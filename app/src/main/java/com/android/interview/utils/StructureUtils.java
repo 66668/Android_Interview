@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 public class StructureUtils {
 
+    //插入排序分为 直接插入排序和希尔排序
     //================================================================================
     //================================================================================
     //================================================================================
@@ -62,6 +63,34 @@ public class StructureUtils {
         System.out.println("03插入排序：" + Arrays.toString(array));
         return array;
     }
+
+    /**
+     * 希尔排序
+     *
+     * @param array
+     */
+    public static int[] shellSort(int[] array) {
+        int j = 0;
+        int temp = 0;
+        for (int increment = array.length / 2; increment > 0; increment /= 2) {
+            for (int i = increment; i < array.length; i++) {
+                temp = array[i];
+                for (j = i; j >= increment; j -= increment) {
+                    if (temp < array[j - increment]) {
+                        array[j] = array[j - increment];
+                    } else {
+                        break;
+                    }
+
+                }
+                array[j] = temp;
+            }
+        }
+        System.out.println("01希尔排序：" + Arrays.toString(array));
+        return array;
+    }
+
+
     //================================================================================
     //================================================================================
     //================================================================================
@@ -85,7 +114,7 @@ public class StructureUtils {
         System.out.println("01冒泡排序：" + Arrays.toString(array));
         return array;
     }
-    
+
     //================================================================================
     //================================================================================
     //================================================================================

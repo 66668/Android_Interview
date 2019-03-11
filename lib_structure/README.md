@@ -90,7 +90,35 @@
   原理：
   
    ![希尔排序 ](https://github.com/66668/Android_Interview/blob/master/pictures/hashSort_01.png)
-  
+   
+   代码：
+    
+       /**
+        * 希尔排序
+        *
+        * @param array
+        */
+       public static int[] shellSort(int[] array) {
+           int j = 0;
+           int temp = 0;
+           for (int increment = array.length / 2; increment > 0; increment /= 2) {
+               for (int i = increment; i < array.length; i++) {
+                   temp = array[i];
+                   for (j = i; j >= increment; j -= increment) {
+                       if (temp < array[j - increment]) {
+                           array[j] = array[j - increment];
+                       } else {
+                           break;
+                       }
+   
+                   }
+                   array[j] = temp;
+               }
+           }
+           System.out.println("01希尔排序：" + Arrays.toString(array));
+           return array;
+       }
+
   ## 2 选择排序算法 原理+代码  
   
   ### 2-1简单选择排序
