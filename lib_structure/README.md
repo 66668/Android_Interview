@@ -21,6 +21,7 @@
 
   ## 1 插入排序算法 原理+代码  
   
+  ### 1-1 直接插入排序 
   动画：
   
   ![插入排序](https://github.com/66668/Android_Interview/blob/master/pictures/insert_01.gif)
@@ -83,8 +84,48 @@
         }
   
   
+  ### 1-2 希尔排序 
+  插入排序的高效版，它与插入排序的不同之处在于，它会优先比较距离较远的元素。希尔排序又叫缩小增量排序。
+  
+  原理：
+  
+   ![希尔排序 ](https://github.com/66668/Android_Interview/blob/master/pictures/hashSort_01.png)
+  
   ## 2 选择排序算法 原理+代码  
   
+  ### 2-1简单选择排序
+  
+   动画：
+      
+   ![选择排序](https://github.com/66668/Android_Interview/blob/master/pictures/selectSort_01.gif)
+   
+   代码：
+    
+      /**
+         * 选择排序
+         *
+         * @param array
+         * @return
+         */
+        public static int[] selectionSort(int[] array) {
+            if (array.length == 0)
+                return array;
+            for (int i = 0; i < array.length; i++) {
+                int minIndex = i;
+                for (int j = i; j < array.length; j++) {
+                    if (array[j] < array[minIndex]) // 找到最小的数
+                        minIndex = j; // 将最小数的索引保存
+                }
+                int temp = array[minIndex];
+                array[minIndex] = array[i];
+                array[i] = temp;
+            }
+            System.out.println("01选择排序：" + Arrays.toString(array));
+            return array;
+        }
+    
+    
+    
   ## 3 交换排序算法 
   
   ### 3—1 冒泡排序 原理+代码  
