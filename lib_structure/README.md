@@ -157,6 +157,9 @@
     
     
   ## 3 交换排序算法 
+  快速排序之所比较快，因为相比冒泡排序，每次交换是跳跃式的。每次排序的时候设置一个基准点，将小于等于基准点的数全部放到基准点的左边，
+  将大于等于基准点的数全部放到基准点的右边。这样在每次交换的时候就不会像冒泡排序一样每次只能在相邻的数之间进行交换，交换的距离就大的多了。
+  因此总的比较和交换次数就少了，速度自然就提高了
   
   ### 3—1 冒泡排序 
   
@@ -186,7 +189,6 @@
   ### 3-2 快速排序
   
     
-  
   快速排序的基本思想：通过一趟排序将待排记录分隔成独立的两部分，其中一部分记录的关键字均比另一部分的关键字小，则可分别对这两部分记录继续进行排序，以达到整个序列有序。
   6.1 算法描述
   
@@ -202,10 +204,108 @@
       
   ![快速排序](https://github.com/66668/Android_Interview/blob/master/pictures/quickSort_01.gif)
   
-  代码：
+  ![快速排序](https://github.com/66668/Android_Interview/blob/master/pictures/quickSort_02.jpg)
+  
+  
+  
+  代码1：
+  
+        /**
+         * 01快速排序方法
+         * @param array
+         * @param start
+         * @param end
+         * @return
+         */
+        public static int[] QuickSort(int[] array, int start, int end) {
+            if (array.length < 1 || start < 0 || end >= array.length || start > end) return null;
+            int smallIndex = partition(array, start, end);
+            if (smallIndex > start)
+                QuickSort(array, start, smallIndex - 1);
+            if (smallIndex < end)
+                QuickSort(array, smallIndex + 1, end);
+            return array;
+        }
+        /**
+         * 快速排序算法——partition
+         * @param array
+         * @param start
+         * @param end
+         * @return
+         */
+        public static int partition(int[] array, int start, int end) {
+            int pivot = (int) (start + Math.random() * (end - start + 1));
+            int smallIndex = start - 1;
+            swap(array, pivot, end);
+            for (int i = start; i <= end; i++)
+                if (array[i] <= array[end]) {
+                    smallIndex++;
+                    if (i > smallIndex)
+                        swap(array, i, smallIndex);
+                }
+            return smallIndex;
+        }
+    
+        /**
+         * 交换数组内两个元素
+         * @param array
+         * @param i
+         * @param j
+         */
+        public static void swap(int[] array, int i, int j) {
+            int temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+  
+  代码2：
     
     
+        /**
+    	 * 02快速排序方法
+    	 * 
+    	 * @param arr
+    	 * @param low
+    	 * @param high
+    	 */
+    	public static int[] quickSort_02(int[] arr, int low, int high) {
+    		int i, j, temp, t;
+    		if (low > high) {
+    			return null;
+    		}
+    		i = low;
+    		j = high;
+    		// temp就是基准位
+    		temp = arr[low];
     
+    		while (i < j) {
+    			// 先看右边，依次往左递减
+    			while (temp <= arr[j] && i < j) {
+    				j--;
+    			}
+    			// 再看左边，依次往右递增
+    			while (temp >= arr[i] && i < j) {
+    				i++;
+    			}
+    			System.out.println("-----i=" + i + "--j=" + j);
+    			// 如果满足条件则交换
+    			if (i < j) {
+    				t = arr[j];
+    				arr[j] = arr[i];
+    				arr[i] = t;
+    			}
+    
+    		}
+    		System.out.println("i=" + i + "--j=" + j);
+    		// 最后将基准为与i和j相等位置的数字交换
+    		arr[low] = arr[i];
+    		arr[i] = temp;
+    		// 递归调用左半数组
+    		quickSort_02(arr, low, j - 1);
+    		// 递归调用右半数组
+    		quickSort_02(arr, j + 1, high);
+    		return arr;
+    	}
   
   
   ## 4 归并排序 原理+代码  
