@@ -52,6 +52,9 @@ android 组件化、插件化、热修复；MVP/MVVM设计模式
 
 熟悉Android系统源码者优先,有NDK 环境下C/C++开发经验者优先；
 
+## 移动开发知识点总结
+
+![总结](https://github.com/66668/Android_Interview/blob/master/pictures/app_all.svg)
 
 ## 数据结构和算法 总结
 [数据结构和算法 跳转](https://github.com/66668/Android_Interview/blob/master/lib_structure/README.md);
