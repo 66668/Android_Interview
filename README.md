@@ -54,6 +54,8 @@ android 组件化、插件化、热修复；MVP/MVVM设计模式
 
 ## 移动开发知识点总结
 
+思维导图：http://naotu.baidu.com/file/82fda7a3ad479fbff45908c463fdcd62?token=8ecbfaab1cc83b72
+
 ![总结](https://github.com/66668/Android_Interview/blob/master/pictures/app_all.svg)
 
 ## 数据结构和算法 总结
