@@ -1,6 +1,8 @@
 # android 总结
 https://blog.csdn.net/tgbus18990140382/article/details/88025363
 
+1. android基础相关
+2. [android handler机制相关 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_handler.md);
 
 
     在Android方面应该掌握的基础
