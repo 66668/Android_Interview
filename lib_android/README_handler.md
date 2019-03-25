@@ -68,10 +68,10 @@ Handler，Message，looper和MessageQueue构成了安卓的消息机制，Handle
 
 1. Handler的处理过程运行在创建Handler的线程里
 2.  一个Looper对应一个MessageQueue
-3. 一个线程对应一个Looper
+3. 一个线程对应一个Looper，
 4. 一个Looper可以对应多个Handler
 5. 不确定当前线程时，更新UI时尽量调用post方法
-6. 一个Thread只能有且只能一个Looper。一个Looper只能对应一个Message。一个Looper和MessageQueue的绑定体可以对应多个Handler。
+6. 一个Thread只能有且只能一个Looper。一个Looper只能对应一个MessageQueue。一个Looper和MessageQueue的绑定体可以对应多个Handler。
 
 ## 对handler使用的封装
 1. HandlerThread
@@ -83,7 +83,7 @@ Handler，Message，looper和MessageQueue构成了安卓的消息机制，Handle
 1. 子线程一定不能执行UI更新吗？（不是，surfaceView（王者荣耀））
 2. 设计模式：（1）生产者消费者模式 （2）享元模式
 3. ThreadLocal原理
-
+4. handler.removeCallbacksAndMessages(),消除的是什么
 # ThreadLocal详解
 
 参考：https://www.jianshu.com/p/2a34d30806d4

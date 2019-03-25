@@ -58,6 +58,10 @@ android 组件化、插件化、热修复；MVP/MVVM设计模式
 
 ![总结](https://github.com/66668/Android_Interview/blob/master/pictures/app_all.svg)
 
+![总结](https://github.com/66668/Android_Interview/blob/master/pictures/android_all_node.jpg)
+
+
+
 ## 数据结构和算法 总结
 [数据结构和算法 跳转](https://github.com/66668/Android_Interview/blob/master/lib_structure/README.md);
 ## java 总结

@@ -5,7 +5,7 @@ import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseAct {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,4 +14,5 @@ public class MainActivity extends AppCompatActivity {
         Handler handler;
         Looper looper;
     }
+
 }
