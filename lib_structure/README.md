@@ -157,8 +157,68 @@
             return array;
         }
     
+   
     
+  ## 2-2 堆排序
+  堆排序（Heapsort）是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。
+  
+  算法描述
+  
+      将初始待排序关键字序列(R1,R2….Rn)构建成大顶堆，此堆为初始的无序区；
+      将堆顶元素R[1]与最后一个元素R[n]交换，此时得到新的无序区(R1,R2,……Rn-1)和新的有序区(Rn),且满足R[1,2…n-1]<=R[n]；
+      由于交换后新的堆顶R[1]可能违反堆的性质，因此需要对当前无序区(R1,R2,……Rn-1)调整为新堆，然后再次将R[1]与无序区最后一个元素交换，得到新的无序区(R1,R2….Rn-2)和新的有序区(Rn-1,Rn)。不断重复此过程直到有序区的元素个数为n-1，则整个排序过程完成
     
+   动画：
+     
+  ![冒泡排序](https://github.com/66668/Android_Interview/blob/master/pictures/bobble_01.gif)
+  
+  代码：
+  
+     public static int[] HeapSort(int[] array) {
+            len = array.length;
+            if (len < 1) return array;
+            //1.构建一个最大堆
+            buildMaxHeap(array);
+            //2.循环将堆首位（最大值）与末位交换，然后在重新调整最大堆
+            while (len > 0) {
+                swap(array, 0, len - 1);
+                len--;
+                adjustHeap(array, 0);
+            }
+            return array;
+        }
+        /**
+         * 建立最大堆
+         *
+         * @param array
+         */
+        public static void buildMaxHeap(int[] array) {
+            //从最后一个非叶子节点开始向上构造最大堆
+            for (int i = (len/2 - 1); i >= 0; i--) { //感谢 @让我发会呆 网友的提醒，此处应该为 i = (len/2 - 1) 
+                adjustHeap(array, i);
+            }
+        }
+        /**
+         * 调整使之成为最大堆
+         *
+         * @param array
+         * @param i
+         */
+        public static void adjustHeap(int[] array, int i) {
+            int maxIndex = i;
+            //如果有左子树，且左子树大于父节点，则将最大指针指向左子树
+            if (i * 2 < len && array[i * 2] > array[maxIndex])
+                maxIndex = i * 2;
+            //如果有右子树，且右子树大于父节点，则将最大指针指向右子树
+            if (i * 2 + 1 < len && array[i * 2 + 1] > array[maxIndex])
+                maxIndex = i * 2 + 1;
+            //如果父节点不是最大值，则将父节点与最大值交换，并且递归调整与父节点交换的位置。
+            if (maxIndex != i) {
+                swap(array, maxIndex, i);
+                adjustHeap(array, maxIndex);
+            }
+        }
+   
   ## 3 交换排序算法 
   快速排序之所比较快，因为相比冒泡排序，每次交换是跳跃式的。每次排序的时候设置一个基准点，将小于等于基准点的数全部放到基准点的左边，
   将大于等于基准点的数全部放到基准点的右边。这样在每次交换的时候就不会像冒泡排序一样每次只能在相邻的数之间进行交换，交换的距离就大的多了。
@@ -364,6 +424,226 @@
            }
            return result;
        }
+
   
-  ## 5 基数排序 原理+代码  
+ ## 5-1计数排序  原理+代码  
+ 
+ 这三种排序算法都利用了桶的概念，但对桶的使用方法上有明显差异：
+ 
+     计数排序：每个桶只存储单一键值
+     桶排序：每个桶存储一定范围的数值
+     基数排序：根据键值的每位数字来分配桶
+
+
+ 计数排序(Counting sort)是一种稳定的排序算法。计数排序使用一个额外的数组C，其中第i个元素是待排序数组A中值等于i的元素的个数。
+ 然后根据数组C来将A中的元素排到正确的位置。它只能对整数进行排序。
+ 
+ 8.1 算法描述
+ 
+     找出待排序的数组中最大和最小的元素；
+     统计数组中每个值为i的元素出现的次数，存入数组C的第i项；
+     对所有的计数累加（从C中的第一个元素开始，每一项和前一项相加）；
+     反向填充目标数组：将每个元素i放在新数组的第C(i)项，每放一个元素就将C(i)减去1。
+
+  动画：
+       
+  ![计数排序](https://github.com/66668/Android_Interview/blob/master/pictures/countSort_01.gif)
   
+    
+   代码：
+   
+   
+        public static int[] CountingSort(int[] array) {
+                if (array.length == 0) return array;
+                int bias, min = array[0], max = array[0];
+                for (int i = 1; i < array.length; i++) {
+                    if (array[i] > max)
+                        max = array[i];
+                    if (array[i] < min)
+                        min = array[i];
+                }
+                bias = 0 - min;
+                int[] bucket = new int[max - min + 1];
+                Arrays.fill(bucket, 0);
+                for (int i = 0; i < array.length; i++) {
+                    bucket[array[i] + bias]++;
+                }
+                int index = 0, i = 0;
+                while (index < array.length) {
+                    if (bucket[i] != 0) {
+                        array[index] = i - bias;
+                        bucket[i]--;
+                        index++;
+                    } else
+                        i++;
+                }
+                return array;
+            }
+   
+            
+  ## 5-2桶排序 
+  
+  桶排序 (Bucket sort)的工作的原理：假设输入数据服从均匀分布，将数据分到有限数量的桶里，每个桶再分别排序（有可能再使用别的排序算法或是以递归方式继续使用桶排序进行排
+  
+  9.1 算法描述
+  
+      人为设置一个BucketSize，作为每个桶所能放置多少个不同数值（例如当BucketSize==5时，该桶可以存放｛1,2,3,4,5｝这几种数字，但是容量不限，即可以存放100个3）；
+      遍历输入数据，并且把数据一个一个放到对应的桶里去；
+      对每个不是空的桶进行排序，可以使用其它排序方法，也可以递归使用桶排序；
+      从不是空的桶里把排好序的数据拼接起来。
+  
+  注意，如果递归使用桶排序为各个桶排序，则当桶数量为1时要手动减小BucketSize增加下一循环桶的数量，否则会陷入死循环，导致内存溢出 
+
+   动画：
+       
+  ![桶排序](https://github.com/66668/Android_Interview/blob/master/pictures/bucketsort_01.png)
+  
+  代码：
+        
+         public static ArrayList<Integer> BucketSort(ArrayList<Integer> array, int bucketSize) {
+                if (array == null || array.size() < 2)
+                    return array;
+                int max = array.get(0), min = array.get(0);
+                // 找到最大值最小值
+                for (int i = 0; i < array.size(); i++) {
+                    if (array.get(i) > max)
+                        max = array.get(i);
+                    if (array.get(i) < min)
+                        min = array.get(i);
+                }
+                int bucketCount = (max - min) / bucketSize + 1;
+                ArrayList<ArrayList<Integer>> bucketArr = new ArrayList<>(bucketCount);
+                ArrayList<Integer> resultArr = new ArrayList<>();
+                for (int i = 0; i < bucketCount; i++) {
+                    bucketArr.add(new ArrayList<Integer>());
+                }
+                for (int i = 0; i < array.size(); i++) {
+                    bucketArr.get((array.get(i) - min) / bucketSize).add(array.get(i));
+                }
+                for (int i = 0; i < bucketCount; i++) {
+                    if (bucketSize == 1) { // 如果带排序数组中有重复数字时  感谢 @见风任然是风 朋友指出错误
+                        for (int j = 0; j < bucketArr.get(i).size(); j++)
+                            resultArr.add(bucketArr.get(i).get(j));
+                    } else {
+                        if (bucketCount == 1)
+                            bucketSize--;
+                        ArrayList<Integer> temp = BucketSort(bucketArr.get(i), bucketSize);
+                        for (int j = 0; j < temp.size(); j++)
+                            resultArr.add(temp.get(j));
+                    }
+                }
+                return resultArr;
+            }
+  
+  
+
+  
+  ## 5-3 基数排序 原理+代码 
+  基数排序也是非比较的排序算法，对每一位进行排序，从最低位开始排序，复杂度为O(kn),为数组长度，k为数组中的数的最大的位数；
+  基数排序是按照低位先排序，然后收集；再按照高位排序，然后再收集；依次类推，直到最高位。有时候有些属性是有优先级顺序的，先按低优先级排序，
+  再按高优先级排序。最后的次序就是高优先级高的在前，高优先级相同的低优先级高的在前。基数排序基于分别排序，分别收集，所以是稳定的。
+  
+ 算法描述
+  
+      取得数组中的最大数，并取得位数；
+      arr为原始数组，从最低位开始取每个位组成radix数组；
+      对radix进行计数排序（利用计数排序适用于小范围数的特点）；
+
+   
+   动画：
+       
+  ![基数排序](https://github.com/66668/Android_Interview/blob/master/pictures/radixsort.gif)
+  
+  代码：
+    
+     public static int[] RadixSort(int[] array) {
+            if (array == null || array.length < 2)
+                return array;
+            // 1.先算出最大数的位数；
+            int max = array[0];
+            for (int i = 1; i < array.length; i++) {
+                max = Math.max(max, array[i]);
+            }
+            int maxDigit = 0;
+            while (max != 0) {
+                max /= 10;
+                maxDigit++;
+            }
+            int mod = 10, div = 1;
+            ArrayList<ArrayList<Integer>> bucketList = new ArrayList<ArrayList<Integer>>();
+            for (int i = 0; i < 10; i++)
+                bucketList.add(new ArrayList<Integer>());
+            for (int i = 0; i < maxDigit; i++, mod *= 10, div *= 10) {
+                for (int j = 0; j < array.length; j++) {
+                    int num = (array[j] % mod) / div;
+                    bucketList.get(num).add(array[j]);
+                }
+                int index = 0;
+                for (int j = 0; j < bucketList.size(); j++) {
+                    for (int k = 0; k < bucketList.get(j).size(); k++)
+                        array[index++] = bucketList.get(j).get(k);
+                    bucketList.get(j).clear();
+                }
+            }
+            return array;
+        }
+  
+  # 二分查找法的两种实现
+  
+  有序的序列，每次都是以序列的中间位置的数来与待查找的关键字进行比较，每次缩小一半的查找范围，直到匹配成功。
+  
+  ## 优缺点
+  
+  优点是比较次数少，查找速度快，平均性能好；
+  
+  其缺点是要求待查表为有序表，且插入删除困难。
+  
+  因此，折半查找方法适用于不经常变动而查找频繁的有序列表。
+  
+  ## 方式1：递归调用
+  
+    public static int recursionBinarySearch(int[] arr,int key,int low,int high){
+    		
+    		if(key < arr[low] || key > arr[high] || low > high){
+    			return -1;				
+    		}
+    		
+    		int middle = (low + high) / 2;			//初始中间位置
+    		if(arr[middle] > key){
+    			//比关键字大则关键字在左区域
+    			return recursionBinarySearch(arr, key, low, middle - 1);
+    		}else if(arr[middle] < key){
+    			//比关键字小则关键字在右区域
+    			return recursionBinarySearch(arr, key, middle + 1, high);
+    		}else {
+    			return middle;
+    		}	
+    		
+    	}
+
+ ## 方式2：while循环
+ 
+    public static int commonBinarySearch(int[] arr,int key){
+    		int low = 0;
+    		int high = arr.length - 1;
+    		int middle = 0;			//定义middle
+    		
+    		if(key < arr[low] || key > arr[high] || low > high){
+    			return -1;				
+    		}
+    		
+    		while(low <= high){
+    			middle = (low + high) / 2;
+    			if(arr[middle] > key){
+    				//比关键字大则关键字在左区域
+    				high = middle - 1;
+    			}else if(arr[middle] < key){
+    				//比关键字小则关键字在右区域
+    				low = middle + 1;
+    			}else{
+    				return middle;
+    			}
+    		}
+    		
+    		return -1;		//最后仍然没有找到，则返回-1
+    	}
