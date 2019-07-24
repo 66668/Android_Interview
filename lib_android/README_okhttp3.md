@@ -22,8 +22,13 @@
 4. ConnectInterceptor 连接池
 5. CallServerInterceptor 发送和接收数据,数据由okio处理
 
-## 3. 同步异步
+## 3. 同步异步的实现原理
 1. 同步：Response response = client.newCall(request).execute();
 2. 异步：client.newCall(request).enqueue(callback)
 最终调用RealCall方法实现
+
+## 4. okio的原理
+
+[android okio的原理 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_okio.md);
+
  

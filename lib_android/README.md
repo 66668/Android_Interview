@@ -2,7 +2,66 @@
 https://blog.csdn.net/tgbus18990140382/article/details/88025363
 
 1. android基础相关
-2. [android handler机制相关 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_handler.md);
+
+[android基础相关 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_base.md);
+
+2. handler机制
+
+[android handler机制相关 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_handler.md);
+
+3. apk的安装流程
+
+[android apk的安装流程 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_apk_install.md);
+
+4. apk的app启动流程：
+
+面试问法：
+（1）点击APP图标启动APP的大致流程
+（2）APP的启动流程
+
+[android app启动流程 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_apk_launch.md);
+
+5. apk的打包流程
+
+[android apk的打包流程 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_apk_package.md);
+
+6. 手写单例（包括kotlin）
+
+[android 手写单例 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_kotlin_singleton.md);
+
+7. okhttp面试
+
+[android 手写单例 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_okhttp3.md);
+
+8. retrofit面试
+
+[android retrofit面试 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_retrofit.md);
+
+9. rxjava面试
+
+[android rxjava面试 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_rxjava.md);
+
+10. 开源图片库面试
+
+[android 开源图片库面试 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_img.md);
+
+11. jetpack组件相关
+
+[android jetpack组件相关 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_jetpack.md);
+
+12. 组件化模块化/插件化相关
+
+[android 组件化模块化 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_app_module.md);
+
+13. 屏幕适配方案
+
+[android 组件化模块化 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_screen_adaptation.md);
+
+13. 性能优化，工具篇
+
+[android 性能优化工具篇 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_performance_tools.md);
+
+
 
 
     在Android方面应该掌握的基础
@@ -95,7 +154,7 @@ Android中如何查看一个对象的回收情况？
     自己做过的APP用户量
     能否接受加班
     
- APP的启动流程
+
     回形打印二维数组
     Java为何引入泛型，泛型边界
     常见的Java数据结构
@@ -132,7 +191,7 @@ Picasso传入的Activity跟Application的context的区别
 
 数据库的升级，表结构的修改
 常见的排序算法，手写二分查找，二分查找的复杂度分析
-点击APP图标启动APP的大致流程
+
 SplashActivity中进行初始化MainActivity的参数，Splash没有初始化，AMS直接启动了MainActivity怎么办
 设计一个多线程，可以同时读，读的时候不能写，写的时候不能读(读写锁)
 设计断点续传，如何判断服务端是否支持断点续传

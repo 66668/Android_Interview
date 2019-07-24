@@ -1,8 +1,10 @@
 # 知识点总结
 
+1. android相关：
+
+[android相关 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README.md);
+
 面试要求总结：
-1.Activity的启动过程（不要回答生命周期） 
-http://blog.csdn.net/luoshengyang/article/details/6689748
 
 2.Activity的启动模式以及使用场景 
 （1）manifest设置，（2）startActivity flag 
