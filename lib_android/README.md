@@ -31,7 +31,7 @@ https://blog.csdn.net/tgbus18990140382/article/details/88025363
 
 7. okhttp面试
 
-[android 手写单例 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_okhttp3.md);
+[android okhttp面试 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_okhttp3.md);
 
 8. retrofit面试
 
@@ -60,6 +60,10 @@ https://blog.csdn.net/tgbus18990140382/article/details/88025363
 13. 性能优化，工具篇
 
 [android 性能优化工具篇 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_performance_tools.md);
+
+14. TCP的三次握手和四次挥手
+
+[android  TCP的三次握手和四次挥手 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_tcp.md);
 
 
 
