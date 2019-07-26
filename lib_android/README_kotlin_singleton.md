@@ -6,24 +6,24 @@
 
 
 
-    //java实现
-    public class SingletonDemo {
-    private SingletonDemo () {
-
-    }
-    // 在类加载时就完成了初始化，使得类加载较慢
-    private static SingletonDemo instance = new SingletonDemo ();
-
-    public static SingletonDemo getInstance() {
-        return instance ;
-    }
-    }
-    
-    //kotlin实现
-    
-    object SingletonDemo {
-    
-    }
+       //java实现
+           public class SingletonDemo {
+           private SingletonDemo () {
+       
+           }
+           // 在类加载时就完成了初始化，使得类加载较慢
+           private static SingletonDemo instance = new SingletonDemo ();
+       
+           public static SingletonDemo getInstance() {
+               return instance ;
+           }
+           }
+           
+           //kotlin实现
+           
+           object SingletonDemo {
+           
+           }
 
 
 2. 懒汉式 - 非线程安全：在并发时，会产生出多个实例对象，实现线程安全，有三分方式，如下3，4，5
