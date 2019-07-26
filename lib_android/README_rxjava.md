@@ -221,7 +221,7 @@ Processor与Subject类似，不过Processor还支持背压操作
 （1） 被观察者对象中有观察者对象清单
 （2）发布订阅模式中，发布对象向队列管道仍数据，订阅对象从队列管道中取对象，实现解耦操作。
 2. rxjava如何实现线程切换的？/subsribeOn为什么只执行第一次，而observerOn可以执行多次线程切换？
-
+ 参考 https://www.jianshu.com/p/e0a5f04bb321
 
     subsribeOn思考：
     1.是哪个对象在什么时候创建了子线程，是一种怎样的方式创建的？
