@@ -139,27 +139,28 @@
  5. 静态内部类式：这种方式对比前两种，既实现了线程安全，又避免了同步带来的性能影响。       
  
     
-    //Java实现
-    public class SingletonDemo {
-        private static class SingletonHolder{
-            private static SingletonDemo instance=new SingletonDemo();
-        }
-        private SingletonDemo(){
-            System.out.println("Singleton has loaded");
-        }
-        public static SingletonDemo getInstance(){
-            return SingletonHolder.instance;
-        }
-    }
-    
-    //kotlin实现
-    class SingletonDemo private constructor() {
-        companion object {
-            val instance = SingletonHolder.holder
-        }
-    
-        private object SingletonHolder {
-            val holder= SingletonDemo()
-        }
-    
-    }
+      
+      //Java实现
+          public class SingletonDemo {
+              private static class SingletonHolder{
+                  private static SingletonDemo instance=new SingletonDemo();
+              }
+              private SingletonDemo(){
+                  System.out.println("Singleton has loaded");
+              }
+              public static SingletonDemo getInstance(){
+                  return SingletonHolder.instance;
+              }
+          }
+          
+          //kotlin实现
+          class SingletonDemo private constructor() {
+              companion object {
+                  val instance = SingletonHolder.holder
+              }
+          
+              private object SingletonHolder {
+                  val holder= SingletonDemo()
+              }
+          
+          }
