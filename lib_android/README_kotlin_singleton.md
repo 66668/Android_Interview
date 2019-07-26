@@ -5,7 +5,7 @@
 1. 饿汉式：饿汉式在创建类的同时就已经创建好了一个静态的对象供系统使用，以后不再改变，所以天生是系统安全。 
 
 
-(```)
+
        //java实现
            public class SingletonDemo {
            private SingletonDemo () {
@@ -24,12 +24,12 @@
            object SingletonDemo {
            
            }
-(```)
+
 
 2. 懒汉式 - 非线程安全：在并发时，会产生出多个实例对象，实现线程安全，有三分方式，如下3，4，5
    
 
-(```)
+
 
       //java实现
          public class SingletonDemo {
@@ -66,9 +66,9 @@
                  }
              }
          }
-(```)
+
 3. 懒汉式 - 线程安全：getInstance()上加锁
-(```)
+
 
        //java实现
            public class SingletonDemo {
@@ -102,7 +102,7 @@
                }
            }
     
-  (```)  
+    
     
  4. 双重校验锁式（Double Check)
  
@@ -111,7 +111,6 @@
  Lazy是接受一个 lambda 并返回一个 Lazy 实例的函数，返回的实例可以作为实现延迟属性的委托：
   第一次调用 get() 会执行已传递给 lazy() 的 lambda 表达式并记录结果， 后续调用 get() 只是返回记录的结果。
  
- (```)
         //Java实现
             public class SingletonDemo {
                 private volatile static SingletonDemo instance;
@@ -136,28 +135,32 @@
                 }
             }
 
-(```)
+  
  5. 静态内部类式：这种方式对比前两种，既实现了线程安全，又避免了同步带来的性能影响。       
  
-(```)//Java实现
-     public class SingletonDemo {
-                   private static class SingletonHolder{
-                       private static SingletonDemo instance=new SingletonDemo();
-                   }
-                   private SingletonDemo(){
-                       System.out.println("Singleton has loaded");
-                   }
-                   public static SingletonDemo getInstance(){
-                       return SingletonHolder.instance;
-                   }
-               }   
-               //kotlin实现
-               class SingletonDemo private constructor() {
-                   companion object {
-                       val instance = SingletonHolder.holder
-                   }
-                   private object SingletonHolder {
-                       val holder= SingletonDemo()
-                   }
-               }
-(```)
+    
+      
+      //Java实现
+          public class SingletonDemo {
+              private static class SingletonHolder{
+                  private static SingletonDemo instance=new SingletonDemo();
+              }
+              private SingletonDemo(){
+                  System.out.println("Singleton has loaded");
+              }
+              public static SingletonDemo getInstance(){
+                  return SingletonHolder.instance;
+              }
+          }
+          
+          //kotlin实现
+          class SingletonDemo private constructor() {
+              companion object {
+                  val instance = SingletonHolder.holder
+              }
+          
+              private object SingletonHolder {
+                  val holder= SingletonDemo()
+              }
+          
+          }
