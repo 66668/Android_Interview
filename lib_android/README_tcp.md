@@ -33,7 +33,7 @@
 第三次握手：客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack=k+1），此包发送完毕，客户端和服务器进入ESTABLISHED（TCP连接成功）状态，完成三次握手。
 
 ## 四次挥手过程理解 
- ![流程图](https://github.com/66668/Android_Interview/blob/master/pictures/tcp_net_03.png)
+ ![流程图](https://github.com/66668/Android_Interview/blob/master/pictures/tcp_net_04.png)
 
 1. 客户端进程发出连接释放报文，并且停止发送数据。释放数据报文首部，FIN=1，其序列号为seq=u（等于前面已经传送过来的数据的最后一个字节的序号加1），此时，客户端进入FIN-WAIT-1（终止等待1）状态。 TCP规定，FIN报文段即使不携带数据，也要消耗一个序号。
 
