@@ -53,7 +53,7 @@ Handler，Message，looper和MessageQueue构成了安卓的消息机制，Handle
 ### Looper
 1. 初始化Looper对象：（1）通过ThreadLocal实现线程变量的隔离。（2）这里初始化一般是初始化子线程Looper.prepare(),主线程已经系统处理了。
     初始化的内容包括new MessageQueue()/mThread=Thread.currentThread
-2. 开启轮询Looper.loop: 该处是处理的难点，核心逻辑必须记住
+2. 开启轮询Looper.loop: 该处是处理的难点，核心逻辑必须记住（当消息队列为空时，进入等待状态，避免阻塞主线程）
 3. 其他处理
 
 ### MessageQueue
