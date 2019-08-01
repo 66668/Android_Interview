@@ -65,6 +65,130 @@ https://blog.csdn.net/tgbus18990140382/article/details/88025363
 
 [android  TCP的三次握手和四次挥手 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_tcp.md);
 
+二、View的绘制流程
+ViewRoot
+-> performTraversal()
+-> performMeasure()
+-> performLayout()
+-> perfromDraw()
+-> View/ViewGroup measure()
+-> View/ViewGroup onMeasure()
+-> View/ViewGroup layout()
+-> View/ViewGroup onLayout()
+-> View/ViewGroup draw()
+-> View/ViewGroup onDraw()
+看下invalidate方法，有带4个参数的，和不带参数有什么区别；requestLayout触发measure和layout，如何实现局部重新测量，避免全局重新测量问题。
+
+三、事件分发机制
+-> dispatchTouchEvent()
+-> onInterceptTouchEvent()
+-> onTouchEvent()
+requestDisallowInterceptTouchEvent(boolean)
+还有onTouchEvent()、onTouchListener、onClickListener的先后顺序
+
+五、AsyncTask源码分析
+
+优劣性分析，这个网上一大堆，不重述。
+
+六、如何保证Service不被杀死？如何保证进程不被杀死？
+
+七、Binder机制，进程通信
+Android用到的进程通信底层基本都是Binder，AIDL、Messager、广播、ContentProvider。不是很深入理解的，至少ADIL怎么用，Messager怎么用，可以写写看，另外序列化（Parcelable和Serilizable）需要做对比，这方面可以看看任玉刚大神的android艺术开发探索一书。
+
+九、SharedPreference原理，能否跨进程？如何实现？
+
+三）性能优化问题
+一、UI优化
+a.合理选择RelativeLayout、LinearLayout、FrameLayout,RelativeLayout会让子View调用2次onMeasure，而且布局相对复杂时，onMeasure相对比较复杂，效率比较低，LinearLayout在weight>0时也会让子View调用2次onMeasure。LinearLayout weight测量分配原则。
+b.使用标签<include><merge><ViewStub>
+c.减少布局层级，可以通过手机开发者选项>GPU过渡绘制查看，一般层级控制在4层以内，超过5层时需要考虑是否重新排版布局。
+d.自定义View时，重写onDraw()方法，不要在该方法中新建对象，否则容易触发GC，导致性能下降
+e.使用ListView时需要复用contentView，并使用Holder减少findViewById加载View。
+f.去除不必要背景，getWindow().setBackgroundDrawable(null)
+g.使用TextView的leftDrawabel/rightDrawable代替ImageView+TextView布局
+二、内存优化
+主要为了避免OOM和频繁触发到GC导致性能下降
+a.Bitmap.recycle(),Cursor.close,inputStream.close()
+b.大量加载Bitmap时，根据View大小加载Bitmap，合理选择inSampleSize，RGB_565编码方式；使用LruCache缓存
+c.使用 静态内部类+WeakReference 代替内部类，如Handler、线程、AsyncTask
+d.使用线程池管理线程，避免线程的新建
+e.使用单例持有Context，需要记得释放，或者使用全局上下文
+f.静态集合对象注意释放
+g.属性动画造成内存泄露
+h.使用webView，在Activity.onDestory需要移除和销毁，webView.removeAllViews()和webView.destory()
+备：使用LeakCanary检测内存泄露
+三、响应速度优化
+Activity如果5秒之内无法响应屏幕触碰事件和键盘输入事件，就会出现ANR，而BroadcastReceiver如果10秒之内还未执行操作也会出现ANR，Serve20秒会出现ANR 为了避免ANR，可以开启子线程执行耗时操作，但是子线程不能更新UI，因此需要Handler消息机制、AsyncTask、IntentService进行线程通信。
+备：出现ANR时，adb pull data/anr/tarces.txt 结合log分析
+四、其他性能优化
+a.常量使用static final修饰
+b.使用SparseArray代替HashMap
+c.使用线程池管理线程
+d.ArrayList遍历使用常规for循环，LinkedList使用foreach
+e.不要过度使用枚举，枚举占用内存空间比整型大
+f.字符串的拼接优先考虑StringBuilder和StringBuffer
+g.数据库存储是采用批量插入+事务
+
+（四）设计模式
+1.单例模式：好几种写法，要求会手写，分析优劣。一般双重校验锁中用到volatile，需要分析volatile的原理
+2.观察者模式：要求会手写，有些面试官会问你在项目中用到了吗？实在没有到的可以讲一讲EventBus，它用到的就是观察者模式
+3.适配器模式：要求会手写，有些公司会问和装饰器模式、代理模式有什么区别？
+4.建造者模式+工厂模式：要求会手写
+5.策略模式：这个问得比较少，不过有些做电商的会问。
+6.MVC、MVP、MVVM：比较异同，选择一种你拿手的着重讲就行
+
+（五）数据结构
+1.HashMap、LinkedHashMap、ConcurrentHashMap，在用法和原理上有什么差异，很多公司会考HashMap原理，通过它做一些扩展，比如中国13亿人口年龄的排序问题，年龄对应桶的个数，年龄相同和hash相同问题类似。
+2.ArrayList和LinkedList对比，这个相对简单一点。
+3.平衡二叉树、二叉查找树、红黑树，这几个我也被考到。
+4.Set原理，这个和HashMap考得有点类似，考hash算法相关，被问到过常用hash算法。HashSet内部用到了HashMap
+
+一、网络框架库 Okhttp
+okhttp源码一定要去看下，里面几个关键的类要记住，还有连接池，拦截器都需要理解。被问到如何给某些特定域名的url增加header，如果是自己封装的代码，可以在封装Request中可以解决，也可以增加拦截器，通过拦截器去做。
+推荐一篇讲解Okhttp不错的文章
+二、消息通知 EventBus
+1.EventBus原理：建议看下源码，不多。内部实现：观察者模式+注解+反射
+2.EventBus可否跨进程问题？代替EventBus的方法（RxBus）
+三、图片加载库（Fresco、Glide、Picasso）
+1.项目中选择了哪个图片加载库？为什么选择它？其他库不好吗？这几个库的区别
+2.项目中选择图片库它的原理，如Glide（LruCache结合弱引用），那么面试官会问LruCache原理，进而问LinkedHashMap原理，这样一层一层地问，所以建议看到不懂的追进去看。如Fresco是用来MVC设计模式，5.0以下是用了共享内存，那共享内存怎么用？Fresco怎么实现圆角？Fresco怎么配置缓存？
+四、消息推送Push
+1.项目中消息推送是自己做的还是用了第三方？如极光。还有没有用过其他的？这几家有什么优势区别，基于什么原因选择它的？
+2.消息推送原理是什么？如何实现心跳连接？
+五、TCP/IP、Http/Https
+网络这一块如果简历中写道熟悉TCP/IP协议，Http/Https协议，那么肯定会被问道，我就验证了。一般我会回答网络层关系、TCP和UDP的区别，TCP三次握手（一定要讲清楚，SYN、ACK等标记位怎样的还有报文结构都需要熟悉下），四次挥手。为什么要三次握手？DDoS攻击。为什么握手三次，挥手要四次？Http报文结构，一次网络请求的过程是怎样的？Http和Https有什么不同？SSL/TLS是怎么进行加密握手的？证书怎么校验？对称性加密算法和非对称加密算法有哪些？挑一个熟悉的加密算法简单介绍下？DNS解析是怎样的？
+
+六、热更新、热修复、插件化(这一块要求高点，一般高级工程师是需要理解的)
+
+了解classLoader
+
+
+便利锋
+
+二叉树宽度遍历 
+
+多线程： 
+线程池，参数，内部的线程数量变化过程，拒绝策略； 
+线程池工厂类里面的四个线程池 
+同步： 
+synchronized和AQS异同 
+Spring&tomcat： 
+Spring boot启动过程； 
+dispatcherservlet； 
+拦截器和过滤器的区别； 
+AOP及实现，为什么需要cglib 
+MySQL： 
+建立索引有什么原则 
+为什么是最左前缀原则 
+给你ABC三个字段，考虑如何建立索引 
+concurrenthashmap里面的get和put需要加锁么，为啥 
+同步： 
+多线程里面对一个整型做加减为啥不能用volatile 
+synchronized和AQS实现 
+四次挥手 如何保证数据包传向正确的目的地
+unix如何创建子进程？ 
+什么是僵尸进程，如何解决 
+
 
 
 

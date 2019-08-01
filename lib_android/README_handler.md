@@ -1,6 +1,14 @@
 # handler机制详解及相关封装
 
 对个人要求：必须熟悉源码，会手写handler机制的框架源码，对处理逻辑必须会手写。
+四、消息分发机制
+这个考得非常常见。一定要看源码，代码不多。带着几个问题去看：
+1.为什么一个线程只有一个Looper、只有一个MessageQueue？
+2.如何获取当前线程的Looper？是怎么实现的？（理解ThreadLocal）
+3.是不是任何线程都可以实例化Handler？有没有什么约束条件？
+4.Looper.loop是一个死循环，拿不到需要处理的Message就会阻塞，那在UI线程中为什么不会导致ANR？
+5.Handler.sendMessageDelayed()怎么实现延迟的？结合Looper.loop()循环中，Message=messageQueue.next()和MessageQueue.enqueueMessage()分析。
+
 
 ## 常见面试题：
 
