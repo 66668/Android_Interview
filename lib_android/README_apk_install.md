@@ -43,7 +43,6 @@
 
 
 
-
 ## APK安装方法
 
 APK有下面4种安装方法：
@@ -62,7 +61,7 @@ APK有下面4种安装方法：
 
     /system/app 默认的系统应用；
 
-    /vendor/app 厂商定制的应用；
+    system/vendor/app 厂商定制的应用；
 
 2. 非系统apk信息目录有：
 

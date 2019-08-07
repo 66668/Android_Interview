@@ -65,34 +65,33 @@ https://blog.csdn.net/tgbus18990140382/article/details/88025363
 
 [android  TCP的三次握手和四次挥手 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_tcp.md);
 
-二、View的绘制流程
-ViewRoot
--> performTraversal()
--> performMeasure()
--> performLayout()
--> perfromDraw()
--> View/ViewGroup measure()
--> View/ViewGroup onMeasure()
--> View/ViewGroup layout()
--> View/ViewGroup onLayout()
--> View/ViewGroup draw()
--> View/ViewGroup onDraw()
-看下invalidate方法，有带4个参数的，和不带参数有什么区别；requestLayout触发measure和layout，如何实现局部重新测量，避免全局重新测量问题。
+15. 事件分发机制
 
-三、事件分发机制
--> dispatchTouchEvent()
--> onInterceptTouchEvent()
--> onTouchEvent()
-requestDisallowInterceptTouchEvent(boolean)
-还有onTouchEvent()、onTouchListener、onClickListener的先后顺序
+[android 事件分发机制 跳转](https://github.com/66668/Android_Interview/blob/master/README_touchEvent.md);
 
-五、AsyncTask源码分析
+16. view的绘制流程
 
-优劣性分析，这个网上一大堆，不重述。
+[android view的绘制流程 跳转](https://github.com/66668/Android_Interview/blob/master/README_view.md);
 
-六、如何保证Service不被杀死？如何保证进程不被杀死？
+17. AsyncTask优缺点
+
+[android AsyncTask优缺点 跳转](https://github.com/66668/Android_Interview/blob/master/README_AcyncTask.md);
+
+18.  ## jvm与dvm之间的区别：
+
+google为了解决与oracle之间关于java相关专利和授权的纠纷，开发了DVM。    
+dvm执行的是.dex格式文件，jvm执行的是.class文件，android程序编译完之后生产.class文件，
+然后，dex工具会把.class文件处理成.dex文件，然后把资源文件和.dex文件等打包成.apk文件，apk就是android package的意思，
+jvm执行的是.class文件。   
+ 
+dvm是基于寄存器的虚拟机，而jvm是基于虚拟栈的虚拟机。寄存器存取速度比栈快得多，dvm可以根据硬件实现最大的优化，比较适合移动设备。 
+  
+class文件存在很多的冗余信息，dex工具会去除冗余信息，并把所有的.class文件整合到.dex文件中，减少了I/O操作，提高了类的查找速度。
+
+19. 
 
 七、Binder机制，进程通信
+
 Android用到的进程通信底层基本都是Binder，AIDL、Messager、广播、ContentProvider。不是很深入理解的，至少ADIL怎么用，Messager怎么用，可以写写看，另外序列化（Parcelable和Serilizable）需要做对比，这方面可以看看任玉刚大神的android艺术开发探索一书。
 
 九、SharedPreference原理，能否跨进程？如何实现？

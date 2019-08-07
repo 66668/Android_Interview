@@ -1,0 +1,17 @@
+# 类加载机制详解（插件化，热修复相关方向）
+
+Android中的类加载器是BootClassLoader、PathClassLoader、DexClassLoader，其中BootClassLoader是虚拟机加载系统类需要用到的，PathClassLoader是App加载自身dex文件中的类用到的，DexClassLoader可以加载直接或间接包含dex文件的文件，如APK等。
+PathClassLoader和DexClassLoader都继承自BaseDexClassLoader，它的一个DexPathList类型的成员变量pathList很重要。DexPathList中有一个Element类型的数组dexElements，这个数组中存放了包含dex文件（对应的是DexFile）的元素。BaseDexClassLoader加载一个类，最后调用的是DexFile的方法进行加载的。
+无论是热修复还是插件化技术中都利用了类加载机制，所以深入理解Android中的类加载机制对于理解这些技术的原理很有帮助。
+
+
+## 双亲委派模型过程
+
+某个特定的类加载器在接到加载类的请求时，首先将加载任务委托给父类加载器，依次递归，如果父类加载器可以完成类加载任务，就成功返回；
+只有父类加载器无法完成此加载任务时，才自己去加载。
+
+使用双亲委派模型的好处在于Java类随着它的类加载器一起具备了一种带有优先级的层次关系。例如类java.lang.Object，它存在在rt.jar中，无论哪一个类加载器要加载这个类，
+最终都是委派给处于模型最顶端的Bootstrap ClassLoader进行加载，因此Object类在程序的各种类加载器环境中都是同一个类。
+相反，如果没有双亲委派模型而是由各个类加载器自行加载的话，如果用户编写了一个java.lang.Object的同名类并放在ClassPath中，那系统中将会出现多个不同的Object类，
+程序将混乱。因此，如果开发者尝试编写一个与rt.jar类库中重名的Java类，可以正常编译，但是永远无法被加载运行。
+

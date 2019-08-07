@@ -19,6 +19,7 @@ public class MainActivity extends BaseAct {
         Looper looper;
         Timer timer;
         finish();
+        ActivityThread activityThread;
     }
 
 }
