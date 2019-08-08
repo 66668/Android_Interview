@@ -88,7 +88,8 @@ dvm是基于寄存器的虚拟机，而jvm是基于虚拟栈的虚拟机。寄�
   
 class文件存在很多的冗余信息，dex工具会去除冗余信息，并把所有的.class文件整合到.dex文件中，减少了I/O操作，提高了类的查找速度。
 
-19. 
+19. android https和http及报文格式
+[android https和http及报文格式 跳转](https://github.com/66668/Android_Interview/blob/master/README_https.md);
 
 七、Binder机制，进程通信
 

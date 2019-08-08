@@ -229,7 +229,6 @@ Processor与Subject类似，不过Processor还支持背压操作
     3.上游事件是怎么跑到子线程里执行的？
     4.多次用 subscribeOn 指定上游线程为什么只有第一次有效 ?
 
-
 3. rxjava如何实现轮询？
 4. hot Observable 与cold Observable如何互相转换
 5. 五种观察者及详解（见上）
