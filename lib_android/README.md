@@ -89,13 +89,23 @@ dvm是基于寄存器的虚拟机，而jvm是基于虚拟栈的虚拟机。寄�
 class文件存在很多的冗余信息，dex工具会去除冗余信息，并把所有的.class文件整合到.dex文件中，减少了I/O操作，提高了类的查找速度。
 
 19. android https和http及报文格式
+
 [android https和http及报文格式 跳转](https://github.com/66668/Android_Interview/blob/master/README_https.md);
+
+20. SharedPreference原理，能否跨进程？
+
+SharePreferences是Android基于xml实现的一种数据持久话手段
+SharePreferences不支持多进程
+SharePreferences的commit与apply一个是同步一个是异步（大部分场景下）
+不要使用SharePreferences存储太大的数据
+
 
 七、Binder机制，进程通信
 
 Android用到的进程通信底层基本都是Binder，AIDL、Messager、广播、ContentProvider。不是很深入理解的，至少ADIL怎么用，Messager怎么用，可以写写看，另外序列化（Parcelable和Serilizable）需要做对比，这方面可以看看任玉刚大神的android艺术开发探索一书。
 
-九、SharedPreference原理，能否跨进程？如何实现？
+
+
 
 三）性能优化问题
 一、UI优化
@@ -143,9 +153,7 @@ g.数据库存储是采用批量插入+事务
 3.平衡二叉树、二叉查找树、红黑树，这几个我也被考到。
 4.Set原理，这个和HashMap考得有点类似，考hash算法相关，被问到过常用hash算法。HashSet内部用到了HashMap
 
-一、网络框架库 Okhttp
-okhttp源码一定要去看下，里面几个关键的类要记住，还有连接池，拦截器都需要理解。被问到如何给某些特定域名的url增加header，如果是自己封装的代码，可以在封装Request中可以解决，也可以增加拦截器，通过拦截器去做。
-推荐一篇讲解Okhttp不错的文章
+
 二、消息通知 EventBus
 1.EventBus原理：建议看下源码，不多。内部实现：观察者模式+注解+反射
 2.EventBus可否跨进程问题？代替EventBus的方法（RxBus）
@@ -155,6 +163,7 @@ okhttp源码一定要去看下，里面几个关键的类要记住，还有连�
 四、消息推送Push
 1.项目中消息推送是自己做的还是用了第三方？如极光。还有没有用过其他的？这几家有什么优势区别，基于什么原因选择它的？
 2.消息推送原理是什么？如何实现心跳连接？
+
 五、TCP/IP、Http/Https
 网络这一块如果简历中写道熟悉TCP/IP协议，Http/Https协议，那么肯定会被问道，我就验证了。一般我会回答网络层关系、TCP和UDP的区别，TCP三次握手（一定要讲清楚，SYN、ACK等标记位怎样的还有报文结构都需要熟悉下），四次挥手。为什么要三次握手？DDoS攻击。为什么握手三次，挥手要四次？Http报文结构，一次网络请求的过程是怎样的？Http和Https有什么不同？SSL/TLS是怎么进行加密握手的？证书怎么校验？对称性加密算法和非对称加密算法有哪些？挑一个熟悉的加密算法简单介绍下？DNS解析是怎样的？
 
@@ -162,32 +171,6 @@ okhttp源码一定要去看下，里面几个关键的类要记住，还有连�
 
 了解classLoader
 
-
-便利锋
-
-二叉树宽度遍历 
-
-多线程： 
-线程池，参数，内部的线程数量变化过程，拒绝策略； 
-线程池工厂类里面的四个线程池 
-同步： 
-synchronized和AQS异同 
-Spring&tomcat： 
-Spring boot启动过程； 
-dispatcherservlet； 
-拦截器和过滤器的区别； 
-AOP及实现，为什么需要cglib 
-MySQL： 
-建立索引有什么原则 
-为什么是最左前缀原则 
-给你ABC三个字段，考虑如何建立索引 
-concurrenthashmap里面的get和put需要加锁么，为啥 
-同步： 
-多线程里面对一个整型做加减为啥不能用volatile 
-synchronized和AQS实现 
-四次挥手 如何保证数据包传向正确的目的地
-unix如何创建子进程？ 
-什么是僵尸进程，如何解决 
 
 
 
