@@ -1,6 +1,7 @@
 # android 打包流程总结
 
 ## 安装的7大步骤
+
 ![apk打包流程图](https://github.com/66668/Android_Interview/blob/master/pictures/apk_package_01.png)
 
 ### 1. 打包资源文件，生成R.java文件
@@ -53,6 +54,9 @@ Jarsigner阶段。通过Jarsigner工具，对上面的apk进行debug或release�
 通过zipalign工具，将签名后的apk进行对齐处理。工具位于android-sdk/tools目录下。对齐的主要过程是将APK包中所有的资源文件距离文件起始偏移为4字节整数倍，这样通过内存映射访问apk文件时的速度会更快。对齐的作用就是减少运行时内存的使用。
 
 
+
+## apk打包问题
+1. 
 
 ## apk详细打包流程图
 

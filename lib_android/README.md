@@ -92,12 +92,20 @@ class文件存在很多的冗余信息，dex工具会去除冗余信息，并把
 
 [android https和http及报文格式 跳转](https://github.com/66668/Android_Interview/blob/master/README_https.md);
 
-20. SharedPreference原理，能否跨进程？
+20. http状态码
+
+[android http状态码 跳转](https://github.com/66668/Android_Interview/blob/master/README_http_statecode.md);
+
+21. SharedPreference原理，能否跨进程？
 
 SharePreferences是Android基于xml实现的一种数据持久话手段
 SharePreferences不支持多进程
 SharePreferences的commit与apply一个是同步一个是异步（大部分场景下）
 不要使用SharePreferences存储太大的数据
+
+22. http状态码
+
+[android http状态码 跳转](https://github.com/66668/Android_Interview/blob/master/README_http_statecode.md);
 
 
 七、Binder机制，进程通信
