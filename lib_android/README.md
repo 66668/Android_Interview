@@ -1,6 +1,10 @@
 # android 总结
 https://blog.csdn.net/tgbus18990140382/article/details/88025363
 
+进阶教程
+https://www.jianshu.com/p/c0ec2a7fc26a
+
+
 1. android基础相关
 
 [android基础相关 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_base.md);

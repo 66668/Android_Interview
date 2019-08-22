@@ -15,11 +15,6 @@ public class MainActivity extends BaseAct {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Handler handler;
-        Looper looper;
-        Timer timer;
-        finish();
-        ActivityThread activityThread;
     }
 
 }

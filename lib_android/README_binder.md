@@ -1,10 +1,12 @@
-# binder机制
+# binder机制总结
 
+## 进程相关
+https://www.jianshu.com/p/cd0d8594abc7
 
 
 ## 进程间通讯的几种方式：
 
-1. AIDL
+1. AIDL [aidl总结 跳转](https://github.com/66668/Android_Interview/blob/master/README_aidl.md);
 2. Messager
 3. ContentProvider
 4. 广播
