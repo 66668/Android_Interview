@@ -1,6 +1,7 @@
 # https 总结（加密算法）
 
 ## 概念
+
 1. TCP 传输控制协议   Transmission Control Protocol
 2. IP 因特网互联协议  Internet Protocol
 3. ICMP 控制报文协议 （ping命令使用）
@@ -15,7 +16,7 @@ SSL的全称是Secure Sockets Layer，即安全套接层协议，是为网络通
 
 TLS的全称是Transport Layer Security，即安全传输层协议，最新版本的TLS建立在SSL 3.0协议规范之上.在理解HTTPS时候,可以把SSL和TLS看做是同一个协议。
 
-##  OSI参考模型/7层模型(了解即可)
+##  OSI参考模型/7层模型()
 
 从底层到应用层：（物理层-->数据链路层）-->网络层-->传输层-->（会话层-->表示层-->应用层）
 
