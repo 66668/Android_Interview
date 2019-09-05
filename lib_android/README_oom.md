@@ -1,4 +1,4 @@
-# 内存泄漏OOM的分析总结
+# 内存泄漏OOM的分析总结(LMK原理分析)
 
 ## 使用as内存分析
 https://developer.android.google.cn/studio/profile/memory-profiler
