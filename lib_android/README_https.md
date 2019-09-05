@@ -1,11 +1,44 @@
-# https 详解（加密算法）
+# https 总结（加密算法）
 
 ## 概念
-HTTPS中的SSL/TLS协议
+1. TCP 传输控制协议   Transmission Control Protocol
+2. IP 因特网互联协议  Internet Protocol
+3. ICMP 控制报文协议 （ping命令使用）
+4. IGMP iternet组管理协议
+5. ARP 地址解析协议
+6. RARP 反向地址转化协议
+7. HTTPS中的SSL/TLS协议:
+
 HTTPS = HTTP + SSL/TLS协议
+
 SSL的全称是Secure Sockets Layer，即安全套接层协议，是为网络通信提供安全及数据完整性的一种安全协议。SSL协议在1994年被Netscape发明，后来各个浏览器均支持SSL，其最新的版本是3.0;
 
 TLS的全称是Transport Layer Security，即安全传输层协议，最新版本的TLS建立在SSL 3.0协议规范之上.在理解HTTPS时候,可以把SSL和TLS看做是同一个协议。
+
+##  OSI参考模型/7层模型(了解即可)
+
+从底层到应用层：（物理层-->数据链路层）-->网络层-->传输层-->（会话层-->表示层-->应用层）
+
+## TCP/IP 参考模型/4层模型
+
+主机到网络层(比特)-->网络互联层（数据帧）-->传输层（数据包）-->应用层（数据段）
+
+## TCP/IP协议族（了解）
+
+![tcp/ip协议族](https://github.com/66668/Android_Interview/blob/master/pictures/tcpip_01.jpg)
+
+![tcp/ip协议族](https://github.com/66668/Android_Interview/blob/master/pictures/tcpip_02.jpg)
+
+## IP地址/端口号
+
+1. IP地址：为了实现网络中不同终端的通信，每个终端必须有一个唯一的标识--IP地址
+2. 端口号：端口号规定为16位，一个IP主机允许有65535个（2^16）端口号：0--1023为系统端口号（不可以乱用）/1024--49152 登记端口号（给第三方应用使用）/49153--65535 短暂端口号（客户进程短暂使用，使用完给其他进程使用）
+
+socket可以使用1024--65535的端口号
+
+通过源IP地址，目标IP地址，协议号，源端口号，目标端口号五个元素，可以确认一个通信
+
+![tcp/ip协议族](https://github.com/66668/Android_Interview/blob/master/pictures/tcpip_02.jpg)
 
 ## 对称加密
 

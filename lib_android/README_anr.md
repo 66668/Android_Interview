@@ -7,9 +7,11 @@ ANR全称：Application Not Responding，也就是应用程序无响应。
 data/anr/traces.txt
 
 ## 原因
-Android系统中，ActivityManagerService(简称AMS)和WindowManagerService(简称WMS)会检测App的响应时间，
+
+1. Android系统中，ActivityManagerService(简称AMS)和WindowManagerService(简称WMS)会检测App的响应时间，
 如果App在特定时间无法相应屏幕触摸或键盘输入事件，或者特定事件没有处理完毕，就会出现ANR。
 
+2. 耗时/死锁
 
 ## 常见事件
 

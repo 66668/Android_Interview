@@ -65,23 +65,19 @@ https://www.jianshu.com/p/c0ec2a7fc26a
 
 [android 性能优化工具篇 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_performance_tools.md);
 
-14. TCP的三次握手和四次挥手
-
-[android  TCP的三次握手和四次挥手 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_tcp.md);
-
-15. 事件分发机制
+14. 事件分发机制
 
 [android 事件分发机制 跳转](https://github.com/66668/Android_Interview/blob/master/README_touchEvent.md);
 
-16. view的绘制流程
+15. view的绘制流程
 
 [android view的绘制流程 跳转](https://github.com/66668/Android_Interview/blob/master/README_view.md);
 
-17. AsyncTask优缺点
+16. AsyncTask优缺点
 
 [android AsyncTask优缺点 跳转](https://github.com/66668/Android_Interview/blob/master/README_AcyncTask.md);
 
-18.  ## jvm与dvm之间的区别：
+17.  ## jvm与dvm之间的区别：
 
 google为了解决与oracle之间关于java相关专利和授权的纠纷，开发了DVM。    
 dvm执行的是.dex格式文件，jvm执行的是.class文件，android程序编译完之后生产.class文件，
@@ -91,6 +87,10 @@ jvm执行的是.class文件。   
 dvm是基于寄存器的虚拟机，而jvm是基于虚拟栈的虚拟机。寄存器存取速度比栈快得多，dvm可以根据硬件实现最大的优化，比较适合移动设备。 
   
 class文件存在很多的冗余信息，dex工具会去除冗余信息，并把所有的.class文件整合到.dex文件中，减少了I/O操作，提高了类的查找速度。
+
+18. TCP的三次握手和四次挥手
+
+[android  TCP的三次握手和四次挥手 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_tcp.md);
 
 19. android https和http及报文格式
 
@@ -107,21 +107,23 @@ SharePreferences不支持多进程
 SharePreferences的commit与apply一个是同步一个是异步（大部分场景下）
 不要使用SharePreferences存储太大的数据
 
-22. http状态码
-
-[android http状态码 跳转](https://github.com/66668/Android_Interview/blob/master/README_http_statecode.md);
-
-23. ANR
+22. ANR
 
 [android ANR 跳转](https://github.com/66668/Android_Interview/blob/master/README_anr.md);
 
-24. 广播总结
+23. 广播总结
 
 [android 广播总结 跳转](https://github.com/66668/Android_Interview/blob/master/README_broadcast.md);
 
 七、Binder机制，进程通信
 
 Android用到的进程通信底层基本都是Binder，AIDL、Messager、广播、ContentProvider。不是很深入理解的，至少ADIL怎么用，Messager怎么用，可以写写看，另外序列化（Parcelable和Serilizable）需要做对比，这方面可以看看任玉刚大神的android艺术开发探索一书。
+
+
+
+
+
+
 
 
 
