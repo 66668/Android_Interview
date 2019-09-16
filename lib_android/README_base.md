@@ -1,7 +1,18 @@
 # android 基础总结
 
+
 https://blog.csdn.net/tgbus18990140382/article/details/88025363
 
+1. android/assets目录和res目录的区别：
+
+    assets：不会再R.java文件爱你中国呢生成标记，可以在assets/下创建文件夹，使用时用AssetsManager调用，assets下的资源打包时会被打入到安装包中
+    
+    res:会在R.java中生成标记，在打包时，会判断那些资源被使用，被使用的打包到安装包中，没被使用的不打包到安装包中
+    
+    res/raw和assets文件夹来存放不需要系统编译成二进制的文件
+
+2. 面向对象的基本特征：封装 继承 多态
+3. 如何中断一个线程：（1）线程中添加标记位：满足直接退出执行（2）在线程执行到sleep()的时机，使用interrupt()终止（3）onStop()强制结束，不推荐，不安全   
 
 
 //基础

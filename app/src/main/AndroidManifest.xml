@@ -16,6 +16,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--桌面小部件的配置-->
+        <receiver android:name="com.android.interview.app_widget.Test42">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <!--  自定义的响应事件 -->
+                <action android:name="android.appwidget.action.MYAPP_START" />
+                <action android:name="android.appwidget.action.MYAPP_STOP" />
+                <action android:name="android.appwidget.action.MYAPP_PLAY" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/test42_info" />
+        </receiver>
+
+        <!--注册：app更新部件的服务 -->
+        <service android:name=".app_widget.UpdateWidgetService" />
+
     </application>
 
 </manifest>
