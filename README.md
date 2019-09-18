@@ -12,6 +12,9 @@
 
 [java相关 跳转](https://github.com/66668/Android_Interview/blob/master/lib_java/README.md);
 
+
+![层次图](https://github.com/66668/Android_Interview/blob/master/pictures/header.jpg)
+
 面试要求总结：
 
 2.Activity的启动模式以及使用场景 
