@@ -29,7 +29,7 @@
 2. V层： xml布局，act/fragment
 3. VM层：viewModel层：实现view层和viewmodel层的双向绑定，databinding
 
-适合中小项目，大项目使用
+适合中小项目，
 
 ### 核心介绍：
 在MVVM中有个ViewModel，它的作用就是与View进行双向绑定，当View或者ViewModel有一方变动时，另一方也会跟着改变，其实就是观察者模式，

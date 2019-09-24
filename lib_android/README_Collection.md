@@ -1,6 +1,10 @@
 # Collection理解
 
-Collection是集合框架的顶层接口，是存储对象的容器,Colloction定义了接口的公用方法如add remove clear等等，它的子接口有两个，List和Set,List的特点有元素有序，元素可以重复，元素都有索引（角标），典型的有
+Collection是集合框架的顶层接口，是存储对象的容器,Colloction定义了接口的公用方法如add remove clear等等，
+它的子接口有两个，List和Set,
+
+List的特点有元素有序，元素可以重复，元素都有索引（角标），
+典型的有：
 Vector:内部是数组数据结构，是同步的（线程安全的）。增删查询都很慢。
 ArrayList:内部是数组数据结构，是不同步的（线程不安全的）。替代了Vector。查询速度快，增删比较慢。
 LinkedList:内部是链表数据结构，是不同步的（线程不安全的）。增删元素速度快。

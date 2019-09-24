@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.util.Collection;
+import java.util.HashMap;
+
 public class MainActivity extends BaseAct {
     ActivityManager manager;
     TextView tv;

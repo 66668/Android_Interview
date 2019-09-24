@@ -10,7 +10,7 @@
   
 
 ## 广播分类：主要分为一下四类：
- 1. Normal Broadcast(普通广播)：通常调用sendBroadcast(Intent)(Intent, String)方法发送
+ 1. Normal Broadcast(普通广播/无需广播)：通常调用sendBroadcast(Intent)(Intent, String)方法发送
  2. System Broadcast(系统广播)：发生各种事件时，系统自动发送
  3. Ordered Broadcast(有序广播)：调用sendOrderedBroadcast(Intent, String)方法发送
  4. Local Broadcast(本地广播)：调用LocalBroadcastManager.sendBroadcast(intent)方法发送
