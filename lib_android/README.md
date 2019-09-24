@@ -67,7 +67,7 @@ https://www.jianshu.com/p/c0ec2a7fc26a
 
 14. 事件分发机制
 
-[android 事件分发机制 跳转](https://github.com/66668/Android_Interview/blob/master/README_touchEvent.md);
+[android 事件分发机制 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_touchEvent.md);
 
 15. view的绘制流程
 
