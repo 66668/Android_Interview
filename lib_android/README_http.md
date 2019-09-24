@@ -3,9 +3,15 @@
 ## 面试点：
 1. tcp/ip协议和http协议在哪个层定义的
 2. OSI的七层模型,tcp/ip的4层模型是什么
-3. http协议的请求过程
+3. 一次完整HTTP请求的过程
+4. DNS域名解析原理
+5. HTTP和HTTPS的区别
+6. HTTP协议报文结构
+7. HTTP头域及http的缓存机制
+8. Http状态码
 
 ## 概念
+
 
 1. TCP 传输控制协议   Transmission Control Protocol
 2. IP 因特网互联协议  Internet Protocol
@@ -29,7 +35,9 @@
     
     2015 http 2.0
     
-8. HTTPS中的SSL/TLS协议:
+8. HTTP 超文本传输协议 端口80  Hyper Text Transfer Protocol 
+9. HTTPS  安全的超文本传输协议 端口443 Hyper Text Transfer Protocol over Secure Socket Layer
+10. HTTPS中的SSL/TLS协议:
 
 HTTPS = HTTP + SSL/TLS协议
 
@@ -37,13 +45,14 @@ SSL的全称是Secure Sockets Layer，即安全套接层协议，是为网络通
 
 TLS的全称是Transport Layer Security，即安全传输层协议，最新版本的TLS建立在SSL 3.0协议规范之上.在理解HTTPS时候,可以把SSL和TLS看做是同一个协议。
 
-9. URI和URL：URL是URI的子集
+11. URI和URL：URL是URI的子集
 
    RUI:统一资源标识符
    
    URL:统一资源定位符 （用定位的方式，标识一个资源）
    
-10. DNS 域名系统 Domain Name System:用于 TCP/IP 网络，它从事将主机名或域名转换为实际 IP 地址的工作
+12. DNS 域名系统 Domain Name System:用于 TCP/IP 网络，它从事将主机名或域名转换为实际 IP 地址的工作
+
 ##  OSI参考模型/7层模型()
 
 从底层到应用层：（物理层-->数据链路层）-->网络层-->传输层-->（会话层-->表示层-->应用层）
@@ -90,7 +99,7 @@ eg: http://www.aspxfans.com:8080/news/index.asp?boardID=5&ID=24618&page=1#r_7073
 
     锚点作用：打开用户页面时滚动到该锚点位置。如：一个html页面中有一段代码，该url的hash为r_70732423
     
-## HTTP请请求的传输过程（非面试重点）   
+## HTTP请求的传输过程（非面试重点）   
 
 
 ![HTTP请请求的传输过程](https://github.com/66668/Android_Interview/blob/master/pictures/http_01.png)
@@ -145,7 +154,18 @@ Http协议是超文本传输协议，是一个应用层协议，由请求和响�
 # HTTP协议报文结构
 报文格式一般是 报文头部+空格+报文主体组成，具体要分请求和响应的报文：
 
-## HTTP请求/响应报 文头部结构
+1. 一个HTTP请求报文由四个部分组成：**请求行、请求头、空行、请求数据**
+
+    (1)请求行由 **请求方法字段**+空格+**URL字段**+空格+**HTTP协议版本字段**+回车符+换行符3个字段组成
+    
+
+2. 一个HTTP响应报文由四部分组成：**响应行、响应头、空行、响应体**
+
+    (1)响应行一般由**协议版本**、**状态码**及其**描述**组成 比如 HTTP/1.1 200 OK
+    
+见如下详解：（1）HTTP请求/响应报文 头部结构 （2）http 头域详解
+
+## HTTP请求/响应报文 头部结构
 
 参考 https://blog.csdn.net/ulike_mfy/article/details/79550241
 
@@ -156,6 +176,7 @@ Http协议是超文本传输协议，是一个应用层协议，由请求和响�
 ![HTTP请求报文格式](https://github.com/66668/Android_Interview/blob/master/pictures/http_req_01.png)
 
 ### 请求行
+
 请求行由 **请求方法字段**+空格+**URL字段**+空格+**HTTP协议版本字段**+回车符+换行符3个字段组成，它们用空格分隔。比如 GET /data/info.html HTTP/1.1
 
 方法字段就是HTTP使用的请求方法，比如常见的GET/POST
@@ -169,52 +190,26 @@ HTTP1.0对于每个连接都只能传送一个请求和响应，请求就会关�
 HTTP客户程序(例如浏览器)，向服务器发送请求的时候必须指明请求类型(一般是GET或者 POST)。如有必要，客户程序还可以选择发送其他的请求头。大多数请求头并不是必需的，但Content-Length除外。对于POST请求来说 Content-Length必须出现。
 
 常见的请求头字段含义：
+1. Accept
+2. Accept-Charset 可接受字符类型
+3. Accept-Encoding 编码方式 
+4. Accept-Language
+5. Authorization 授权信息
+6. Expect
+7. From
+8. Host 
+9. If-Match
+10. If-Modifed-Since 只有当所请求的信息在指定的日期以后，又经过修改才返回它，否则返回304（与缓存有关）
+11. **If-Unmodifed-Since**
+12. **If-None-Match**
+13. If-Range
+14. Max-Forwards
+15. Proxy-Authorization
+16. **Range** **面试考点： Range头域可以请求实体的一个或多个子范围，**用于实现断点续传**配合IO流的RandomAccessFile实现
+17. Referer
+18. TE
+19. User-Agent ：发出请求的用户信息
 
-Accept： 浏览器可接受的MIME类型。
-
-Accept-Charset：浏览器可接受的字符集。
-
-Accept-Encoding：浏览器能够进行解码的数据编码方式，比如gzip。Servlet能够向支持gzip的浏览器返回经gzip编码的HTML页面。许多情形下这可以减少5到10倍的下载时间。
-
-Accept-Language：浏览器所希望的语言种类，当服务器能够提供一种以上的语言版本时要用到。
-
-Authorization：授权信息，通常出现在对服务器发送的WWW-Authenticate头的应答中。
-
-Content-Length：表示请求消息正文的长度。
-
-Host： 客户机通过这个头告诉服务器，想访问的主机名。Host头域指定请求资源的Intenet主机和端口号，必须表示请求url的原始服务器或网关的位置。HTTP/1.1请求必须包含主机头域，否则系统会以400状态码返回。
-
-If-Modified-Since：客户机通过这个头告诉服务器，资源的缓存时间。只有当所请求的内容在指定的时间后又经过修改才返回它，否则返回304“Not Modified”应答。
-
-Referer：客户机通过这个头告诉服务器，它是从哪个资源来访问服务器的(防盗链)。包含一个URL，用户从该URL代表的页面出发访问当前请求的页面。
-
-User-Agent：User-Agent头域的内容包含发出请求的用户信息。浏览器类型，如果Servlet返回的内容与浏览器类型有关则该值非常有用。
-
-Cookie：客户机通过这个头可以向服务器带数据，这是最重要的请求头信息之一。
-
-Pragma：指定“no-cache”值表示服务器必须返回一个刷新后的文档，即使它是代理服务器而且已经有了页面的本地拷贝。
-
-From：请求发送者的email地址，由一些特殊的Web客户程序使用，浏览器不会用到它。
-
-Connection：处理完这次请求后是否断开连接还是继续保持连接。如果Servlet看到这里的值为“Keep- Alive”，或者看到请求使用的是HTTP 1.1(HTTP 1.1默认进行持久连接)，它就可以利用持久连接的优点，当页面包含多个元素时(例如Applet，图片)，显著地减少下载所需要的时间。要实现这一点，Servlet需要在应答中发送一个Content-Length头，最简单的实现方法是：先把内容写入 ByteArrayOutputStream，然后在正式写出内容之前计算它的大小。
-
-Range：Range头域可以请求实体的一个或者多个子范围。例如，
-
-表示头500个字节：bytes=0-499
-
-表示第二个500字节：bytes=500-999
-
-表示最后500个字节：bytes=-500
-
-表示500字节以后的范围：bytes=500-
-
-第一个和最后一个字节：bytes=0-0,-1
-
-同时指定几个范围：bytes=500-600,601-999
-
-但是服务器可以忽略此请求头，如果无条件GET包含Range请求头，响应会以状态码206(PartialContent)返回而不是以200 (OK)。
-
-UA-Pixels，UA-Color，UA-OS，UA-CPU：由某些版本的IE浏览器所发送的非标准的请求头，表示屏幕大小、颜色深度、操作系统和CPU类型。
 
 ### 空行
 它的作用是通过一个空行，告诉服务器请求头部到此为止。
@@ -234,6 +229,7 @@ UA-Pixels，UA-Color，UA-OS，UA-CPU：由某些版本的IE浏览器所发送�
 上面是POST方法，它的请求行URL段中一般是没有参数的，参数放在了报文体中。而GET方法的参数直接置于请求行URL中，报文体则为空。
 
 ## 响应报文
+
 HTTP响应报文格式就如下图所示
 ![响应报文格式](https://github.com/66668/Android_Interview/blob/master/pictures/http_resp_01.png)
 ![响应报文格式](https://github.com/66668/Android_Interview/blob/master/pictures/http_header_03.png)
@@ -241,7 +237,7 @@ HTTP响应报文格式就如下图所示
 响应报文由三部分组成：**响应行、响应头、空行、响应体**
 
 ### 响应行
-响应行一般由协议版本、状态码及其描述组成 比如 HTTP/1.1 200 OK
+响应行一般由**协议版本**、**状态码**及其**描述**组成 比如 HTTP/1.1 200 OK
 
 其中协议版本HTTP/1.1或者HTTP/1.0，200就是它的状态码，OK则为它的描述。
 
@@ -258,6 +254,7 @@ HTTP响应报文格式就如下图所示
 500~599：服务器端出现错误，常用500
 
 更详细的状态码信息
+
 ### 响应头
 响应头用于描述服务器的基本信息，以及数据的描述，服务器通过这些数据的描述信息，可以通知客户端如何处理等一会儿它回送的数据。
 
@@ -265,99 +262,33 @@ HTTP响应报文格式就如下图所示
 
 常见的响应头字段含义：
 
-Allow：服务器支持哪些请求方法(如GET、POST等)。
+1. Accept-Range
+2. Age
+3. **Etag** :表示资源是否变化
+4. Location 这个头配合302状态码使用，用于重定向接收者到一个新URI地址。表示客户应当到哪里去提取文档。Location通常不是直接设置的，而是通过HttpServletResponse的sendRedirect方法，该方法同时设置状态代码为302。
+5. Proxy-Authenticate
+6. Server 服务器通过这个头告诉浏览器服务器的类型。Server响应头包含处理请求的原始服务器的软件信息。此域能包含多个产品标识和注释，产品标识一般按照重要性排序。Servlet一般不设置这个值，而是由Web服务器自己设置。
+7. Vary
+8. WWW-Authenticate 客户应该在Authorization头中提供什么类型的授权信息?在包含401(Unauthorized)状态行的应答中这个头是必需的。例如，response.setHeader(“WWW-Authenticate”, “BASIC realm=\”executives\”“)。注意Servlet一般不进行这方面的处理，而是让Web服务器的专门机制来控制受密码保护页面的访问。
+                    
+                    注：设置应答头最常用的方法是HttpServletResponse的setHeader，该方法有两个参数，分别表示应答头的名字和值。和设置状态代码相似，设置应答头应该在发送任何文档内容之前进行。
+                    
+                    setDateHeader方法和setIntHeadr方法专门用来设置包含日期和整数值的应答头，前者避免了把Java时间转换为GMT时间字符串的麻烦，后者则避免了把整数转换为字符串的麻烦。
 
-Content-Encoding：文档的编码(Encode)方法。只有在解码之后才可以得到Content-Type头指定的内容类型。利用gzip压缩文档能够显著地减少HTML文档的下载时间。Java的GZIPOutputStream可以很方便地进行gzip压缩，但只有Unix上的Netscape和Windows上的IE4、IE5才支持它。因此，Servlet应该通过查看Accept-Encoding头(即request.getHeader(“Accept- Encoding”))检查浏览器是否支持gzip，为支持gzip的浏览器返回经gzip压缩的HTML页面，为其他浏览器返回普通页面。
+9. Refresh：告诉浏览器隔多久刷新一次，以秒计。
+10. Set-Cookie：设置和页面关联的Cookie。Servlet不应使用response.setHeader(“Set-Cookie”, …)，而是应使用HttpServletResponse提供的专用方法addCookie。
 
-Content-Length：表示内容长度。只有当浏览器使用持久HTTP连接时才需要这个数据。如果你想要利用持久连接的优势，可以把输出文档写入 ByteArrayOutputStram，完成后查看其大小，然后把该值放入Content-Length头，最后通过byteArrayStream.writeTo(response.getOutputStream()发送内容。
+11. setContentType：设置Content-Type头。大多数Servlet都要用到这个方法。
 
-Content- Type：表示后面的文档属于什么MIME类型。Servlet默认为text/plain，但通常需要显式地指定为text/html。由于经常要设置 Content-Type，因此HttpServletResponse提供了一个专用的方法setContentType。
+12. setContentLength：设置Content-Length头。对于支持持久HTTP连接的浏览器来说，这个函数是很有用的。
 
-Date：当前的GMT时间，例如，Date:Mon,31Dec200104:25:57GMT。Date描述的时间表示世界标准时，换算成本地时间，需要知道用户所在的时区。你可以用setDateHeader来设置这个头以避免转换时间格式的麻烦。
+13. addCookie：设置一个Cookie(Servlet API中没有setCookie方法，因为应答往往包含多个Set-Cookie头)。
 
-Expires：告诉浏览器把回送的资源缓存多长时间，-1或0则是不缓存。
-
-Last-Modified：文档的最后改动时间。客户可以通过If-Modified-Since请求头提供一个日期，该请求将被视为一个条件GET，只有改动时间迟于指定时间的文档才会返回，否则返回一个304(Not Modified)状态。Last-Modified也可用setDateHeader方法来设置。
-
-Location：这个头配合302状态码使用，用于重定向接收者到一个新URI地址。表示客户应当到哪里去提取文档。Location通常不是直接设置的，而是通过HttpServletResponse的sendRedirect方法，该方法同时设置状态代码为302。
-
-Refresh：告诉浏览器隔多久刷新一次，以秒计。
-
-Server：服务器通过这个头告诉浏览器服务器的类型。Server响应头包含处理请求的原始服务器的软件信息。此域能包含多个产品标识和注释，产品标识一般按照重要性排序。Servlet一般不设置这个值，而是由Web服务器自己设置。
-
-Set-Cookie：设置和页面关联的Cookie。Servlet不应使用response.setHeader(“Set-Cookie”, …)，而是应使用HttpServletResponse提供的专用方法addCookie。
-
-Transfer-Encoding：告诉浏览器数据的传送格式。
-
-WWW-Authenticate：客户应该在Authorization头中提供什么类型的授权信息?在包含401(Unauthorized)状态行的应答中这个头是必需的。例如，response.setHeader(“WWW-Authenticate”, “BASIC realm=\”executives\”“)。注意Servlet一般不进行这方面的处理，而是让Web服务器的专门机制来控制受密码保护页面的访问。
-
-注：设置应答头最常用的方法是HttpServletResponse的setHeader，该方法有两个参数，分别表示应答头的名字和值。和设置状态代码相似，设置应答头应该在发送任何文档内容之前进行。
-
-setDateHeader方法和setIntHeadr方法专门用来设置包含日期和整数值的应答头，前者避免了把Java时间转换为GMT时间字符串的麻烦，后者则避免了把整数转换为字符串的麻烦。
-
-HttpServletResponse还提供了许多设置
-
-setContentType：设置Content-Type头。大多数Servlet都要用到这个方法。
-
-setContentLength：设置Content-Length头。对于支持持久HTTP连接的浏览器来说，这个函数是很有用的。
-
-addCookie：设置一个Cookie(Servlet API中没有setCookie方法，因为应答往往包含多个Set-Cookie头)。
 ### 空行
 ### 响应体
 响应体就是响应的消息体，如果是纯数据就是返回纯数据，如果请求的是HTML页面，那么返回的就是HTML代码，如果是JS就是JS代码，如此之类。
 
-
-
-
-##HTTP头域
-
-HTTP的头域包括通用头，请求头，响应头和实体头四个部分。前面讲解了请求头和响应头，接下来看看通用头和实体头(这里可能和前面介绍的请求头、响应头有重复)。
-## 请求头
-## 响应头
-## 通用头
-通用头域包含请求和响应消息都支持的头域，通用头域包含Cache-Control、 Connection、Date、Pragma、Transfer-Encoding、Upgrade、Via。对通用头域的扩展要求通讯双方都支持此扩展，如果存在不支持的通用头域，一般将会作为实体头域处理。下面简单介绍几个通用头域。
-
-常见通用头含义：
-
-Cache-Control：指定请求和响应遵循的缓存机制。在请求消息或响应消息中设置 Cache-Control并不会修改另一个消息处理过程中的缓存处理过程。请求时的缓存指令包括no-cache、no-store、max-age、 max-stale、min-fresh、only-if-cached，响应消息中的指令包括public、private、no-cache、no- store、no-transform、must-revalidate、proxy-revalidate、max-age。各个消息中的指令含义如下：
-
-Public指示响应可被任何缓存区缓存。 Private指示对于单个用户的整个或部分响应消息，不能被共享缓存处理。这允许服务器仅仅描述当用户的部分响应消息，此响应消息对于其他用户的请求无效。 no-cache指示请求或响应消息不能缓存 no-store用于防止重要的信息被无意的发布。在请求消息中发送将使得请求和响应消息都不使用缓存。 max-age指示客户机可以接收生存期不大于指定时间(以秒为单位)的响应。 min-fresh指示客户机可以接收响应时间小于当前时间加上指定时间的响应。 max-stale指示客户机可以接收超出超时期间的响应消息。如果指定max-stale消息的值，那么客户机可以接收超出超时期指定值之内的响应消息。
-
-Date：表示消息发送的时间，时间的描述格式由rfc822定义。例如，Date:Mon,31Dec200104:25:57GMT。Date描述的时间表示世界标准时，换算成本地时间，需要知道用户所在的时区。
-
-Pragma：用来包含实现特定的指令，最常用的是Pragma:no-cache。在HTTP/1.1协议中，它的含义和Cache-Control:no-cache相同。
-## 实体头
-请求消息和响应消息都可以包含实体信息，实体信息一般由实体头域和实体组成。实体头域包含关于实体的原信息，实体头包括Allow、Content- Base、Content-Encoding、Content-Language、 Content-Length、Content-Location、Content-MD5、Content-Range、Content-Type、 Etag、Expires、Last-Modified、extension-header。extension-header允许客户端定义新的实体头，但是这些域可能无法未接受方识别。实体可以是一个经过编码的字节流，它的编码方式由Content-Encoding或Content-Type定义，它的长度由Content-Length或Content-Range定义。
-
-常见实体头含义：
-
-Content-Encoding： 服务器通过这个头告诉浏览器数据的压缩格式。
-
-Content-Length： 服务器通过这个头告诉浏览器回送数据的长度。
-
-Content-Disposition：告诉浏览器以下载方式打开数据。
-
-Content-Type：服务器通过这个头告诉浏览器回送数据的类型。Content-Type实体头用于向接收方指示实体的介质类型，指定HEAD方法送到接收方的实体介质类型，或GET方法发送的请求介质类型。
-
-Content-Range：用于指定整个实体中的一部分的插入位置，他也指示了整个实体的长度。在服务器向客户返回一个部分响应，它必须描述响应覆盖的范围和整个实体长度。一般格式：
-
-Content-Range:bytes-unitSPfirst-byte-pos-last-byte-pos/entity-legth
-
-例如，传送头500个字节次字段的形式：Content-Range:bytes0- 499/1234，如果一个http消息包含此节(例如，对范围请求的响应或对一系列范围的重叠请求)，Content-Range表示传送的范围， Content-Length表示实际传送的字节数。
-
-Last-Modified：指定服务器上保存内容的最后修订时间。
-
-ETag：缓存相关的头
-
-Expires：告诉浏览器把回送的资源缓存多长时间 -1或0则是不缓存
-
-其中三种禁止浏览器缓存的头字段：
-
-Expires：-1或0
-
-Cache-Control：no-cache
-
-Pragma：no-cache
+## HTTP 头域详解
 
 ## POST/GET区别
 

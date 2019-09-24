@@ -13,6 +13,17 @@ data/anr/traces.txt
 
 2. 耗时/死锁
 
+1. 耗时的网络访问
+2. 大量的数据读写
+3. 数据库操作
+4. 硬件操作（比如camera)
+5. 调用thread的join()方法、sleep()方法、wait()方法或者等待线程锁的时候
+6. service binder的数量达到上限
+7. system server中发生WatchDog ANR
+8. service忙导致超时无响应
+9. 其他线程持有锁，导致主线程等待超时
+10. 其它线程终止或崩溃导致主线程一直等待
+
 ## 常见事件
 
 1. 按键或触摸事件在特定时间内无响应， 5s

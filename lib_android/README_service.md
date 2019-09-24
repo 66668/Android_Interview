@@ -132,3 +132,235 @@ xml代码：
         @Override    public IBinder onBind(Intent arg0) {        return mBinder;
         }
     }
+    
+    
+# Service 使用示例详解
+
+结合公司的成熟项目，熟悉service
+
+## 后台服务启动方式1：startService(Intent)/stopService(Intent)
+流程：
+
+1. 创建简单的自定义Service
+2. 在Manifest中注册Service 
+3. (默认)act中，使用：
+    
+    
+     //start
+     Intent startIntent = new Intent(MainActivity.this, MyStartService.class);
+     startService(startIntent);
+     //stop
+     Intent stopIntent = new Intent(MainActivity.this, MyStartService.class);
+     stopService(stopIntent);
+4.调用生命周期：
+
+    //start
+    onCreate--onStartCommand
+    //stop
+    onDestroy
+
+
+## 后台服务启动方式2：bindService()/unBindService()
+
+流程：
+
+1. 创建简单的自定义Service
+2. 在service中自定义Binder,给自定义Service的onBind使用
+
+       
+        //myBinder为自定义Binder实例
+         @Override
+            public IBinder onBind(Intent intent) {
+                Logger.d("MyBindService--onBind");
+                return myBinder;
+            }
+
+3. 在Manifest中注册Service 
+4.  (默认)act中，创建ServiceConnection的内部类实例，给bindService这个方法使用
+
+            
+            //准备ServiceConnection对象
+            MyBindService.MyBBinder myBBinder;
+            private ServiceConnection myBBinderCon = new ServiceConnection() {
+        
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                }
+        
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    myBBinder = (MyBindService.MyBBinder) service;
+                    //act调用service方法
+                    myBBinder.sjyToDo();
+                }
+            };
+            
+            //使用bind
+            Intent bindIntent = new Intent(MainActivity.this, MyBindService.class);
+            bindService(bindIntent, myBBinderCon, BIND_AUTO_CREATE);
+            //unbind
+            unbindService(myBBinderCon);
+            
+5. 生命周期
+
+        
+        //  bind
+        onCreate--onBind--（自定义Binder）linkToDeath
+        // unbind
+        (自定义Binder）unlinkToDeath--onUnbind--onDestroy
+                   
+## 前台服务 
+
+1. 状态栏必须提供通知
+2. 内存不足，不会被回收
+3. 
+### 前台服务和后台服务的区别
+
+1. 前台Service的系统优先级更高、不易被回收；
+
+2. 前台Service会一直有一个正在运行的图标在系统的状态栏显示，下拉状态栏后可以看到更加详细的信息，
+    非常类似于通知的效果。(只有在这个服务被终止或从前台主动移除通知后才能被解除。)
+
+## 源码流程
+
+## 代码流程
+流程 ：
+
+1. 创建简单的自定义Service
+2. 在Service的onCreate()中，**设置前台服务的代码(注意api>26)的写法**
+
+    
+     @Override
+        public void onCreate() {
+            super.onCreate();
+            Logger.d("MyForegroundService--onCreate--开启前台Service");
+            if (Build.VERSION.SDK_INT >= 26) {
+                setForeground();
+            }
+        }
+    
+        @TargetApi(26)
+        private void setForeground() {
+            //写法1：简单的前台
+    //        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    //        NotificationChannel channel = new NotificationChannel(ID, NAME, NotificationManager.IMPORTANCE_HIGH);
+    //        manager.createNotificationChannel(channel);
+    //        Notification notification = new Notification.Builder(this, ID)
+    //                .setContentTitle("前台服务Demo-主题")
+    //                .setContentText("前台服务demo-内容")
+    //                .setSmallIcon(R.mipmap.ic_launcher)
+    //                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+    //                .build();
+    //        startForeground(1, notification);
+    
+            //写法2：通知栏支持跳转的前台
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent2 = PendingIntent.getActivity(this, 0, intent, 0);
+            Notification notification2 = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                Uri mUri = Settings.System.DEFAULT_NOTIFICATION_URI;
+                NotificationChannel mChannel = new NotificationChannel("channel_id2", "driver", NotificationManager.IMPORTANCE_LOW);//CHANNEL_ONE_ID自定义
+    
+                mChannel.setSound(mUri, Notification.AUDIO_ATTRIBUTES_DEFAULT);
+                mChannel.enableLights(true); //设置开启指示灯，如果设备有的话
+                mChannel.setLightColor(Color.RED); //设置指示灯颜色
+                mChannel.setShowBadge(true); //设置是否显示角标
+                mChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);//设置是否应在锁定屏幕上显示此频道的通知
+                mChannel.setDescription("设置渠道描述");//设置渠道描述
+                mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 600});//设置震动频率
+                mChannel.setBypassDnd(true);//设置是否绕过免打扰模式
+                //api26更改
+                NotificationManager manager2 = (NotificationManager) getApplication().getSystemService(NOTIFICATION_SERVICE);
+                manager2.createNotificationChannel(mChannel);
+                notification2 = new Notification.Builder(this, "channel_id2")
+                        .setChannelId("channel_id2")
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("前台服务Demo-主题2")
+                        .setContentText("前台服务demo-内容2")
+                        .setContentIntent(pendingIntent2)
+                        .build();
+            } else {
+                // 提升应用权限
+                notification2 = new Notification.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText("hello world")
+                        .setContentIntent(pendingIntent2)
+                        .build();
+            }
+            notification2.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR | Notification.FLAG_FOREGROUND_SERVICE;
+            startForeground(2, notification2);
+        }
+        
+3. 在Manifest中注册Service 
+4. (默认)act中调用：
+    
+            
+          // start
+          Intent startForegroundIntent = new Intent(this, MyForegroundService.class);
+          if (Build.VERSION.SDK_INT >= 26) {
+                        startForegroundService(startForegroundIntent);
+          } else {
+                        startService(startForegroundIntent);
+          }
+          
+          //stop
+          Intent stopForeground = new Intent(this, MyForegroundService.class);
+          stopService(stopForeground);
+            
+## 远程服务  
+ 
+远程服务和本地服务的区别：
+1. 最大区别是服务和调用者可以不在一个进程中
+
+| 服务| 特点 |优点|缺点 |
+| ---------- | -------------| -------------| -------------| 
+| 本地服务|  1.运行在主线程。2 主进程终止，服务也终止|节约资源，通讯方便|主进程终止，服务终止，限制大|
+| 远程服务|  1.独立进程。2 服务常驻后台，不受act影响|灵活：独立进程，不受act影响|耗费资源（单独进程），要使用aidl|
+
+## 示例
+
+1. 新建项目,aidl(服务端)，并将aidl绑定给自定义的服务，并在manefest中将service设置成可被别的app调用的属性
+2. 新建项目,aidl(调用端)
+
+
+    /**
+     * 远程服务 aidl
+     */
+    IAidlDemoInterface iAidlDemoInterface;
+    private ServiceConnection remoteConn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            iAidlDemoInterface = IAidlDemoInterface.Stub.asInterface(iBinder);
+
+            //使用自定义方法
+            try {
+                Logger.d("远程服务--调用者调用自定义");
+                iAidlDemoInterface.myAdd();
+            } catch (Exception e) {
+
+            }
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+            Logger.d("远程服务关闭");
+        }
+    };
+    
+    
+    
+    //使用
+    Intent remoteIntent = new Intent();
+    remoteIntent.setPackage("com.sjy.servicedemo2");
+    remoteIntent.setAction("com.sjy.remoteService.demo");
+    remoteIntent.setComponent(new ComponentName("com.sjy.servicedemo2","com.sjy.servicedemo2.RemoteService"));
+    bindService(remoteIntent, remoteConn, BIND_AUTO_CREATE);             
+
+
+
+
+
+

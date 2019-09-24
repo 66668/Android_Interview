@@ -119,6 +119,31 @@ SharePreferences的commit与apply一个是同步一个是异步（大部分场�
 
 [android 广播总结 跳转](https://github.com/66668/Android_Interview/blob/master/README_broadcast.md);
 
+25. Collection
+
+[Collection 跳转](https://github.com/66668/Android_Interview/blob/master/RREADME_Collection.md);
+
+26. Flutter框架
+
+[Flutter框架 跳转](https://github.com/66668/Android_Interview/blob/master/README_flutter.md);
+
+
+26. LruCache
+
+[LruCache 跳转](https://github.com/66668/Android_Interview/blob/master/README_Lrucache.md);
+
+26. 冷启动热启动
+
+[冷启动热启动 跳转](https://github.com/66668/Android_Interview/blob/master/README_start.md);
+
+26. SurfaceView
+
+[SurfaceView 跳转](https://github.com/66668/Android_Interview/blob/master/README_SurfaceView.md);
+
+26. android线程总结
+
+[android线程总结 跳转](https://github.com/66668/Android_Interview/blob/master/README_thread.md);
+
 七、Binder机制，进程通信
 
 Android用到的进程通信底层基本都是Binder，AIDL、Messager、广播、ContentProvider。不是很深入理解的，至少ADIL怎么用，Messager怎么用，可以写写看，另外序列化（Parcelable和Serilizable）需要做对比，这方面可以看看任玉刚大神的android艺术开发探索一书。

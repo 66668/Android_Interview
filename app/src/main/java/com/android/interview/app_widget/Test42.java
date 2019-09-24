@@ -92,46 +92,29 @@ public class Test42 extends AppWidgetProvider {
         //（1）start点击发送广播
         Intent startIntent = new Intent(context, MainActivity.class);//目标act
         startIntent.setAction(MYAPP_START);
-        Bundle starBundle = new Bundle();
-        starBundle.putString("start", "start" + "--updateAppWidget");
-        starBundle.putString("stop", "stop");
-        starBundle.putString("play", "play");
-        startIntent.putExtras(starBundle);
+        startIntent.setPackage(context.getPackageName());
         PendingIntent startPendingIntent = PendingIntent.getActivity(context, 0, startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         views.setOnClickPendingIntent(R.id.tv_start, startPendingIntent);
 
         //（2）stop点击发送广播
-        Intent stopIntent = new Intent(context, MainActivity.class);//目标act
+        Intent stopIntent = new Intent(context, Test42.class);//目标act
         stopIntent.setAction(MYAPP_STOP);
-        Bundle stopBundle = new Bundle();
-        stopBundle.putString("start", "start");
-        stopBundle.putString("stop", "stop" + "--updateAppWidget");
-        stopBundle.putString("play", "play");
-        stopIntent.putExtras(stopBundle);
-        PendingIntent stopPendingIntent = PendingIntent.getActivity(context, 0, stopIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        stopIntent.setPackage(context.getPackageName());
+        PendingIntent stopPendingIntent = PendingIntent.getBroadcast(context, 0, stopIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         views.setOnClickPendingIntent(R.id.tv_stop, stopPendingIntent);
 
         //（3）play点击发送广播
-        Intent playIntent = new Intent(context, MainActivity.class);//目标act
-        startIntent.setAction(MYAPP_PLAY);
-        Bundle playBundle = new Bundle();
-        playBundle.putString("start", "start" );
-        playBundle.putString("stop", "stop");
-        playBundle.putString("play", "play"+ "--updateAppWidget");
-        playIntent.putExtras(playBundle);
-        PendingIntent playPendingIntent = PendingIntent.getActivity(context, 0, playIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        Intent playIntent = new Intent(context, Test42.class);//目标act
+        playIntent.setAction(MYAPP_PLAY);
+        playIntent.setPackage(context.getPackageName());
+        PendingIntent playPendingIntent = PendingIntent.getBroadcast(context, 0, playIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         views.setOnClickPendingIntent(R.id.tv_play, playPendingIntent);
 
         //（4）title点击发送广播
-        Intent titleIntent = new Intent(context, MainActivity.class);//目标act
-        startIntent.setAction(MYAPP_PLAY);
-        Bundle titleBundle = new Bundle();
-        titleBundle.putString("start", "start" + "--updateAppWidget");
-        titleBundle.putString("stop", "stop");
-        titleBundle.putString("play", "play");
-        titleIntent.putExtras(playBundle);
-        PendingIntent titlePendingIntent = PendingIntent.getBroadcast(context, 0, playIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        views.setOnClickPendingIntent(R.id.tv_title, titlePendingIntent);
+//        Intent titleIntent = new Intent(context, MainActivity.class);//目标act
+//        titleIntent.setAction(MYAPP_PLAY);
+//        PendingIntent titlePendingIntent = PendingIntent.getBroadcast(context, 0, titleIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+//        views.setOnClickPendingIntent(R.id.tv_title, titlePendingIntent);
 
         Log.d("SJY", "onUpdate--updateAppWidget");
         appWidgetManager.updateAppWidget(appWidgetId, views);

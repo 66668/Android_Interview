@@ -2,15 +2,15 @@
 
 1. 数据结构与算法：
 
-[数据结构与算法 跳转](https://github.com/66668/Android_Interview/blob/master/lib_structure/README.md);
+[数据结构与算法 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_structure.md);
 
 2. android相关：
 
 [android相关 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README.md);
 
-3. java相关
+3. java 基础
 
-[java相关 跳转](https://github.com/66668/Android_Interview/blob/master/lib_java/README.md);
+[java基础](https://github.com/66668/Android_Interview/blob/master/lib_android/README_java_base.md);
 
 
 ![层次图](https://github.com/66668/Android_Interview/blob/master/pictures/header.jpg)

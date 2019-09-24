@@ -164,3 +164,7 @@ file --> new --> Widget-->app widget,创建指定大小的部件，as会自动�
             this.finish();
 
  隐式启动，在启动的时候是不明确的。 如果intent-filter中还设置了 data 属性，则必须 action,category,data 完全匹配才能完成跳转
+ 
+ 
+ ## 个人开发遇到的问题
+ 1. onUpdate创建点击事件，发送给onRecevice，让onRecevice去打开app,无响应。
