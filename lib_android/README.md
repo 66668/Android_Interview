@@ -4,14 +4,73 @@ https://blog.csdn.net/tgbus18990140382/article/details/88025363
 进阶教程
 https://www.jianshu.com/p/c0ec2a7fc26a
 
-
+## android 基础总结
 1. android基础相关
 
 [android基础相关 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_base.md);
 
+
+2. Activity/Fragment生命周期总结
+
+[Activity/Fragment生命周期](https://github.com/66668/Android_Interview/blob/master/lib_android/README_lifeCycle.md);
+
+
+3. AsyncTask总结
+
+[AsyncTask总结](https://github.com/66668/Android_Interview/blob/master/README_AsyncTask.md);
+
+4. ANR总结
+
+[android ANR](https://github.com/66668/Android_Interview/blob/master/README_anr.md);
+
+5. onSaveInstanceState() 与 onRestoreIntanceState() 总结
+
+
+[onSaveInstanceState() 与 onRestoreIntanceState()](https://github.com/66668/Android_Interview/blob/master/README_onSave_onRestore.md);
+
+
+6. android中进程的优先级 总结
+
+[onSaveInstanceState() 与 onRestoreIntanceState()](https://github.com/66668/Android_Interview/blob/master/README_process.md);
+
+7. 序列化 反序列化
+
+[序列化 反序列化](https://github.com/66668/Android_Interview/blob/master/README_binder.md);
+
+8. 动画简单总结
+
+[动画简单总结](https://github.com/66668/Android_Interview/blob/master/README_anim.md);
+
+9.Context总结
+   
+[Context总结](https://github.com/66668/Android_Interview/blob/master/README_Context.md);
+
+10. Android各版本新特性
+
+[Android各版本新特性](https://github.com/66668/Android_Interview/blob/master/README_version.md);
+
+11. Json 
+
+[Android各版本新特性](https://github.com/66668/Android_Interview/blob/master/README_json.md);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 2. handler机制
 
 [android handler机制相关 跳转](https://github.com/66668/Android_Interview/blob/master/lib_android/README_handler.md);
+
+
 
 3. apk的安装流程
 
@@ -73,9 +132,7 @@ https://www.jianshu.com/p/c0ec2a7fc26a
 
 [android view的绘制流程 跳转](https://github.com/66668/Android_Interview/blob/master/README_view.md);
 
-16. AsyncTask优缺点
 
-[android AsyncTask优缺点 跳转](https://github.com/66668/Android_Interview/blob/master/README_AcyncTask.md);
 
 17.  ## jvm与dvm之间的区别：
 
@@ -111,9 +168,7 @@ SharePreferences不支持多进程
 SharePreferences的commit与apply一个是同步一个是异步（大部分场景下）
 不要使用SharePreferences存储太大的数据
 
-23. ANR
 
-[android ANR 跳转](https://github.com/66668/Android_Interview/blob/master/README_anr.md);
 
 24. 广播总结
 

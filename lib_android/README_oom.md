@@ -1,4 +1,4 @@
-# 内存泄漏OOM的分析总结(LMK原理分析)
+# 内存泄漏OOM的分析总结(LMK原理分析+LeakCanary原理详解)
 
 ## 使用as内存分析
 https://developer.android.google.cn/studio/profile/memory-profiler
@@ -78,6 +78,8 @@ bitmap是比较占内存的，所以一定要在不使用的时候及时进行�
 4. StringBuilder替代String: 在有些时候，代码中会需要使用到大量的字符串拼接的操作，这种时候有必要考虑使用StringBuilder来替代频繁的“+”
 5. 避免在类似onDraw这样的方法中创建对象，因为它会迅速占用大量内存，引起频繁的GC甚至内存抖动
 6. 减少内存泄漏也是一种避免OOM的方法
+
+## LeakCanary原理
 
 
 

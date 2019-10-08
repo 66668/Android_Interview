@@ -64,6 +64,9 @@ Java对象序列化是将实现了Serializable接口的对象转换成一个字�
 
 ### 为什么需要使用序列化和反序列化(场景)
 
+因为bundle传递数据时只支持基本数据类型，所以在传递对象时需要序列化转换成可存储或可传输的本 质状态(字节流)。
+序列化后的对象可以在网络、IPC(比如启动另一个进程的Activity、Service和 Reciver)之间进行传输，也可以存储到本地。
+
 我们知道，不同进程/程序间进行远程通信时，可以相互发送各种类型的数据，包括文本、图片、音频、视频等，而这些数据都会以二进制序列的形式在网络上传送。
 
 那么当两个Java进程进行通信时，能否实现进程间的对象传送呢？当然是可以的！如何做到呢？这就需要使用Java序列化与反序列化了。发送方需要把这个Java对象转换为字节序列，然后在网络上传输，接收方则需要将字节序列中恢复出Java对象。
@@ -103,6 +106,8 @@ Java对象序列化是将实现了Serializable接口的对象转换成一个字�
 3. Parcelable是Android提供轻量级方法，效率高，但是实现复杂。
 4. 一般在内存中序列画传递时选用Parcelable。在设备或网络中传递选用Serializable。
 5. 无论是Serializable还是Parcelable，两种内属性只要有对象，那么对应对象的类一定也要实现序列化。
+
+![Serializable和Parcelable总结](https://github.com/66668/Android_Interview/blob/master/pictures/serialize_01.png)
 
 
 
