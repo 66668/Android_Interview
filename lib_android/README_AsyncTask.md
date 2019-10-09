@@ -9,6 +9,7 @@
 AsyncTask必须在主线程初始化，因为内部的Handler是一个静态对象，在AsyncTask类加载的时候他就已经被初始化了。
 在Android3.0开始，execute方法串行执行任务的，一个一个来，3.0之前是并行执行的。如果要在3.0上执行并行任务，可以调用executeOnExecutor方法
 
+
         AsyncTask中有两个线程池(SerialExecutor和THREAD_POOL_EXECUTOR)和一个 Handler(InternalHandler)，
         其中线程池SerialExecutor用于任务的排队，而线程池 THREAD_POOL_EXECUTOR用于真正地执行任务，InternalHandler用于将执行环境从线程池切换 到主线程)
         

@@ -1,12 +1,17 @@
 # 线程学习 基础与进阶
-说明：线程方面的只是
+
 ## 内容概括
 
-1android 常用四种调用线程的方法,及特殊线程HandlerThread;
+1. android 常用四种调用线程的方法,及特殊线程HandlerThread;
 
-2android线程间的通信
+2. android线程间的通信
 
-3android线程同步
+3. android线程同步
+
+# Thread、AsyncTask、IntentService的使用场景与特点。
+1. Thread线程，独立运行与于 Activity 的，当Activity 被 finish 后，如果没有主动停止 Thread或者 run 方法没有执行完，其会一直执行下去。
+2. AsyncTask 封装了两个线程池和一个Handler(SerialExecutor用于排队， THREAD_POOL_EXECUTOR为真正的执行任务，Handler将工作线程切换到主线程)，其必须在 UI线程中创建，execute 方法必须在 UI线程中执行，一个任务实例只允许执行一次，执行多次抛 出异常，用于网络请求或者简单数据处理。
+3. IntentService:处理异步请求，实现多线程，在onHandleIntent中处理耗时操作，多个耗时任务 会依次执行，执行完毕自动结束。
 
 ## 一Thread介绍：
 
@@ -414,16 +419,25 @@ eg2：
 
 ## 五 AsyncTask：
 
-1.原理：
+### 内部原理
 
-内部是Handler和两个线程池实现的，Handler用于将线程切换到主线程，两个线程池一个用于任务的排队，一个用于执行任务，
-当AsyncTask执行execute方法时会封装出一个FutureTask对象，将这个对象加入队列中，如果此时没有正在执行的任务，就执行它，
+1. 内部是Handler和两个线程池实现的，是一种轻量级的异步任务类，Handler用于将线程切换到主线程，两个线程池一个用于任务的排队，一个用于执行任务。
+
+2. 当AsyncTask执行execute方法时会封装出一个FutureTask对象，将这个对象加入队列中，如果此时没有正在执行的任务，就执行它，
 执行完成之后继续执行队列中下一个任务，执行完成通过Handler将事件发送到主线程。
 AsyncTask必须在主线程初始化，因为内部的Handler是一个静态对象，在AsyncTask类加载的时候他就已经被初始化了。
 在Android3.0开始，execute方法串行执行任务的，一个一个来，3.0之前是并行执行的。如果要在3.0上执行并行任务，可以调用executeOnExecutor方法
 
-AsyncTask封装了线程池和Handler，是一种轻量级的异步任务类，它可以在线程池中执行后台任务，然后把执行的进度和最终结果传递给主线程，
-并在主线程中更新UI。简单讲就是方便开发者在子线程中更新UI（因为内部集成了Handler，所以它可以很灵活的在UI线程和子线程之间进行切换）
+
+        AsyncTask中有两个线程池(SerialExecutor和THREAD_POOL_EXECUTOR)和一个 Handler(InternalHandler)，
+        其中线程池SerialExecutor用于任务的排队，而线程池 THREAD_POOL_EXECUTOR用于真正地执行任务，InternalHandler用于将执行环境从线程池切换 到主线程)
+        
+        sHandler是一个静态的Handler对象(InternalHandler)，为了能够将执行环境切换到主线程，这就要求sHandler这 个对象必须在主线程创建。由于静态成员会在加载类的时候进行初始化，
+        因此这就变相要求 AsyncTask的类必须在主线程中加载，否则同一个进程中的AsyncTask都将无法正常工作
+        
+        AsyncTask是一个抽象的泛型类，它提供了Params、Progress和Result这三个泛型参数，
+        其中Params 表示参数的类型，Progress表示后台任务的执行进度和类型，而Result则表示后台任务的返回结果的类型，
+        如果AsyncTask不需要传递具体的参数，那么这三个泛型参数可以用Void来代替。
 
 
 protected void onPreExecute() {}   //预执行
@@ -433,15 +447,24 @@ protected void onPostExecute(Result result) {} //执行完毕
 protected void cancel() {} //终止执行
 
 
-四.AsyncTask的缺点及注意点
+### AsyncTask的缺点及注意点
 
 必须在主线程中加载，不然在API 16以下不可用，但目前来说，大部分app最低版本也到16了，这个缺点可以忽略了
 1. 内存泄露
-在Activity中使用非静态匿名内部AsyncTask类，会持有外部类的隐式引用。由于AsyncTask的生命周期可能比Activity的长，
-当Activity进行销毁AsyncTask还在执行时，由于AsyncTask持有Activity的引用，导致Activity对象无法回收，进而产生内存泄露。
+如果AsyncTask被声明为Activity的非静态内部类，那么AsyncTask会保留一个对Activity的引用。如果 Activity已经被销毁，
+AsyncTask的后台线程还在执行，它将继续在内存里保留这个引用，导致Activity 无法被回收，引起内存泄漏
 -->改为静态内部类
 2. Activity 已被销毁，doInBackground还没有执行完，执行完后再执行 onPostResult, 导致产生异常 
 -->记得在Activity的 onDestroy 方法中调 cancel方法取消 AsyncTask
 （1.内存泄漏 2.生命周期没有跟Activity同步，建议用线程池）
 
 3. 每个AsyncTask实例只能执行一次。
+
+4. 结果丢失 屏幕旋转或Activity在后台被系统杀掉等情况会导致Activity的重新创建，之前运行的AsyncTask会持有
+一个之前Activity的引用，这个引用已经无效，这时调用onPostExecute()再去更新界面将不再生效。
+
+5. 并行还是串行
+在Android1.6之前的版本，AsyncTask是串行的
+在1.6之后的版本，采用线程池处理并行任务，
+从 Android 3.0开始，为了避免AsyncTask所带来的并发错误，又采用一个线程来串行执行任务。可以使用 executeOnExecutor()方法来并行地执行任务。
+
