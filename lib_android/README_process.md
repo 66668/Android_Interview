@@ -2,11 +2,30 @@
 
 ## android中进程的优先级
 
-1. 前台进程:即与用户正在交互的Activity或者Activity用到的Service等，如果系统内存不足时前台进程是最晚被杀死 的
+1. 前台进程:
+
+     (1).当前进程activity正在与用户进行交互（onResume）
+     
+     (2).当前进程service正在与activity进行交互或者当前service调用了startForground()属于前台进程或者当前service正在执行生命周期（onCreate(),onStart(),onDestory()）
+     
+     (3).进程持有一个BroadcostReceiver,这个BroadcostReceiver正在执行onReceive()方法
+     
 2. 可见进程: 可以是处于暂停状态(onPause)的Activity或者绑定在其上的Service，即被用户可见，但由于失了焦点而不能与用户交互
 3. 服务进程:其中运行着使用startService方法启动的Service，虽然不被用户可见，但是却是用户关心的，例如用户 正在非音乐界面听的音乐或者正在非下载页面下载的文件等;当系统要空间运行，前两者进程才会被终 止
-4. 后台进程: 其中运行着执行onStop方法而停止的程序，但是却不是用户当前关心的，例如后台挂着的QQ，这时的进程系统一旦没了有内存就首先被杀死
+4. 后台进程: 其中运行着执行onStop方法,但是onDestroy()没有调用的状态的程序，但是却不是用户当前关心的，例如后台挂着的QQ，这时的进程系统一旦没了有内存就首先被杀死
 5. 空进程: 不包含任何应用程序的进程，这样的进程系统是一般不会让他存在的
+
+## Android中进程内存的分配，能不能自己分配定额内存?
+
+在Android运行机制里面, 不同分辨率不同RAM大小的设备当然会被分配不同的运行内存.高分辨率的设备也肯定比更低分辨率设备需要更多的内存.具体分配多少,
+
+可以通过查看自己设备当中/system/build.prop 文件,里面有说明.google原生OS的默认值是16M，但是各个厂家的OS会对这个值进行修改
+
+heapgrowthlimit 是一个普通应用的内存限制 ,这个值可以通过ActivityManager.getLargeMemoryClass() 方法得到.
+
+heapstartsize 是初始内存,应用随着使用,内存不断自动的增加,会慢慢达到上限的最大内存
+
+ 
 
 
 ## 后台杀死与恢复机制

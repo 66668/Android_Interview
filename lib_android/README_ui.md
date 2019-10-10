@@ -47,3 +47,30 @@
  
 能，使用全局的BroadCastRecevier能进行跨进程通信，但是注意它只能被动接收广播。此外，
 LocalBroadCastRecevier只限于本进程的广播间通信。
+
+## 下拉状态栏是不是影响activity的生命周期
+
+Android下拉通知栏不会影响Activity的生命周期方法
+
+## Android长连接，怎么处理心跳机制。
+长连接:长连接是建立连接之后, 不主动断开. 双方互相发送数据, 发完了也不主动断开连接, 之后有需要发送的数据就继续通过这个连接发送.
+
+心跳包:其实主要是为了防止NAT超时，客户端隔一段时间就主动发一个数据，探测连接是否断开。
+
+服务器处理心跳包:假如客户端心跳间隔是固定的, 那么服务器在连接闲置超过这个时间还没收到心跳 时, 可以认为对方掉线, 关闭连接. 
+
+如果客户端心跳会动态改变, 应当设置一个最大值, 超过这个最大值才认为对方掉线. 还有一种情况就是服务器通过TCP连接主动给客户端发消息出现写超时, 可以直接认为对方掉线.
+
+## CrashHandler实现原理?
+
+获取app crash的信息保存在本地然后在下一次打开app的时候发送到服务器。
+
+具体实现在Application的onCreate()中初始化如下代码即可。
+
+        //捕捉未catch的异常，
+        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+                @Override
+                public void uncaughtException(Thread thread, final Throwable ex) {
+                    //自定义处理即可  
+                }
+            });
