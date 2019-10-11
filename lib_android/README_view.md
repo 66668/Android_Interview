@@ -1,5 +1,7 @@
-# View的绘制流程
+# View 总结（自定义View等）
 
+
+## View 的绘制流程
 ViewRoot
 -> performTraversal()
 -> performMeasure()
@@ -36,3 +38,10 @@ View执行requestLayout方法，会向上递归到顶级父View中，再执行�
 2. restore:用来恢复Canvas之前保存的状态。防止save后对Canvas执行的操作对后续的绘制有影响。
 
 save和restore要配对使用(restore可以比save少，但不能多)，如果restore调用次数比save多，会引 发Error。save和restore操作执行的时机不同，就能造成绘制的图形不同。
+
+## 自定义view效率高于xml定义吗?
+
+自定义view效率高于xml定义:
+ 
+1. 少了解析xml。
+2. 自定义View 减少了ViewGroup与View之间的测量,包括父量子,子量自身,子在父中位置摆放,当子 view变化时,父的某些属性都会跟着变化。

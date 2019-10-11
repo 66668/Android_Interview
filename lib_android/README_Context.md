@@ -34,6 +34,10 @@
 
 任何一个Context的实例，只要调用getApplicationContext()方法都可以拿到我们的 Application对象。
 
+## ApplicationContext和ActivityContext的区别
+1. 第一种中context的生命周期与Application的生命周期相关的，context随着Application的销毁而销毁，伴随application的一生，与activity的生命周期无关.
+2. 第二种中的context跟Activity的生命周期是相关的，但是对一个Application来说，Activity可以销毁几 次，那么属于Activity的context就会销毁多次
+
 ## 获取Context的方法
 1. view.getContext() 
 2. Activity.this

@@ -3,15 +3,19 @@
 ## MVC框架
 
 简单来说就是通过controller的控制去操作model层的数据，并且返回给view层展示
-1. M层：model层，数据操作，网络请求,并通知View改变
-2. V层：view层，xml布局，自定义的view,viewGroup,负责将用户的请求通知Controller，并根据model更新界面
-3. C层：controller层，activity/fragment层,接收用户请求并更新model
+1. M层：model层，数据操作，网络请求,I/O操作，并通知View改变
+2. V层：view层，xml布局 自定义的view,viewGroup的动态view部分；负责将用户的请求通知Controller，并根据model更新界面；
+3. C层：controller层，activity/fragment层,接收用户请求并更新model,Activity本来主要是作为初始化页面，展示数据的操作，
+但是因为XML视图功能太弱，所以Activity既要负责视图的显示又要加入控制逻辑，承担的功能过多。
+
+
+说明：图有错误，补充：还包括c与v的互相交互
+![MVC框架](https://github.com/66668/Android_Interview/blob/master/pictures/mvc_01.png)
 
 ### 缺点：
 
-1. view层和model层是相互可知的，这意味着两层之间存在耦合。
+1. model层完全解耦，但controller层和view层并没有解耦，这意味着两层之间存在耦合。
 2. 业务增多，c层代码更多，Activity或者Fragment ，我们不能很清晰的区分它是View还是Controller，既有交互又有页面绘制，这就导致了activity和fragment很“庞大”
-
 
 
 ## MVP框架
@@ -21,7 +25,10 @@
 2. V层：和mvc不同，该v层包括 xml布局，act/fragment
 3. P层：连接m层和c层的桥梁，p层和v层通讯通过接口方式，p层拿到处理结果通过接口返回给v层，v层再做UI的操作。
 
+通过中间层Preseter实现了Model和View的完全解耦，但是随着业务增多，p层的接口会更多更复杂
+
 ![MVP框架](https://github.com/66668/Android_Interview/blob/master/pictures/mvp_01.png)
+
 
 ## MVVM框架
 

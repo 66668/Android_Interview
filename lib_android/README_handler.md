@@ -252,7 +252,7 @@ Handler.Callback 有优先处理消息的权利 ：Handler(Callback callback, bo
 1. 子线程向主线程通讯：最简单，主线程的handler已经处理了Looper的封装，子线程直接调用handler.sendMessage即可。
 2. 主线程向子线程通讯：子线程需要手动封装Looper.prepare()和Looper.looper()方法。同时new Handler(子线程的looper)指定子线程的looper,
    
-   android有封装类HandlerThread
+   android有封装类**HandlerThread**
     
         
         public class ThreadHandlerActivity extends Activity{     
@@ -284,7 +284,44 @@ Handler.Callback 有优先处理消息的权利 ：Handler(Callback callback, bo
              }
          
          }
+         
 3. 子线程和子线程的通讯：在一个子线程中创建一个Handler+Looper,它的回调自然就在此子线程中，然后在另一个子线程中调用此handler来发送消息就可以了
+
+        
+        //处理消息
+        new Thread(new Runnable() {
+         
+                              @Override
+                              public void run() {
+                                  String msg;
+                                  Looper.prepare();
+         
+                                  childHandler = new Handler() {
+                                      @Override
+                            public void handleMessage(Message msg) {
+                                         super.handleMessage(msg);
+         
+                                         System.out.println("这个消息是从-->>" + msg.obj+ "过来的，在" + "btn的子线程当中" + "中执行的");
+         
+                                     }
+         
+                                 };  
+                              Looper.loop();//开始轮循
+         
+                             }
+                         }).start();
+
+                //发消息
+                new Thread(new Runnable() {
+ 
+                      @Override
+                      public void run() {
+                         Looper loop = Looper.myLooper();
+               Message msg = childHandler.obtainMessage();
+                         msg.obj = "btn2当中子线程";
+                         childHandler.sendMessage(msg);
+                     }
+                 }).start();
 
 
 ### 框架类对应关系
@@ -297,8 +334,6 @@ Handler.Callback 有优先处理消息的权利 ：Handler(Callback callback, bo
 ## 对handler使用的封装
 1. HandlerThread
 2. AsyncTask
-
-
 
 
 ## 总结及其他引申问题：
@@ -318,7 +353,26 @@ Handler.Callback 有优先处理消息的权利 ：Handler(Callback callback, bo
 4. 在使用ThreadLocal的时候，我们仍然需要注意，避免使用static的ThreadLocal，分配使用了ThreadLocal后，
 一定要根据当前线程的生命周期来判断是否需要手动的去清理ThreadLocalMap中清key==null的Entry。
 
+## ThreadLocal的原理 
+
+ThreadLocal是一个关于创建线程局部变量的类。使用场景如下所示:
+
+1. 实现单个线程单例以及单个线程上下文信息存储，比如交易id等。 
+2. 实现线程安全，非线程安全的对象使用ThreadLocal之后就会变得线程安全，因为每个线程都会有 一个对应的实例。承载一些线程相关的数据，避免在方法中来回传递参数。
+
+当需要使用多线程时，有个变量恰巧不需要共享，此时就不必使用synchronized这么麻烦的关键字来锁 住，每个线程都相当于在堆内存中开辟一个空间，
+线程中带有对共享变量的缓冲区，通过缓冲区将堆内 存中的共享变量进行读取和操作，ThreadLocal相当于线程内的内存，一个局部变量。每次可以对线程 
+自身的数据读取和操作，并不需要通过缓冲区与 主内存中的变量进行交互。并不会像synchronized那 样修改主内存的数据，再将主内存的数据复制到线程内的工作内存。
+ThreadLocal可以让线程独占资 源，存储于线程内部，避免线程堵塞造成CPU吞吐下降。
+
+在每个Thread中包含一个ThreadLocalMap，ThreadLocalMap的key是ThreadLocal的对象，value是 独享数据。
 
 
+**ThreadLocal源码**：
+1. ThreadLocal本质是操作线程中ThreadLocalMap来实现本地线程变量的存储的
+2. ThreadLocalMap是采用数组的方式来存储数据，其中key(弱引用)指向当前ThreadLocal对象，value为设的值
+3. ThreadLocal为内存泄漏采取了处理措施，在调用ThreadLocal的get(),set(),remove()方法的时候都会清除线程ThreadLocalMap里所有key为null的Entry
+4. 在使用ThreadLocal的时候，我们仍然需要注意，避免使用static的ThreadLocal，分配使用了ThreadLocal后，
+一定要根据当前线程的生命周期来判断是否需要手动的去清理ThreadLocalMap中清key==null的Entry。
 
 

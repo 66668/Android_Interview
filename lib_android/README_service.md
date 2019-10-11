@@ -1,4 +1,6 @@
-# android service(不死进程)总结
+# android service 总结 (包含不死进程)
+
+
 
 在Android Services (后台服务) 里面，我们了解了Android四大组件之一的Service，知道如何使用后台服务进行来完成一些特定的任务。
 但是后台服务在系统内存不足的时候，可能会被系统杀死。那么如何让后台服务尽量不被杀死呢？基本的解决思路主要有以下几种：
@@ -136,7 +138,17 @@ xml代码：
     
 # Service 使用示例详解
 
-结合公司的成熟项目，熟悉service
+## startService 和 bindService 有什么不同
+
+1. 生命周期不同
+2. 结束方式不同，交互方式不同。
+
+## 为什么bindService可以跟Activity生命周期联动? 
+
+1. bindService 方法执行时，LoadedApk 会记录 ServiceConnection 信息。
+2. Activity 执行 finish 方法时，会通过LoadedApk 检查 Activity 是否存在未注销/解绑的 BroadcastReceiver 和 ServiceConnection，
+
+如果有，那么会通知 AMS 注销/解绑对应的 BroadcastReceiver 和 Service，并打印异常信息，告诉用户应该主动执行注销/解绑的操作。
 
 ## 后台服务启动方式1：startService(Intent)/stopService(Intent)
 流程：
@@ -152,13 +164,11 @@ xml代码：
      //stop
      Intent stopIntent = new Intent(MainActivity.this, MyStartService.class);
      stopService(stopIntent);
-4.调用生命周期：
+4. 调用生命周期：startService--> onCreate()--->onStartCommand() ---> onDestory()
 
-    //start
-    onCreate--onStartCommand
-    //stop
-    onDestroy
-
+5. 说明：如果服务已经开启，不会重复的执行onCreate()， 而是会调用onStartCommand()。一旦服务开启跟调 用者(开启者)就没有任何关系了。
+   开启者退出了，开启者挂了，服务还在后台长期的运行。
+   开启者不能调用服务里面的方法。
 
 ## 后台服务启动方式2：bindService()/unBindService()
 
@@ -201,13 +211,14 @@ xml代码：
             //unbind
             unbindService(myBBinderCon);
             
-5. 生命周期
+5. 生命周期:
+  onCreate() ---> onBind()--->onunbind()--->onDestory()
+  
+ (完整版)bindService---> onCreate() ---> onBind()--->(linkToDeath)---->(unbindService-->unlinkToDeath)--->onunbind()--->onDestory()
+ 
+6. 说明：bind的方式开启服务，绑定服务，调用者挂了，服务也会跟着挂掉。 绑定者可以调用服务里面的方法。
 
-        
-        //  bind
-        onCreate--onBind--（自定义Binder）linkToDeath
-        // unbind
-        (自定义Binder）unlinkToDeath--onUnbind--onDestroy
+   通信: 1、通过Binder对象。 2、通过broadcast(广播)。
                    
 ## 前台服务 
 

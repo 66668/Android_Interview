@@ -9,3 +9,12 @@ Fragment状态保存入口:
  
 2. FragmentManager还提供了public方法: saveFragmentInstanceState(), 可以对单个Fragment进行 状态保存, 这是提供给我们用的。
 3. FragmentManager的moveToState()方法中, 当状态回退到ACTIVITY_CREATED, 会调用 saveFragmentViewState()方法, 保存View的状态.
+
+## activty和Fragmengt之间怎么通信，Fragmengt和Fragmengt怎么通信? 
+
+1. Handler
+2. 广播 
+3. 事件总线:EventBus、RxBus、Otto 
+4. 接口回调 
+5. Bundle和setArguments(bundle)
+

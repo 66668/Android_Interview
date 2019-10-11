@@ -97,3 +97,38 @@ Android下拉通知栏不会影响Activity的生命周期方法
 1. 在Activity中被创建:该Thread的就是为这个Activity服务的，完成这个特定的Activity交代的任务，主动通知该Activity一些消息和事件，Activity销毁后，该Thread也没有存活的意义了。
 2. 在Service中被创建:这是保证最长生命周期的Thread的唯一方式，只要整个Service不退出，Thread就可以一直在后台执行，一般在Service的onCreate()中创建，在onDestroy()中销毁。
     所以，在Service中 创建的Thread，适合长期执行一些独立于APP的后台任务，比较常见的就是:在Service中保持与服务器端的长连接。
+    
+##  我们常说，一部Android设备上不能同时安装2个相同包名的app，指的是applicationId不能一样。
+
+## LaunchMode应用场景
+有四种模式：standard/singleTop/singleTask/singleInstance
+
+1. standard，创建一个新的Activity。默认的模式
+2. singleTop，栈顶不是该类型的Activity，创建一个新的Activity。否则，onNewIntent。 
+3. singleTask，回退栈中没有该类型的Activity，创建Activity，否则，onNewIntent+ClearTop。 
+
+        
+        注意:
+        设置了"singleTask"启动模式的Activity，它在启动的时候，会先在系统中查找属性值affinity等于它的属性值taskAffinity的Task是否存在;
+        如果存在这样的Task，它就会在这个Task中启动，否则就会在新的任务栈中启动。因此， 如果我们想要设置了"singleTask"启动模式的Activity在
+        新的任务中启动，就要为它设置 一个独立的taskAffinity属性值。
+        
+        如果设置了"singleTask"启动模式的Activity不是在新的任务中启动时，它会在已有的任务中查看是否已 经存在相应的Activity实例， 如果存在，
+        就会把位于这个Activity实例上面的Activity全部结束掉，即最终 这个Activity 实例会位于任务的Stack顶端中。
+        
+        在一个任务栈中只有一个”singleTask”启动模式的Activity存在。他的上面可以有其他的Activity。这点与 singleInstance是有区别的。
+
+4. singleInstance，回退栈中，只有这一个Activity，没有其他Activity。 
+
+**应用场景**：
+
+singleTop适合接收通知启动的内容显示页面。
+
+singleTask适合作为程序入口点,主界面等。 例如浏览器的主界面。不管从多少个应用启动浏览器，只会启动主界面一次，其余情况都会走onNewIntent，并且会清空主界面上面的其他页面。
+
+singleInstance应用场景:单独的应用功能界面：闹铃的响铃界面
+
+## 说说Activity、Intent、Service 是什么关系
+1. 他们都是 Android 开发中使用频率最高的类。其中 Activity 和 Service 都是 Android 四大组件之一。
+2. 他俩都是Context 类的子类 ContextWrapper 的子类
+3. Activity负责用户界面的显示和交互，Service 负责后台任务的处理。Activity 和 Service 之间可以通过 Intent 传 递数据，因此可以把 Intent 看作是通信使者。
