@@ -74,3 +74,26 @@ Android下拉通知栏不会影响Activity的生命周期方法
                     //自定义处理即可  
                 }
             });
+## 类的初始化顺序依次是? 
+
+(静态变量、静态代码块)>(变量、代码块)>构造方法
+
+## 多进程场景遇见过么?
+1. 在新的进程中，启动前台Service，播放音乐。
+2. 一个成熟的应用一定是多模块化的。首先多进程开发能为应用解决了OOM问题，因为Android对内 存的限制是针对于进程的，所以，当我们需要加载大图之类的操作，
+可以在新的进程中去执行，避免主 进程OOM。而且假如图片浏览进程打开了一个过大的图片，java heap 申请内存失败，该进程崩溃并不 影响我主进程的使用。
+
+## 编译期注解跟运行时注解 
+
+1. 运行期注解(RunTime)利用反射去获取信息还是比较损耗性能的，对应
+@Retention(RetentionPolicy.RUNTIME)。
+
+2. 编译期(Compile time)注解，以及处理编译期注解的手段APT和Javapoet，对应 @Retention(RetentionPolicy.CLASS)。
+ 其中apt+javaPoet目前也是应用比较广泛，在一些大的开源库，如EventBus3.0+,页面路由 ARout、 Dagger、Retrofit,ButterKnife等均有使用的身影，
+ 注解不仅仅是通过反射一种方式来使用，也可以使用APT在编译 期处理
+ 
+## 直接在Activity中创建一个thread跟在service中创建一个thread之间的区别?
+
+1. 在Activity中被创建:该Thread的就是为这个Activity服务的，完成这个特定的Activity交代的任务，主动通知该Activity一些消息和事件，Activity销毁后，该Thread也没有存活的意义了。
+2. 在Service中被创建:这是保证最长生命周期的Thread的唯一方式，只要整个Service不退出，Thread就可以一直在后台执行，一般在Service的onCreate()中创建，在onDestroy()中销毁。
+    所以，在Service中 创建的Thread，适合长期执行一些独立于APP的后台任务，比较常见的就是:在Service中保持与服务器端的长连接。

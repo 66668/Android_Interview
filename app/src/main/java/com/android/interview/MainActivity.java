@@ -2,6 +2,7 @@ package com.android.interview;
 
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +12,7 @@ public class MainActivity extends BaseAct {
     TextView tv;
 
     Handler handler;
+    Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

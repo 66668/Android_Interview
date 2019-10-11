@@ -28,3 +28,11 @@ View（非容器类）调用invalidate方法只会重绘自身，ViewGroup调用
 requestLayout()触发measure和layout，
 
 View执行requestLayout方法，会向上递归到顶级父View中，再执行这个顶级父View的requestLayout方法，所以其他View的onMeasure，onLayout也可能会被调用。
+
+## Canvas.save()跟Canvas.restore()的调用时机 
+
+1. save:用来保存Canvas的状态。save之后，可以调用Canvas的平移、放缩、旋转、错切、裁剪等操作。 
+
+2. restore:用来恢复Canvas之前保存的状态。防止save后对Canvas执行的操作对后续的绘制有影响。
+
+save和restore要配对使用(restore可以比save少，但不能多)，如果restore调用次数比save多，会引 发Error。save和restore操作执行的时机不同，就能造成绘制的图形不同。

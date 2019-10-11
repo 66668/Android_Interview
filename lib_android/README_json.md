@@ -1,6 +1,6 @@
 # Json/FastJson总结
 
-JSON的全称是JavaScript Object Notation，也就是JavaScript 对象表示法 
+JSON的全称是JavaScript Object Notation，也就是JavaScript对象表示法 
 
 JSON是存储和交换文本信息的语法，类似XML，但是比XML更小、更快，更易解析 
 
@@ -18,6 +18,27 @@ JSON是轻量级的文本数据交换格式，独立于语言，具有可描述�
 
 语义性较差，不如 xml 直观
 
+## 通过google提供的Gson解析json时，定义JavaBean的规则是什么? 
+1. 实现序列化 Serializable
+2. 属性私有化，并提供get，set方法
+3. 提供无参构造
+4. 属性名必须与json串中属性名保持一致 (因为Gson解析json串底层用到了Java的反射原理)
+## json解析方式的两种区别? 
+1. SDK提供JSONArray，JSONObject
+2. google提供的Gson:
+
+    (1)通过fromJson()实现对象的反序列化(即将json串转换为对象类型)
+    
+    (2)通过toJson()实现对象的序列化 (即将对象类型转换为json串)
+
+## JSON的结构?
+json是一种轻量级的数据交换格式， json简单说就是对象和数组，所以这两种结构就是对象和数组两种结构，通过这两种结构可以表示各种 复杂的结构
+
+1. 对象:对象表示为“{}”扩起来的内容，数据结构为 {key:value,key:value,...}的键值对的结构，在 面向对象的语言中，key为对象的属性，value为对应的属性值，
+所以很容易理解，取值方法为 对象.key 获取属性值，这个属性值的类型可以是 数字、字符串、数组、对象几种。
+
+2. 数组:数组在json中是中括号“[]”扩起来的内容，数据结构为 ["java","javascript","vb",...]，取值方式 和所有语言中一样，使用索引获取，
+字段值的类型可以是 数字、字符串、数组、对象几种。 经过对象、数组2种结构就可以组合成复杂的数据结构了。
 
 
 

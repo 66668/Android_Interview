@@ -1,20 +1,6 @@
-# 内存泄漏OOM的分析总结(LMK原理分析+LeakCanary原理详解)
+# 内存泄漏OOM 总结(LMK原理分析+LeakCanary原理详解)
 
-## 使用as内存分析
-https://developer.android.google.cn/studio/profile/memory-profiler
-
-## 分析工具总结：
-
-### 1 as自带-静态代码分析工具 —— Lint
-  
-1. 位置:Analyze--Inspec Code--选择检测模块，ok即可。
-
-### adb shell 命令检测
-
-使用 adb shell dumpsys meminfo [PackageName]，可以打印出指定包名的应用内存信息
-只需要关注Activities和Views两个信息即可，打开act和关闭act，查看act和view的对应关系是否变化异常，判断是否内存泄漏
-
-## 内存泄漏的场景和解决办法
+## 内存泄漏的场景分析
 
 1. 非静态内部类的静态实例
 
@@ -50,19 +36,23 @@ Handler导致的内存泄漏也可以被归纳为非静态内部类导致的，H
 WebView只要使用一次，内存就不会被释放，所以WebView都存在内存泄漏的问题，通常的解决办法是为WebView单开一个进程，使用AIDL进行通信，根据业务需求在合适的时机释放掉
 
 7. 资源对象未关闭导致
-如Cursor，File,IO等，内部往往都使用了缓冲，会造成内存泄漏，一定要确保关闭它并将引用置为null
+
+如(数据库)Cursor，File,IO等，内部往往都使用了缓冲，会造成内存泄漏，一定要确保先关闭它再将引用置为null
+
 
 8. 集合中的对象未清理
 
-集合用于保存对象，如果集合越来越大，不进行合理的清理，尤其是入股集合是静态的
+我们通常把一些对象的引用加入到了集合中，当我们不需要该对象时，并没有把它的引用从集合中清理 掉，这样这个集合就会越来越大。如果这个集合是static的话，那情况就更严重了。
 
 9.Bitmap导致内存泄漏
 
-bitmap是比较占内存的，所以一定要在不使用的时候及时进行清理，避免静态变量持有大的bitmap对象
+bitmap是比较占内存的，所以一定要在不使用的时候及时进行recycle()释放内存清理，避免静态变量持有大的bitmap对象
 
-10. 监听器未关闭
+10. 监听器(注册)未关闭
 
-很多需要register和unregister的系统服务要在合适的时候进行unregister,手动添加的listener也需要及时移除
+很多需要register和unregister的系统服务要在合适的时候进行unregister（registerReceiver后调用unregisterReceiver）,手动添加的listener也需要及时移除
+
+11. 构造Adapter时，没有使用缓存的convertView
 
 
 ## 如何避免OOM
@@ -78,6 +68,31 @@ bitmap是比较占内存的，所以一定要在不使用的时候及时进行�
 4. StringBuilder替代String: 在有些时候，代码中会需要使用到大量的字符串拼接的操作，这种时候有必要考虑使用StringBuilder来替代频繁的“+”
 5. 避免在类似onDraw这样的方法中创建对象，因为它会迅速占用大量内存，引起频繁的GC甚至内存抖动
 6. 减少内存泄漏也是一种避免OOM的方法
+
+
+## 分析工具总结：
+参考 https://developer.android.google.cn/studio/profile/memory-profiler
+
+1. as自带-静态代码分析工具 —— Lint（位置:Analyze--Inspec Code--选择检测模块，ok即可。）
+2. as的**profiler**工具，可以分析 cpu memery network等
+3. **LeakCanary**
+
+4. adb shell 命令检测
+
+使用 adb shell dumpsys meminfo [PackageName]，可以打印出指定包名的应用内存信息
+只需要关注Activities和Views两个信息即可，打开act和关闭act，查看act和view的对应关系是否变化异常，判断是否内存泄漏
+
+## Oom 是否可以try catch ? 
+
+只有在一种情况下，这样做是可行的:
+
+在try语句中声明了很大的对象，导致OOM，并且可以确认OOM是由try语句中的对象声明导致的，那 么在catch语句中，可以释放掉这些对象，解决OOM的问题，继续执行剩余语句。
+
+**但是这通常不是合适的做法**
+
+Java中管理内存除了显式地catch OOM之外还有更多有效的方法:比如SoftReference, WeakReference, 硬盘缓存等。 
+
+在JVM用光内存之前，会多次触发GC，这些GC会降低程序运行的效率。 **如果OOM的原因不是try语句中的对象(比如内存泄漏)，那么在catch语句中会继续抛出OOM**。
 
 ## LeakCanary原理
 
