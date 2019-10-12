@@ -17,6 +17,10 @@ ContentProvider使用表的形式来组织数据，无论数据的来源是什�
 6. android:exported:标记允许其他应用程序使用这个Provider。 
 7. android:multiProcess:标记允许系统启动Provider相同的进程中调用客户端。
 
+## 说说ContentProvider、ContentResolver、ContentObserver 之间的关系?
+1. ContentProvider:管理数据，提供数据的增删改查操作，数据源可以是数据库、文件、XML、网络 等，ContentProvider为这些数据的访问提供了统一的接口，可以用来做进程间数据共享。
+2. ContentResolver:ContentResolver可以为不同URI操作不同的ContentProvider中的数据，外部进程 可以通过ContentResolver与ContentProvider进行交互。
+3. ContentObserver:观察ContentProvider中的数据变化，并将变化通知给外界。
 
 
 

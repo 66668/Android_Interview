@@ -29,3 +29,9 @@
             public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             switch (newVersion) {
         } }
+## 如何导入外部数据库?
+  把原数据库包括在项目源码的 res/raw。
+  
+  android系统下数据库应该存放在 /data/data/com.(package name)/ 目录下，所以我们需要做的是 把已有的数据库传入那个目录下。
+  
+  操作方法是用FileInputStream读取原数据库，再用 FileOutputStream把读取到的东西写入到那个目录

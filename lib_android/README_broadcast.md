@@ -7,7 +7,7 @@
   3. AMS查找符合相应条件（IntentFilter/Permission等）的BroadcastReceiver
   4. AMS将广播发送到上述符合条件的BroadcastReceiver相应的消息循环队列中
   5. BroadcastReceiver通过消息循环执行拿到此广播，回调BroadcastReceiver中的onReceive()方法。
-  
+  6. LocalBroadcastManager 的核心实现实际还是 Handler，只是利用到了IntentFilter的match功能,因为是 Handler 实现的应用内的通信，自然安全性更好，效率更高
 
 ## 广播分类：主要分为一下四类：
  1. Normal Broadcast(普通广播/无需广播)：通常调用sendBroadcast(Intent)(Intent, String)方法发送
@@ -130,6 +130,8 @@
                 
   
 
+**如何通过广播拦截和abort一条短信?**：
+自定义有序广播设置优先级大于它+abortBroadcast()拦截。
 
 ## 3. 本地广播
 

@@ -132,3 +132,115 @@ singleInstance应用场景:单独的应用功能界面：闹铃的响铃界面
 1. 他们都是 Android 开发中使用频率最高的类。其中 Activity 和 Service 都是 Android 四大组件之一。
 2. 他俩都是Context 类的子类 ContextWrapper 的子类
 3. Activity负责用户界面的显示和交互，Service 负责后台任务的处理。Activity 和 Service 之间可以通过 Intent 传 递数据，因此可以把 Intent 看作是通信使者。
+
+## Base64、MD5是加密方法么? 
+
+1. 加密指的是对数据进行转换以后，数据变成了另一种格式，并且除了拿到解密方法的人，没人能把数 据转换回来。 
+
+2. **MD5是一种信息摘要算法，它是不可逆的，不可以解密**。所以它只能算的上是一种单向加密算法。
+ 
+3. **Base64也不是加密算法，它是一种数据编码方式，虽然是可逆的，但是它的编码方式是公开的，无所 谓加密。**
+
+            
+            **Base64是什么?**：
+            
+            Base64是用文本表示二进制的编码方式，它使用4个字节的文本来表示3个字节的原始二进制数据。
+            
+            它将二进制数据转换成一个由64个可打印的字符组成的序列:A-Za-z0-9+/
+            
+            **MD5是什么?**：
+            
+            MD5是哈希算法的一种，可以将任意数据产生出一个128位(16字节)的散列值，用于确保信息传输完 整一致。
+            
+            我们常在注册登录模块使用MD5，用户密码可以使用MD5加密的方式进行存储。
+            
+            如: md5(hello world,32) = 5eb63bbbe01eeed093cb22bb8f5acdc3
+
+## 如何选择第三方，从那些方面考虑?
+
+大方向:从软件环境做判断
+
+**性能**是开源软件第一解决的问题。
+
+一个好的**生态**，是一个优秀的开源库必备的，取决标准就是观察它是否一直在持续更新迭代，是否能及
+时处理github上用户提出来的问题。大家在社区针对这个开源库是否有比较活跃的探讨。 
+
+**背景**，该开源库由谁推出，由哪个公司推出来的。
+
+**用户数**和有哪些知名的企业**用户落地**使用
+
+小方向:
+
+从软件开发者的角度做判断 **是否解决了我们现有问题或长期来看带来的维护成本**。
+
+公司有多少人会。
+
+**学习成本**
+
+## 单例实现线程的同步的要求: 
+
+1. 单例类确保自己只有一个实例(**构造函数私有:不被外部实例化,也不被继承**)。
+
+2. **单例类必须自己创建自己的实例**。 
+
+3. 单例类必须**为其他对象提供唯一的实例**。
+
+## LinearLayout、FrameLayout、RelativeLayout性能对比，为什么?
+ 
+RelativeLayout会让子View调用2次onMeasure，
+ 
+LinearLayout 在有weight时，也会调用子 View 2次
+ 
+onMeasure RelativeLayout的子View如果高度和RelativeLayout不同，则会引发效率问题，当子View很复杂时，这个问题会更加严重。如果可以，尽量使用padding代替margin。 
+
+在不影响层级深度的情况下,使用LinearLayout和FrameLayout而不是RelativeLayout。
+
+## 为什么Google给开发者默认新建了个RelativeLayout，而自己却在DecorView中 用了个LinearLayout?
+
+因为DecorView的层级深度是已知而且固定的，上面一个标题栏，下面一个内容栏。采用 RelativeLayout并不会降低层级深度，
+
+所以此时在根节点上用LinearLayout是效率最高的。而之所以给 开发者默认新建了个RelativeLayout是希望开发者能采用尽量少
+
+的View层级深度来表达布局以实现性能最优，因为复杂的View嵌套对性能的影响会更大一些。
+
+## 显示Intent与隐式Intent的区别
+对明确指出了目标组件名称的Intent，我们称之为“显式Intent”。 
+
+对于没有明确指出目标组件名称的Intent，则称之为“隐式 Intent”。
+
+对于隐式意图，在定义Activity时，指定一个intent-filter，当一个隐式意图对象被一个意图过滤器进行 匹配时，
+将有三个方面会被参考到:
+1. 动作(Action)
+2. 类别(Category ['kætɪg(ə)rɪ] ) 
+3. 数据(Data )
+
+    
+        <activity android:name=".MainActivity"  android:label="@string/app_name">
+                    <intent-filter>
+        </activity>
+            <action android:name="com.wpc.test" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:mimeType="image/gif"/>
+        </intent-filter>
+
+## 如何查看android SQL数据库文件和SP文件？
+1. sql数据库位置：/data/data/应用包名下，可以看到.db后缀的文件，就是数据库文件
+2. SP位置：/data/data/应用包名下/shared_prefs文件夹下,adb命令：run-as+包名就可以打开对应debug版的sp文件
+
+## 各大平台打包上线的流程与审核时间，常见问题(主流的应用市场说出3-4个)
+
+1. 需要公司资质，发布人的身份信息，软著
+2. 平台内部测试，1--3天
+3. apk包认领，签名包，
+
+##  面向对象的基本特征：
+
+**封装 继承 多态**
+
+##  如何中断一个线程：
+1. 线程中添加标记位：满足直接退出执行
+2. 在线程执行到sleep()的时机，使用interrupt()终止
+3. onStop()强制结束，不推荐，不安全   
+
+
+

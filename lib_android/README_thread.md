@@ -235,10 +235,17 @@ eg2：
 
 
  ## 二 HandlerThread介绍：
- 原理：
  
- 继承自Thread，start开启线程后，会在其run方法中会通过Looper创建消息队列并开启消息循环，这个消息队列运行在子线程中，
- 所以可以将HandlerThread中的Looper实例传递给一个Handler，从而保证这个Handler的handleMessage方法运行在子线程中，
+ **原理**：
+ 
+ 当系统有多个耗时任务需要执行时，每个任务都会开启个新线程去执行耗时任务，这样会导致系统多次 创建和销毁线程，从而影响性能。为了解决这一问题，Google提出了HandlerThread
+ 
+ HandlerThread本质上是一个线程类，它继承自Thread，start开启线程后，会在其run方法中会通过Looper创建消息队列并开启消息循环，这个消息队列运行在子线程中，
+ 
+ 所以可以将HandlerThread中的Looper实例传递给一个Handler，从而保证这个Handler的handleMessage方法运行在子线程中，当有耗时任务进入队列时，则不需要开启新线程，在原有的线程中执行耗时任务即可，否则线程阻塞
+ 
+ 由于HanlderThread的run()方法是一个无限循环，因此当明确不需要再使用 HandlerThread时，可以通过它的quit或者quitSafely方法来终止线程的执行。
+ 
  Android中使用HandlerThread的一个场景就是IntentService
  
  
@@ -252,6 +259,9 @@ eg2：
 
 4. 可以实现主线程向子线程发送消息
 
+5. HandlerThread**优点是异步不会堵塞，减少对性能的消耗,避免频繁的new Thread操作**。 HandlerThread**缺点是不能同时继续进行多任务处理，要等待进行处理，处理效率较低**。
+ HandlerThread与线程池不同，HandlerThread是一个串队列，背后只有一个线程。
+ 
 优点：
 
 1.开发中如果多次使用类似new Thread(){}.start()这种方式开启子线程，会创建多个匿名线程，使得程序运行起来越来越慢，
@@ -259,6 +269,7 @@ eg2：
  
  2.Handler类内部的Looper默认绑定的是UI线程的消息队列，对于非UI线程如果需要使用消息机制，
 自己去创建Looper较繁琐，由于HandlerThread内部已经自动创建了Looper，直接使用HandlerThread更方便
+
 
 
 ### 常见用法：
@@ -272,6 +283,11 @@ eg2：
 
 ## 三 IntentService 异步介绍：
 原理：
+
+回答1：
+
+IntentService是一种特殊的Service，它继承了Service并且它是一个抽象类，因此必须创建它的子类才
+能使用IntentService。
 
 继承自Service，它的内部封装了HandlerThread和Handler，可以执行耗时任务，同时因为它是一个服务，优先级比普通线程高很多，
 所以更适合执行一些高优先级的后台任务，HandlerThread底层通过Looper消息队列实现的，所以它是顺序的执行每一个任务。
@@ -290,6 +306,30 @@ eg2：
 
 创建IntentService时，只需实现onHandleIntent和 空构造方法这两步骤即可，onHandleIntent为异步方法，可以执行耗时操作
 
+
+回答2：
+
+
+在实现上，IntentService封装了HandlerThread和Handler。当IntentService被第一次启动时，它的 onCreate()方法会被调用，onCreat()方法会创建一个HandlerThread，
+然后使用它的Looper来构造一 个Handler对象mServiceHandler，这样通过mServiceHandler发送的消息最终都会在HandlerThread 中执行。
+
+生成一个默认的且与主线程互相独立的工作者线程来执行所有传送至onStartCommand()方法的 Intetnt。
+
+生成一个工作队列来传送Intent对象给onHandleIntent()方法，同一时刻只传送一个Intent对象，这样 一来，你就不必担心多线程的问题。
+在所有的请求(Intent)都被执行完以后会自动停止服务，所以，你 不需要自己去调用stopSelf()方法来停止。
+
+该服务提供了一个onBind()方法的默认实现，它返回null。
+ 
+提供了一个onStartCommand()方法的默认实现，它将Intent先传送至工作队列，然后从工作队列中每次取出一个传送至onHandleIntent()方法，在该方法中对Intent做相应的处理。
+
+### 为什么在mServiceHandler的handleMessage()回调方法中执行完onHandlerIntent()方法后要使用带参数的stopSelf()方法?
+
+因为stopSel()方法会立即停止服务，
+
+而stopSelf(int startId)会等待所有的消息都处理完毕后才终止服务，
+
+一般来说，stopSelf(int startId)在尝试停止服务之前会判断最近启动服务的次数是否和startId相等，如果相等就立刻停止服务，不相等则不停止服务。
+
 ### 使用步骤：
 
  1:自定义的ItnentService重写onHandleIntent方法
@@ -303,7 +343,7 @@ eg2：
 
 方式1：自定义回调UI
 
-方式2：LocalBroadcastManager触发广播回调UI
+方式2：LocalBroadcastManager触发广播回调UI（内部封装了）
 
 方式3：act触发广播回调UI
 

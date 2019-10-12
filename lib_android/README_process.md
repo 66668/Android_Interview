@@ -31,8 +31,10 @@ heapstartsize 是初始内存,应用随着使用,内存不断自动的增加,会
 
 1. AIDL [aidl总结 跳转](https://github.com/66668/Android_Interview/blob/master/README_aidl.md);
 2. Messager
-3. ContentProvider
-4. 广播
+3. ContentProvider，如访问系统相册
+4. 广播， 如显示系统时间
+5. Intent+Uri跳转系统应用
+
 
 但是Android并没有采用Linux的几种IPC方案，而是使用了binder来完成进程之间的IPC。这主要是基于以下两点考虑：
 
