@@ -21,6 +21,7 @@
 7. **独立比例像素(sp)**:字体大小专用单位 Android开发时用此单位设置文字大小，推荐使用 12sp、14sp、18sp、22sp作为字体大小。
 
 ### （面试）dp是什么，sp呢，有什么区别
+
 ## 适配方案
 适配的最多的2个分辨率:1280*800,1920*1080 
 
@@ -61,3 +62,22 @@ https://github.com/JessYanCoding/MVPArms
 使用介绍：
 
 https://juejin.im/post/5bce688e6fb9a05cf715d1c2
+
+
+## 多语言文件的配置
+
+res/value res/value-zh res/value-en
+
+    
+    //代码内设置默认语言
+    private void setLanguage() {
+        ACache aCache = ACache.get(this);//使用ACache保存配置的语言
+        //如果系统当前默认的语言不等于当前ACache中保存的语言，就更改
+        if (Locale.getDefault() != Utils.getLanguageLocal(aCache.getAsString(Content.currentLanguage))){
+            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+            Configuration configuration = getResources().getConfiguration();
+            Locale locale = Utils.getLanguageLocal(aCache.getAsString(Content.currentLanguage));//获取到ACache中保存的语言
+            configuration.setLocale(locale);//设置语言
+            getResources().updateConfiguration(configuration, displayMetrics);//更新系统配置文件
+        }
+    }
