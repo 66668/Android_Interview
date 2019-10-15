@@ -12,7 +12,7 @@
 ## Merge/ViewStub/include 的作用。 
 
 1. Merge: 减少视图层级，可以删除多余的层级。
-2. ViewStub: 按需加载，减少内存使用量、加快渲染速度、不支持 merge 标签
+2. ViewStub: 按需加载，减少内存使用量、加快渲染速度、不支持 merge 标签,使用ViewStub处理整体相同，局部不同的情况
 3. include:xml优化布局，可以公用公共布局，merge比include少一层布局。
 
 ## activity的startActivity和context的startActivity区别?
@@ -249,6 +249,74 @@ onMeasure RelativeLayout的子View如果高度和RelativeLayout不同，则会�
 （1）include标签重用布局代码 （2）style设置重复组件样式 （3）资源（尺寸，颜色等）统一引用，方便统一管理（4）使用ViewStub处理整体相同，局部不同的情况
 
 2. **代码去重**：重构技巧，比如提炼方法，抽象基类，提炼常量等去重
+
+
+## Activity调用finish方法，会回调哪些生命周期方法？
+
+ActivityThread中查看performXXX方法即可
+
+finish执行位置：
+
+1. 在onCreate中：    onCreate->onDestroy
+2. 在onStart中：     onCreate->onStart->onStop->onDestroy
+3. 在onResume中：    onCreate->onStart->onResume->onPause->onStop->onDestroy
+4. 在onPause(同上):  onCreate->onStart->onResume->onPause->onStop->onDestroy
+5. 在onStop:        onCreate->onStart->onResume->onPause->onStop->onDestroy
+6. 在onDestroy:     onCreate->onStart->onResume->onPause->onStop
+7. 在onRestart:     onCreate->onStart->onResume->onPause->onStop->onReStart->onStart->onResume->onPause->onStop->onDestroy
+    
+## Debug和Release状态的不同   
+
+Debug可以称为调试版本，它包含**调试信息**，对代码不作任何优化，便于程序员调试程序。Release称为发布版本，它往往是进行了各种优化，
+使得程序在代码大小和运行速度上都是最优方案，所以在规则的检查上面也更加严格。
+
+releas版本与debug版本的**applicationId不一样**，因此可以同时安装在一台设备上，集成各种第三方SDK的功能,分享,推送等,要注意appid替换所带来的麻烦
+
+
+## RemoteViews实现和使用场景
+
+RemoteViews 的作用是在其他进程中显示并更新 View 界面。主要用于通知栏和桌面小部件上。
+
+## Android中如何查看一个对象的回收情况?
+
+1. 引用计数法
+2. 跟搜索算法
+3. profiler 查看内存监控，一直增长就有内存泄漏
+
+## Activity正常和异常情况下的生命周期
+
+1. 描述正常情况的生命周期
+
+2. 异常情况下的生命周期分析
+
+(1)情况一：资源相关的系统配置发生改变导致Activity被杀死并重新创建
+
+当系统配置发生改变后，如从横屏手机切换到了竖屏，Activity会被销毁，其onPause,onStop,onDestroy方法均会被调用，同时由于是在异常情况下被终止的，系统会调用onSavedInstanceState来保存当前Activity的状态(正常情况下不会调用此方法)，这个方法的调用时机是在onStop之前，当Activity重新被创建后，系统调用会调用
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    1
+    2
+    3
+    4
+
+方法，并且把Activity销毁时onSavedInstanceState方法所保存的Bundle对象作为参数同时传递给onRestoreInstanceState和onCreate方法，onRestoreInstanceState是在onStart之后调用。
+Note:我们知道，当Activity被异常终止后被恢复时，系统会自动的帮我们恢复数据和一些状态，如文本框用户输入的数据，listview的滚动位置等，关于保存和恢复View的层次结构和数据，系统的工作流程是这样的，首先Activity被意外终止时，Activity会调用onSavedInstanceState去保存数据，然后Activity会委托Window去保存数据，接着Window再委托它上面的顶级容器去保存数据，顶层容器是一个ViewGroup，一般来说它很可能是一个DecorView.最后顶层容器再去一一通知它的子元素来保存数据，这样整个数据保存过程就完成了，可以发现，这是一种典型的委托思想，上层委托下层，父容器委托子容器去处理一些事情。
+
+(2)情况二：资源内存不足导致低优先级的Activity被杀死
+
+Activity按照优先级我们可以分为以下的三种：
+a.前台Activity—正在和用户交互的Activity，优先级最高。
+b.可见但非前台Activity,如处于onPause状态的Activity，Activity中弹出了一个对话框，导致Activity可见但是位于后台无法和用户直接交互。
+c.后台Activity—已经被暂停的Activity,比如执行了onStop方法，优先级最低。
+当系统内存不足时，系统就会按照上述的优先级顺序选择杀死Activity所在的进程，并在后续通过onSaveInstanceState缓存数据和onRestoreInstanceState恢复数据。
+Note:如果一个进程中没有四大组件在执行，那么这个进程将很快被杀死，因此，一些后台工作不适合脱离了四大组件工作，比较好的方法是将后台工作放入Service中从而保证进程有一定的优先级，这样就不会轻易的被系统杀死。
+Note:系统只恢复那些被开发者指定过id的控件，如果没有为控件指定id,则系统就无法恢复了
+
+
 
 
 
