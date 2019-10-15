@@ -53,3 +53,11 @@ dimens使用:
 
 4. 代码适配: 在代码中使用Google提供的API对设备的屏幕宽度进行测量，然后按照需求进行设置。 
 5. 接口配合: 本地加载图片前判断手机分辨率或像素密度，向服务器请求对应级别图片。
+
+https://github.com/JessYanCoding/AndroidAutoSize
+
+https://github.com/JessYanCoding/MVPArms
+
+使用介绍：
+
+https://juejin.im/post/5bce688e6fb9a05cf715d1c2
