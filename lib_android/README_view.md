@@ -14,12 +14,17 @@ ViewRoot
 -> View/ViewGroup draw()
 -> View/ViewGroup onDraw()
 
-## postInvalidate()和invalidate()区别与联系
+## postInvalidate()和invalidate()和requestLayout()区别与联系
 
-1. postInvalidate() 方法在非 UI 线程中调用，通知 UI 线程重绘。
+1. **postInvalidate()** 在非UI线程中调用，通知UI线程重绘。
 
-2. invalidate()方法在 UI 线程中调用，重绘当前 UI。
+2. **invalidate()** ,在UI线程中调用，重绘当前UI（即draw()过程），不会触发onMeasure（）方法（控制大小用）。如果是View就重绘View,如果是ViewGroup就全部重绘。
+
 Invalidate不能直接在线程中调用，因为他是违背了单线程模型：Android UI操作并不是线程安全的，并且这些操作必须在UI线程中调用。
+
+3. **requestLayout()** 触发measure和layout不触发onDraw
+
+4. **requestFocus()** ，局部刷新，他只刷新你要刷新的地方。  他是让我们的某一部分获取焦点，获取焦点的会导致view的重绘。
 
 ## 如何实现局部重新测量，避免全局重新测量问题。
 
