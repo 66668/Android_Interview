@@ -137,3 +137,10 @@ HTTP的头域包括**通用头，请求头，响应头，实体头**四个部分
 5. 缓存中要用到两对头信息  Etag+If-None-Match, Last-Modified+If-Modified-Since。都是做缓存处理使用的。
 
 ![HTTP请求报文格式](https://github.com/66668/Android_Interview/blob/master/pictures/http_cache_01.png)
+
+## 断点续传实现?
+
+   在本地下载过程中要使用数据库实时存储到底存储到文件的哪个位置了，这样点击开始继续传递时，才能通过HTTP的GET请求中的
+   setRequestProperty("Range","bytes=startIndex-endIndex");方法可以告 诉服务器，数据从哪里开始，到哪里结束。
+   同时在本地的文件写入时，RandomAccessFile的seek()方 法也支持在文件中的任意位置进行写入操作。最后通过广播或事件
+   总线机制将子线程的进度告诉 Activity的进度条。关于断线续传的HTTP状态码是206，即HttpStatus.SC_PARTIAL_CONTENT。
