@@ -1,4 +1,9 @@
-# 内存泄漏OOM 总结(LMK原理分析+LeakCanary原理详解)
+# 内存泄漏OOM(内存优化) 总结(LMK原理分析+LeakCanary原理详解)
+
+## 内存泄漏分析工具：
+1. as自带-静态代码分析工具 —— **Lint**（位置:Analyze--Inspec Code--选择检测模块，ok即可。）
+2. **profiler** 的memory分析,具体分析某一个act是否泄漏，打开memory监听视图后，操作多次进入退出act，比较分析进入的内存信息即可。
+3. **adb+leakCanary分析**：adb shell dumpsys meminfo com.thinkernote.ThinkerNote -d记录app登陆和退出的信息，比较views是不是为0，不为0用leakCanary定位问题。
 
 ## 内存泄漏的场景分析
 
@@ -57,30 +62,27 @@ bitmap是比较占内存的，所以一定要在不使用的时候及时进行re
 
 ## 如何避免OOM
 
-1. 使用更加轻量的数据结构：如使用ArrayMap/SparseArray替代HashMap,HashMap更耗内存，因为它需要额外的实例对象来记录Mapping操作，SparseArray更加高效，因为它避免了Key Value的自动装箱，和装箱后的解箱操作
+1. 使用更加轻量的数据结构：
+    
+    如使用ArrayMap/SparseArray替代HashMap,HashMap更耗内存，因为它需要额外的实例对象来记录Mapping操作，SparseArray更加高效，因为它避免了Key Value的自动装箱，和装箱后的解箱操作
+    
+    增强for循环
+    
 2. 减少面枚举的使用，可以用静态常量或者注解@IntDef替代
 3. Bitmap优化:
 
-    a.尺寸压缩：通过InSampleSize设置合适的缩放
-    b.颜色质量：设置合适的format，ARGB_6666/RBG_545/ARGB_4444/ALPHA_6，存在很大差异
-    c.inBitmap:使用inBitmap属性可以告知Bitmap解码器去尝试使用已经存在的内存区域，新解码的Bitmap会尝试去使用之前那张Bitmap在Heap中所占据的pixel data内存区域，而不是去问内存重新申请一块区域来存放Bitmap。利用这种特性，即使是上千张的图片，也只会仅仅只需要占用屏幕所能够显示的图片数量的内存大小，但复用存在一些限制，具体体现在：在Android 4.4之前只能重用相同大小的Bitmap的内存，而Android 4.4及以后版本则只要后来的Bitmap比之前的小即可。使用inBitmap参数前，每创建一个Bitmap对象都会分配一块内存供其使用，而使用了inBitmap参数后，多个Bitmap可以复用一块内存，这样可以提高性能
+    a.尺寸压缩：通过InSampleSize设置合适的缩放（降低图片大小，降低采样率）
+    b.颜色质量：设置模式，存在很大差异（**RGB_8888--->RGB_565**）
+    c.inBitmap:使用inBitmap属性可以告知Bitmap解码器去尝试使用已经存在的内存区域，新解码的Bitmap会尝试去使用之前那张Bitmap在Heap中
+    所占据的pixel data内存区域，而不是去问内存重新申请一块区域来存放Bitmap。利用这种特性，即使是上千张的图片，也只会仅仅只需要占
+    用屏幕所能够显示的图片数量的内存大小，但复用存在一些限制，具体体现在：在Android 4.4之前只能重用相同大小的Bitmap的内存，
+    而Android 4.4及以后版本则只要后来的Bitmap比之前的小即可。使用inBitmap参数前，每创建一个Bitmap对象都会分配一块内存供其使用，
+    而使用了inBitmap参数后，多个Bitmap可以复用一块内存，这样可以提高性能
     
-4. StringBuilder替代String: 在有些时候，代码中会需要使用到大量的字符串拼接的操作，这种时候有必要考虑使用StringBuilder来替代频繁的“+”
+4. 避免创建不必要的对象：StringBuilder StringBuffer替代String
 5. 避免在类似onDraw这样的方法中创建对象，因为它会迅速占用大量内存，引起频繁的GC甚至内存抖动
-6. 减少内存泄漏也是一种避免OOM的方法
+6. 尽量使用基本数据类型代替封装类型
 
-
-## 分析工具总结：
-参考 https://developer.android.google.cn/studio/profile/memory-profiler
-
-1. as自带-静态代码分析工具 —— Lint（位置:Analyze--Inspec Code--选择检测模块，ok即可。）
-2. as的**profiler**工具，可以分析 cpu memery network等
-3. **LeakCanary**
-
-4. adb shell 命令检测
-
-使用 adb shell dumpsys meminfo [PackageName]，可以打印出指定包名的应用内存信息
-只需要关注Activities和Views两个信息即可，打开act和关闭act，查看act和view的对应关系是否变化异常，判断是否内存泄漏
 
 ## Oom 是否可以try catch ? 
 
