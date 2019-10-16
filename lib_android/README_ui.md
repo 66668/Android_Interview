@@ -15,6 +15,18 @@
 2. ViewStub: 按需加载，减少内存使用量、加快渲染速度、不支持 merge 标签,使用ViewStub处理整体相同，局部不同的情况
 3. include:xml优化布局，可以公用公共布局，merge比include少一层布局。
 
+ViewStub是一个轻量级的View，它是一个看不见的，并且不占布局位置，占用资源非常小的视图对象。可以为ViewStub指定一个布局，加载布局时，只有ViewStub会被初始化，
+然后当ViewStub被设置为可见时，或是调用了ViewStub.inflate()时，ViewStub所指向的布局会被加载和实例化，然后ViewStub的布局属性都会传给它指向的布局。
+
+    注意：
+
+    ViewStub只能加载一次，之后ViewStub对象会被置为空。所以它不适用于需要按需显示隐藏的情况。
+
+    ViewStub只能用来加载一个布局文件，而不是某个具体的View。
+
+    ViewStub中不能嵌套Merge标签。
+
+
 ## activity的startActivity和context的startActivity区别?
 
 1. 从Activity中启动新的Activity时可以直接mContext.startActivity(intent)就好 
@@ -315,6 +327,11 @@ c.后台Activity—已经被暂停的Activity,比如执行了onStop方法，优�
 当系统内存不足时，系统就会按照上述的优先级顺序选择杀死Activity所在的进程，并在后续通过onSaveInstanceState缓存数据和onRestoreInstanceState恢复数据。
 Note:如果一个进程中没有四大组件在执行，那么这个进程将很快被杀死，因此，一些后台工作不适合脱离了四大组件工作，比较好的方法是将后台工作放入Service中从而保证进程有一定的优先级，这样就不会轻易的被系统杀死。
 Note:系统只恢复那些被开发者指定过id的控件，如果没有为控件指定id,则系统就无法恢复了
+
+## android 布局加载原理
+
+LayoutInflater通过pull解析（xmlPullPaser）方式解析xml各个节点，再通过反射创建出View对象
+（调用clazz.getConstructor()通过反射获取构造方法,并通过暴力反射，将其设置为可访问，并存入hasmap集合中）
 
 
 
