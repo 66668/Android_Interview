@@ -170,6 +170,7 @@ go run cmd/battery-historian/battery-historian.go
     在绘制一个单元之前，首先判断该单元的区域是否在Canvas的剪切域内。若不在，直接返回，避免CPU和GPU的计算和渲染工作。
 
 
+## 性能优化--内存优化（见OOM篇）
        
    
       
