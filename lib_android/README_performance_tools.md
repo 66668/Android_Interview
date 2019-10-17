@@ -192,7 +192,19 @@ go run cmd/battery-historian/battery-historian.go
     （1）定期数据库数据更新
     （2）当预置的条件被满足时才执行
     （3）多任务打包一起执行，wifi下才执行等
+    
+  
+## 性能优化--网络优化
 
+1. 连接复用:节省连接建立时间，如开启 keep-alive。于Android来说默认情况下 HttpURLConnection和HttpClient都开启了keep-alive。
+只是2.2之前HttpURLConnection存在影 响连接池的Bug。
+2. 请求合并:即将多个请求合并为一个进行请求，比较常见的就是网页中的CSS Image Sprites。 如果某个页面内请求过多，也可以考虑做一定的请求合并。
+3. 减少请求数据的大小:对于post请求，body可以做gzip压缩的，header也可以做数据压缩(不 过只支持http 2.0)。 返回数据的body也可以做gzip压缩，
+body数据体积可以缩小到原来的30%左右(也可以考虑压缩 返回的json数据的key数据的体积，尤其是针对返回数据格式变化不大的情况，支付宝聊天返回的 数据用到了)。
+4. 根据用户的当前的网络质量来判断下载什么质量的图片(电商用的比较多)。
+5. 使用HttpDNS优化DNS:DNS存在解析慢和DNS劫持等问题，DNS 不仅支持 UDP，它还支持 TCP，但是大部分标准的 DNS 都是基于 UDP 与 DNS 服务器的 53
+ 端口进行交互。HTTPDNS 则不 同，顾名思义它是利用 HTTP 协议与 DNS 服务器的 80 端口进行交互。不走传统的 DNS 解析，从 而绕过运营商的 LocalDNS 服务器，
+ 有效的防止了域名劫持，提高域名解析的效率。
        
    
       
