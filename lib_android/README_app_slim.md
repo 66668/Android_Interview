@@ -10,7 +10,7 @@
 6. androidManifest
 7. resources.arsc ：编译后的二进制资源文件
 
-![apk组成](https://github.com/66668/Android_Interview/blob/master/pictures/apk_install_03.png)
+![apk组成](https://github.com/66668/Android_Interview/blob/master/pictures/apk_slim_01.png)
 
 ## apk优化
 1. 图片：使用一套资源（hdpi）,特殊机型特殊图片开多套资源（如logo,大背景图等）,大图使用jpg格式，能用drawable样式尽量不用图片(如渐变色设置)
