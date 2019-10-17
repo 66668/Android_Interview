@@ -172,7 +172,7 @@ go run cmd/battery-historian/battery-historian.go
 
 ## 性能优化--内存优化（见OOM篇）
 
-## 性能优化--app瘦身（见app瘦身篇README_app_slim）
+## 性能优化--app瘦身（见app瘦身篇README_app_slim.md）
 
 ## 性能优化--App电量优化
 
@@ -205,6 +205,9 @@ body数据体积可以缩小到原来的30%左右(也可以考虑压缩 返回�
 5. 使用HttpDNS优化DNS:DNS存在解析慢和DNS劫持等问题，DNS 不仅支持 UDP，它还支持 TCP，但是大部分标准的 DNS 都是基于 UDP 与 DNS 服务器的 53
  端口进行交互。HTTPDNS 则不 同，顾名思义它是利用 HTTP 协议与 DNS 服务器的 80 端口进行交互。不走传统的 DNS 解析，从 而绕过运营商的 LocalDNS 服务器，
  有效的防止了域名劫持，提高域名解析的效率。
+ 
+## app 安全优化（README_app_security.md）
+
        
    
       
