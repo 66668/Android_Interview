@@ -1,15 +1,13 @@
-# android apk安装流程总结
+# apk安装流程总结
 
 ## 流程简介
 
-(1)总结APK的安装流程如下：
 
-复制APK安装包到data/app目录下，解压并扫描安装包，把dex文件(Dalvik字节码)保存到dalvik-cache目录，并data/data目录下创建对应的应用数据目录。
-
-(2)总结APK的安装流程如下：
-
-复制APK安装包到/data/app目录下，解压缩并扫描安装包，向资源管理器注入APK资源，解析AndroidManifest文件，并在/data/data目录下创建对应的应用数据目录，
-然后针对Dalvik/ART环境优化dex文件，保存到dalvik-cache目录，将AndroidManifest文件解析出的组件、权限注册到PackageManagerService并发送广播。
+1. 复制APK安装包到/data/app目录下，解压缩并扫描安装包，
+2. 资源管理器解析APK里的资源文件/向资源管理器注入APK资源
+3. 解析AndroidManifest文件，并在/data/data目录下创建对应的应用数据目录，
+4. 然后针对Dalvik/ART环境优化dex文件，保存到dalvik-cache目录，
+5. 将AndroidManifest文件解析出的组件、权限注册到PackageManagerService并**发送广播**。
 
 
 ###（1）拷贝apk到指定的目录：
