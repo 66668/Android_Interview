@@ -171,6 +171,10 @@ go run cmd/battery-historian/battery-historian.go
 
 
 ## 性能优化--内存优化（见OOM篇）
+
+## 性能优化--app瘦身（见app瘦身篇README_app_slim）
+
+
        
    
       
