@@ -174,6 +174,24 @@ go run cmd/battery-historian/battery-historian.go
 
 ## 性能优化--app瘦身（见app瘦身篇README_app_slim）
 
+## 性能优化--App电量优化
+
+### 优化工具
+1. 手机设置-电量--应用，查看应用耗电情况
+2. 使用开源 battery historain分析
+
+### 具体优化：
+1. traceView分析高cpu问题，对cpu时间片优化
+2. 网络传输：（1）压缩传输数据，（2）尽量使用wifi(3)低电量尽量不传输（4）无网络不请求
+3. 定位优化：后台时注销定位监听，多模块时，功能要复用
+4. 谨慎使用WakeLock,是一种锁机制，只要进程app持有WakeLock，手机就不会休眠：
+    （1）前台app不申请WakeLock(2)app后台使用带超时参数的方法，防止未释放锁
+       （3）任务结束时，及时释放（4）屏幕常亮设置，使用FLAG_KEEP_SCREEN_ON即可
+5. 使用传感器，及时注销
+6. JobScheduler使用的场景优化：
+    （1）定期数据库数据更新
+    （2）当预置的条件被满足时才执行
+    （3）多任务打包一起执行，wifi下才执行等
 
        
    
