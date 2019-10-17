@@ -73,19 +73,6 @@ Android下拉通知栏不会影响Activity的生命周期方法
 
 如果客户端心跳会动态改变, 应当设置一个最大值, 超过这个最大值才认为对方掉线. 还有一种情况就是服务器通过TCP连接主动给客户端发消息出现写超时, 可以直接认为对方掉线.
 
-## CrashHandler实现原理?
-
-获取app crash的信息保存在本地然后在下一次打开app的时候发送到服务器。
-
-具体实现在Application的onCreate()中初始化如下代码即可。
-
-        //捕捉未catch的异常，
-        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-                @Override
-                public void uncaughtException(Thread thread, final Throwable ex) {
-                    //自定义处理即可  
-                }
-            });
 ## 类的初始化顺序依次是? 
 
 (静态变量、静态代码块)>(变量、代码块)>构造方法
