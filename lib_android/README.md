@@ -363,7 +363,6 @@ Arouter的原理
 
 
 Debug跟Release的APK的区别
-软引用跟弱引用的区别
 ConcurrentHashmap的原理
 Listview跟Recyclerview的区别（刷新，缓存，各自的使用场景）
 对谷歌新推出的Room架构
@@ -1274,7 +1273,6 @@ Bitmap优化：
 
 2、使用Android特有的数据结构，如SparseArray来代替hashMap。
 
-3、适当的使用软引用和弱引用。
 
 加密算法（base64、MD5、对称加密和非对称加密）和使用场景。
 
@@ -1678,53 +1676,7 @@ RecyclerView提供了API来实现item的动画效果。
 如果需要频繁的刷新数据，需要添加动画，则RecyclerView有较大的优势。
 如果只是作为列表展示，则两者区别并不是很大。
  
-34、Universal-ImageLoader，Picasso，Fresco，Glide对比
-Fresco 是 Facebook 推出的开源图片缓存工具，主要特点包括：两个内存缓存加上 Native 缓存构成了三级缓存，
-优点：
-1. 图片存储在安卓系统的匿名共享内存, 而不是虚拟机的堆内存中, 图片的中间缓冲数据也存放在本地堆内存, 所以, 应用程序有更多的内存使用, 不会因为图片加载而导致oom, 同时也减少垃圾回收器频繁调用回收 Bitmap 导致的界面卡顿, 性能更高。
- 
-2. 渐进式加载 JPEG 图片, 支持图片从模糊到清晰加载。
- 
-3. 图片可以以任意的中心点显示在 ImageView, 而不仅仅是图片的中心。
- 
-4. JPEG 图片改变大小也是在 native 进行的, 不是在虚拟机的堆内存, 同样减少 OOM。
- 
-5. 很好的支持 GIF 图片的显示。
- 
-缺点:
-1. 框架较大, 影响 Apk 体积
-2. 使用较繁琐
- 
-Universal-ImageLoader：（估计由于HttpClient被Google放弃，作者就放弃维护这个框架）
-优点：
-1.支持下载进度监听
-2.可以在 View 滚动中暂停图片加载，通过 PauseOnScrollListener 接口可以在 View 滚动中暂停图片加载。
-3.默认实现多种内存缓存算法 这几个图片缓存都可以配置缓存算法，不过 ImageLoader 默认实现了较多缓存算法，如 Size 最大先删除、使用最少先删除、最近最少使用、先进先删除、时间最长先删除等。
-4.支持本地缓存文件名规则定义
-     
-Picasso 优点
-1. 自带统计监控功能。支持图片缓存使用的监控，包括缓存命中率、已使用内存大小、节省的流量等。
- 
-2.支持优先级处理。每次任务调度前会选择优先级高的任务，比如 App 页面中 Banner 的优先级高于 Icon 时就很适用。
- 
-3.支持延迟到图片尺寸计算完成加载
- 
-4.支持飞行模式、并发线程数根据网络类型而变。 手机切换到飞行模式或网络类型变换时会自动调整线程池最大并发数，比如 wifi 最大并发为 4，4g 为 3，3g 为 2。  这里 Picasso 根据网络类型来决定最大并发数，而不是 CPU 核数。
- 
-5.“无”本地缓存。无”本地缓存，不是说没有本地缓存，而是 Picasso 自己没有实现，交给了 Square 的另外一个网络库 okhttp 去实现，这样的好处是可以通过请求 Response Header 中的 Cache-Control 及 Expired 控制图片的过期时间。
- 
- Glide 优点
-1. 不仅仅可以进行图片缓存还可以缓存媒体文件。Glide 不仅是一个图片缓存，它支持 Gif、WebP、缩略图。甚至是 Video，所以更该当做一个媒体缓存。
- 
-2. 支持优先级处理。
- 
-3. 与 Activity/Fragment 生命周期一致，支持 trimMemory。Glide 对每个 context 都保持一个 RequestManager，通过 FragmentTransaction 保持与 Activity/Fragment 生命周期一致，并且有对应的 trimMemory 接口实现可供调用。
- 
-4. 支持 okhttp、Volley。Glide 默认通过 UrlConnection 获取数据，可以配合 okhttp 或是 Volley 使用。实际 ImageLoader、Picasso 也都支持 okhttp、Volley。
- 
-5. 内存友好。Glide 的内存缓存有个 active 的设计，从内存缓存中取数据时，不像一般的实现用 get，而是用 remove，再将这个缓存数据放到一个 value 为软引用的 activeResources map 中，并计数引用数，在图片加载完成后进行判断，如果引用计数为空则回收掉。内存缓存更小图片，Glide 以 url、view_width、view_height、屏幕的分辨率等做为联合 key，将处理后的图片缓存在内存缓存中，而不是原始图片以节省大小与 Activity/Fragment 生命周期一致，支持 trimMemory。图片默认使用默认 RGB_565 而不是 ARGB_888，虽然清晰度差些，但图片更小，也可配置到 ARGB_888。
- 
-6.Glide 可以通过 signature 或不使用本地缓存支持 url 过期
+34、
  
 42、Xutils, OKhttp, Volley, Retrofit对比
 Xutils这个框架非常全面，可以进行网络请求，可以进行图片加载处理，可以数据储存，还可以对view进行注解，使用这个框架非常方便，但是缺点也是非常明显的，使用这个项目，会导致项目对这个框架依赖非常的严重，一旦这个框架出现问题，那么对项目来说影响非常大的。、
