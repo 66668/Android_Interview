@@ -58,11 +58,6 @@ http://www.jianshu.com/p/63aafe3c12af
 此处延伸：进程的优先级是什么（下面这篇文章，都有说） 
 https://segmentfault.com/a/1190000006251859
 
-10.进程间通信的方式 
-（1）AIDL，（2）广播，（3）Messenger 
-AIDL : http://www.jianshu.com/p/ae97c3ceea8d 
-Messenger : http://blog.csdn.net/lmj623565791/article/details/47017485 
-此处延伸：简述Binder ， http://blog.csdn.net/luoshengyang/article/details/6618363/
 
 23.自定义view和动画 
 以下两个讲解都讲得很透彻，这部分面试官多数不会问很深，要么就给你一个效果让你讲原理。 
@@ -99,12 +94,6 @@ http://blog.csdn.net/kingzone_2008/article/details/9220691
 
 熟悉计算机操作系统及计算机网络知识。
 
-掌握调试技能和方法，能独立分析和解决崩溃，性能优化，ANR等问题；
-
-在内存优化、绘制效率优化、IO优化或数据库、电量等调优方面有丰富的经验者优先 布局优化，熟悉多线程、高性能编程及性能调优；
-
-熟悉JS语法，有分析及使用过ReactNative/weex等框架优先
-
 具备插件化，多进程，JNI使用经验者优先考虑
 
 有音视频or跨平台开发经验者优先；
@@ -126,8 +115,7 @@ http://blog.csdn.net/kingzone_2008/article/details/9220691
 有扎实的C++/Java语言基础和Android技术：线程池、消息机制、View的事件体系、View 工作原理、
 动画以及Android性能调优经验，熟悉Android平台单元测试和自动化测试工具3、Retrofit、RxJava/rxAndroid 、RxBus/EventBus、Arouter、butterknife、glide/Picasso/Fresco
 /、greendao/realm 、zxing
-4、极光/个推 、埋点、微信支付、支付宝支付、
-5、对webview加载h5 , js 交互有自己独到的见解
+
 
 android 组件化、插件化、热修复；MVP/MVVM设计模式
 
