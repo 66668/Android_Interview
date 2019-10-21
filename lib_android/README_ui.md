@@ -340,3 +340,8 @@ TT 和NNNN 的取值是由AAPT工具随意指定的–基本上每一种新的�
 
 
 
+## http怎么知道文件过大是否传输完毕的响应?
+
+如果是最后一个tcp segment 的话，就会有http header 字段，同时， 数据的最后会有 "0\r\n\r\n" 这个东西，这个东西就表示数据都发送完了。
+
+![http响应](https://github.com/66668/Android_Interview/blob/master/pictures/http_complete_01.png)
