@@ -54,6 +54,63 @@ bitmap recycler引发的问题:当图像的旋转角度小余两个像素点之�
 2. BitmapFactory.Options.inSampleSize:缩放比例，可以参考Luban那个库，根据图片宽高计算出合适的缩放比例。
 3. BitmapFactory.Options.inPurgeable:让系统可以内存不足时回收内存。
 
+## 从网络加载一个10M的图片，说下注意事项?
+
+我们首先获得目标View所需的大小，然后获得图片的大小，最后通过计算屏幕与图片的缩放比，按照缩放比来解析位图。
+
+具体步骤如下：
+
+
+    将BitmapFactory.Options的inJustDecodeBounds参数设为true并加载图片
+    从BitmapFactory.Options中取出图片的原始宽高信息，他们对应于outWidth和outHeight参数
+    根据采样率的规律并结合目标View的所需大小计算出采样率inSampleSize
+    将BitmapFactory.Options的inJustDecodeBounds参数设为false,然后重新加载图片
+
+ 
+两个方法比较重要，在这里我们进行解析：
+
+options.inJustDecodeBounds：如果给它赋值true，那么它就不会解析图片。使用它的目的是为了获得图片的一些信息，如图片高度和宽度，然后进行下一步工作，也就是计算缩放比。将options.inJustDecodeBounds设置为false，将会加载图片
+
+options.inSampleSize ：给图片赋予缩放比，当它的值大于1的时候，它就会按照缩放比返回一个小图片用来节省内存。
+
+ 
+
+除了因为图片大小自身的原因之外，还有Android对图片解码的因素在内。
+
+在Android中使用ARGB来展示颜色的，一般情况下使用的是ARGB_8888，每个像素的大小约为4byte。如果对质量不做太大要求，可以使用ARGB_4444或者RGB_565，他们都是2个字节的。
+
+ 
+
+**如果图片涉及到放大功能，则也需要注意以下事项**：
+1. 图片分块加载：
+ 
+图片的分块加载在地图绘制的情况上最为明显，当想获取一张尺寸很大的图片的某一小块区域时，就用到了图片的分块加载，在Android中BitmapRegionDecoder类的功能就是加载一张图片的指定区域。BitmapRegionDecoder类的使用非常简单，API很少并且一目了然，如下：
+
+（1）创建BitmapRegionDecoder实例
+
+（2）获取图片宽高
+
+（3）加载特定区域内的原始精度的Bitmap对象
+
+（4）调用BitmapRegionDecoder类中的recycle（）,回收释放Native层内存
+
+ 
+
+ 
+2. 使用LruCache
+
+继承并使用LruCache，利用其来缓存加载过的图片区域，需要重写一些方法，如sizeOf()、entryRemoved（）等
+
+其中sizeOf()用于处理获取缓存对象的大小，比如缓存Bitmap对象时，可以使用Bitmap的字节数作为Bitmap大小的表示。
+
+entryRemoved()用于回收某个对象时调用，这样当回收Bitmap对象时可以调用Bitmap对象的recycle()方法主动释放Bitmap对象的内存。
+
+3. 手势处理：
+
+主要用到两个手势处理类，分别是ScaleGestureDetector和GestureDetector，前者用于处理缩放手势，后者用于处理其余手势，如移动，快速滑动，点击，双击，长按等。
+
+ScaleGestureDetector专门处理缩放手势，其比较重要的方法是onScale(ScaleGestureDetector detector)，当缩放时会不停地回调这个方法，需要注意的一点是detector.getScaleFactor()获取到的缩放比例是相对上一次的
+
 
 
 
