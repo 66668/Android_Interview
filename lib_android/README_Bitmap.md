@@ -46,19 +46,25 @@ bitmap recycler引发的问题:当图像的旋转角度小余两个像素点之�
 
 在复用Bitmap来解码图片时，那么 getByteCount() 表示新解码图片占用内存的大 小， getAllocationByteCount() 表示被复用Bitmap真实占用的内存大小(即 mBuffer的长度)
 
-## 怎么保证加载Bitmap不产生内存溢出?
+## 怎么保证加载Bitmap不OOM/Bitmap的压缩策略(重要)
 
 为了保证在加载Bitmap的时候不产生内存溢出，可以使用BitmapFactory进行图片压缩，主要有以下几 个参数:
 
-1. BitmapFactory.Options.inPreferredConfig:将ARGB_8888改为RGB_565，改变编码方式，节约内存。 
-2. BitmapFactory.Options.inSampleSize:缩放比例，可以参考Luban那个库，根据图片宽高计算出合适的缩放比例。
-3. BitmapFactory.Options.inPurgeable:让系统可以内存不足时回收内存。
+1. BitmapFactory.Options.**inPreferredConfig**:将ARGB_8888改为RGB_565，改变编码方式，节约内存。 
+2. BitmapFactory.Options.**inSampleSize**:缩放比例，可以参考Luban那个库，根据图片宽高计算出合适的缩放比例(当使用ImageView的时候，可能图片的像素大于ImageView)
+3. 设置Options.**inPurgeable**和**inInputShareable**:让系统能及时回收内存。
+
+        
+        inPurgeable:设置为True时，表示系统内存不足时可以被回收，设置为False时，表示不能被回收。
+        inInputShareable:设置是否深拷贝，与inPurgeable结合使用，inPurgeable为false时，该参 数无意义。
+4. 使用decodeStream代替decodeResource等其他方法。
+5. 下边的问题
 
 ## 从网络加载一个10M的图片，说下注意事项?
 
 我们首先获得目标View所需的大小，然后获得图片的大小，最后通过计算屏幕与图片的缩放比，按照缩放比来解析位图。
 
-具体步骤如下：
+高效加载Bitmap具体步骤如下：
 
 
     将BitmapFactory.Options的inJustDecodeBounds参数设为true并加载图片
