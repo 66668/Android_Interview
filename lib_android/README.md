@@ -1387,50 +1387,7 @@ Dalvik虚拟机：
 2、Dalvik运行的是自定义的.dex字节码格式。（java类被编译成.class文件后，会通过一个dx工具将所有的.class文件转换成一个.dex文件，然后dalvik虚拟机会从其中读取指令和数据
 3、常量池已被修改为只使用32位的索引，以 简化解释器。
 4、一个应用，一个虚拟机实例，一个进程（所有android应用的线程都是对应一个linux线程，都运行在自己的沙盒中，不同的应用在不同的进程中运行。每个android dalvik应用程序都被赋予了一个独立的linux PID(app_*)）
- 
-7、进程保活（不死进程）
-此处延伸：进程的优先级是什么
-当前业界的Android进程保活手段主要分为** 黑、白、灰 **三种，其大致的实现思路如下：
-黑色保活：不同的app进程，用广播相互唤醒（包括利用系统提供的广播进行唤醒）
-白色保活：启动前台Service
-灰色保活：利用系统的漏洞启动前台Service
-黑色保活
-所谓黑色保活，就是利用不同的app进程使用广播来进行相互唤醒。举个3个比较常见的场景：
-场景1：开机，网络切换、拍照、拍视频时候，利用系统产生的广播唤醒app
-场景2：接入第三方SDK也会唤醒相应的app进程，如微信sdk会唤醒微信，支付宝sdk会唤醒支付宝。由此发散开去，就会直接触发了下面的 场景3
-场景3：假如你手机里装了支付宝、淘宝、天猫、UC等阿里系的app，那么你打开任意一个阿里系的app后，有可能就顺便把其他阿里系的app给唤醒了。（只是拿阿里打个比方，其实BAT系都差不多）
-白色保活
-白色保活手段非常简单，就是调用系统api启动一个前台的Service进程，这样会在系统的通知栏生成一个Notification，用来让用户知道有这样一个app在运行着，哪怕当前的app退到了后台。如下方的LBE和QQ音乐这样：
-灰色保活
-灰色保活，这种保活手段是应用范围最广泛。它是利用系统的漏洞来启动一个前台的Service进程，与普通的启动方式区别在于，它不会在系统通知栏处出现一个Notification，看起来就如同运行着一个后台Service进程一样。这样做带来的好处就是，用户无法察觉到你运行着一个前台进程（因为看不到Notification）,但你的进程优先级又是高于普通后台进程的。那么如何利用系统的漏洞呢，大致的实现思路和代码如下：
-思路一：API < 18，启动前台Service时直接传入new Notification()；
-思路二：API >= 18，同时启动两个id相同的前台Service，然后再将后启动的Service做stop处理
-熟悉Android系统的童鞋都知道，系统出于体验和性能上的考虑，app在退到后台时系统并不会真正的kill掉这个进程，而是将其缓存起来。打开的应用越多，后台缓存的进程也越多。在系统内存不足的情况下，系统开始依据自身的一套进程回收机制来判断要kill掉哪些进程，以腾出内存来供给需要的app。这套杀进程回收内存的机制就叫 Low Memory Killer ，它是基于Linux内核的 OOM Killer（Out-Of-Memory killer）机制诞生。
-进程的重要性，划分5级：
-前台进程 (Foreground process)
-可见进程 (Visible process)
-服务进程 (Service process)
-后台进程 (Background process)
-空进程 (Empty process)
- 
-了解完 Low Memory Killer，再科普一下oom_adj。什么是oom_adj？它是linux内核分配给每个系统进程的一个值，代表进程的优先级，进程回收机制就是根据这个优先级来决定是否进行回收。对于oom_adj的作用，你只需要记住以下几点即可：
-进程的oom_adj越大，表示此进程优先级越低，越容易被杀回收；越小，表示进程优先级越高，越不容易被杀回收
-普通app进程的oom_adj>=0,系统进程的oom_adj才可能<0
-有些手机厂商把这些知名的app放入了自己的白名单中，保证了进程不死来提高用户体验（如微信、QQ、陌陌都在小米的白名单中）。如果从白名单中移除，他们终究还是和普通app一样躲避不了被杀的命运，为了尽量避免被杀，还是老老实实去做好优化工作吧。
-所以，进程保活的根本方案终究还是回到了性能优化上，进程永生不死终究是个彻头彻尾的伪命题！
- 
-8、讲解一下Context 
-Context是一个抽象基类。在翻译为上下文，也可以理解为环境，是提供一些程序的运行环境基础信息。Context下有两个子类，ContextWrapper是上下文功能的封装类，而ContextImpl则是上下文功能的实现类。而ContextWrapper又有三个直接的子类， ContextThemeWrapper、Service和Application。其中，ContextThemeWrapper是一个带主题的封装类，而它有一个直接子类就是Activity，所以Activity和Service以及Application的Context是不一样的，只有Activity需要主题，Service不需要主题。Context一共有三种类型，分别是Application、Activity和Service。这三个类虽然分别各种承担着不同的作用，但它们都属于Context的一种，而它们具体Context的功能则是由ContextImpl类去实现的，因此在绝大多数场景下，Activity、Service和Application这三种类型的Context都是可以通用的。不过有几种场景比较特殊，比如启动Activity，还有弹出Dialog。出于安全原因的考虑，Android是不允许Activity或Dialog凭空出现的，一个Activity的启动必须要建立在另一个Activity的基础之上，也就是以此形成的返回栈。而Dialog则必须在一个Activity上面弹出（除非是System Alert类型的Dialog），因此在这种场景下，我们只能使用Activity类型的Context，否则将会出错。
- 
-getApplicationContext()和getApplication()方法得到的对象都是同一个application对象，只是对象的类型不一样。
-Context数量 = Activity数量 + Service数量 + 1 （1为Application）
- 
-9、理解Activity，View,Window三者关系
-这个问题真的很不好回答。所以这里先来个算是比较恰当的比喻来形容下它们的关系吧。Activity像一个工匠（控制单元），Window像窗户（承载模型），View像窗花（显示视图）LayoutInflater像剪刀，Xml配置像窗花图纸。
-1：Activity构造的时候会初始化一个Window，准确的说是PhoneWindow。
-2：这个PhoneWindow有一个“ViewRoot”，这个“ViewRoot”是一个View或者说ViewGroup，是最初始的根视图。
-3：“ViewRoot”通过addView方法来一个个的添加View。比如TextView，Button等
-4：这些View的事件监听，是由WindowManagerService来接受消息，并且回调Activity函数。比如onClickListener，onKeyDown等。
+
  
 10、四种LaunchMode及其使用场景
 此处延伸：栈(First In Last Out)与队列(First In First Out)的区别
@@ -1446,21 +1403,7 @@ singleTask 模式
 如果在栈中已经有该Activity的实例，就重用该实例(会调用实例的 onNewIntent() )。重用时，会让该实例回到栈顶，因此在它上面的实例将会被移出栈。如果栈中不存在该实例，将会创建新的实例放入栈中。使用场景如浏览器的主界面。不管从多少个应用启动浏览器，只会启动主界面一次，其余情况都会走onNewIntent，并且会清空主界面上面的其他页面。
 singleInstance 模式
 在一个新栈中创建该Activity的实例，并让多个应用共享该栈中的该Activity实例。一旦该模式的Activity实例已经存在于某个栈中，任何应用再激活该Activity时都会重用该栈中的实例( 会调用实例的 onNewIntent() )。其效果相当于多个应用共享一个应用，不管谁激活该 Activity 都会进入同一个应用中。使用场景如闹铃提醒，将闹铃提醒与闹铃设置分离。singleInstance不要用于中间页面，如果用于中间页面，跳转会有问题，比如：A -> B (singleInstance) -> C，完全退出后，在此启动，首先打开的是B。
- 
-11、View的绘制流程
-自定义控件：
-1、组合控件。这种自定义控件不需要我们自己绘制，而是使用原生控件组合成的新控件。如标题栏。
-2、继承原有的控件。这种自定义控件在原生控件提供的方法外，可以自己添加一些方法。如制作圆角，圆形图片。
-3、完全自定义控件：这个View上所展现的内容全部都是我们自己绘制出来的。比如说制作水波纹进度条。
- 
-View的绘制流程：OnMeasure()——>OnLayout()——>OnDraw()
- 
-第一步：OnMeasure()：测量视图大小。从顶层父View到子View递归调用measure方法，measure方法又回调OnMeasure。
- 
-第二步：OnLayout()：确定View位置，进行页面布局。从顶层父View向子View的递归调用view.layout方法的过程，即父View根据上一步measure子View所得到的布局大小和布局参数，将子View放在合适的位置上。
- 
-第三步：OnDraw()：绘制视图。ViewRoot创建一个Canvas对象，然后调用OnDraw()。六个步骤：①、绘制视图的背景；②、保存画布的图层（Layer）；③、绘制View的内容；④、绘制View子视图，如果没有就不用；
-⑤、还原图层（Layer）；⑥、绘制滚动条。
+
  
 12、View，ViewGroup事件分
 1. Touch事件分发中只有两个主角:ViewGroup和View。ViewGroup包含onInterceptTouchEvent、dispatchTouchEvent、onTouchEvent三个相关事件。View包含dispatchTouchEvent、onTouchEvent两个相关事件。其中ViewGroup又继承于View。
@@ -1474,11 +1417,7 @@ View的绘制流程：OnMeasure()——>OnLayout()——>OnDraw()
 13、保存Activity状态
 onSaveInstanceState(Bundle)会在activity转入后台状态之前被调用，也就是onStop()方法之前，onPause方法之后被调用；
  
-14、Android中的几种动画
-帧动画：指通过指定每一帧的图片和播放时间，有序的进行播放而形成动画效果，比如想听的律动条。
-补间动画：指通过指定View的初始状态、变化时间、方式，通过一系列的算法去进行图形变换，从而形成动画效果，主要有Alpha、Scale、Translate、Rotate四种效果。注意：只是在视图层实现了动画效果，并没有真正改变View的属性，比如滑动列表，改变标题栏的透明度。
-属性动画：在Android3.0的时候才支持，通过不断的改变View的属性，不断的重绘而形成动画效果。相比于视图动画，View的属性是真正改变了。比如view的旋转，放大，缩小。
- 
+
 15、Android中跨进程通讯的几种方式
 Android 跨进程通信，像intent，contentProvider,广播，service都可以跨进程通信。
 intent：这种跨进程方式并不是访问内存的形式，它需要传递一个uri,比如说打电话。
@@ -1490,54 +1429,7 @@ service：远程服务，aidl
 此处延伸：简述Binder
  
 AIDL: 每一个进程都有自己的Dalvik VM实例，都有自己的一块独立的内存，都在自己的内存上存储自己的数据，执行着自己的操作，都在自己的那片狭小的空间里过完自己的一生。而aidl就类似与两个进程之间的桥梁，使得两个进程之间可以进行数据的传输，跨进程通信有多种选择，比如 BroadcastReceiver , Messenger 等，但是 BroadcastReceiver 占用的系统资源比较多，如果是频繁的跨进程通信的话显然是不可取的；Messenger 进行跨进程通信时请求队列是同步进行的，无法并发执行。
- 
-Binde机制简单理解:
-在Android系统的Binder机制中，是有Client,Service,ServiceManager,Binder驱动程序组成的，其中Client，service，Service Manager运行在用户空间，Binder驱动程序是运行在内核空间的。而Binder就是把这4种组件粘合在一块的粘合剂，其中核心的组件就是Binder驱动程序，Service Manager提供辅助管理的功能，而Client和Service正是在Binder驱动程序和Service Manager提供的基础设施上实现C/S 之间的通信。其中Binder驱动程序提供设备文件/dev/binder与用户控件进行交互，
-Client、Service，Service Manager通过open和ioctl文件操作相应的方法与Binder驱动程序进行通信。而Client和Service之间的进程间通信是通过Binder驱动程序间接实现的。而Binder Manager是一个守护进程，用来管理Service，并向Client提供查询Service接口的能力。
- 
-17、Handler的原理
-Android中主线程是不能进行耗时操作的，子线程是不能进行更新UI的。所以就有了handler，它的作用就是实现线程之间的通信。
-handler整个流程中，主要有四个对象，handler，Message,MessageQueue,Looper。当应用创建的时候，就会在主线程中创建handler对象，
-我们通过要传送的消息保存到Message中，handler通过调用sendMessage方法将Message发送到MessageQueue中，Looper对象就会不断的调用loop()方法
-不断的从MessageQueue中取出Message交给handler进行处理。从而实现线程之间的通信。
- 
-18、Binder机制原理
-在Android系统的Binder机制中，是有Client,Service,ServiceManager,Binder驱动程序组成的，其中Client，service，Service Manager运行在用户空间，Binder驱动程序是运行在内核空间的。而Binder就是把这4种组件粘合在一块的粘合剂，其中核心的组件就是Binder驱动程序，Service Manager提供辅助管理的功能，而Client和Service正是在Binder驱动程序和Service Manager提供的基础设施上实现C/S 之间的通信。其中Binder驱动程序提供设备文件/dev/binder与用户控件进行交互，Client、Service，Service Manager通过open和ioctl文件操作相应的方法与Binder驱动程序进行通信。而Client和Service之间的进程间通信是通过Binder驱动程序间接实现的。而Binder Manager是一个守护进程，用来管理Service，并向Client提供查询Service接口的能力。
- 
-19、热修复的原理
-我们知道Java虚拟机 —— JVM 是加载类的class文件的，而Android虚拟机——Dalvik/ART VM 是加载类的dex文件，
-而他们加载类的时候都需要ClassLoader,ClassLoader有一个子类BaseDexClassLoader，而BaseDexClassLoader下有一个
-数组——DexPathList，是用来存放dex文件，当BaseDexClassLoader通过调用findClass方法时，实际上就是遍历数组，
-找到相应的dex文件，找到，则直接将它return。而热修复的解决方法就是将新的dex添加到该集合中，并且是在旧的dex的前面，
-所以就会优先被取出来并且return返回。
- 
- 
- 
- 
- 
-20、Android内存泄露及管理
-（1）内存溢出（OOM）和内存泄露（对象无法被回收）的区别。 
-（2）引起内存泄露的原因
-(3) 内存泄露检测工具 ------>LeakCanary
- 
-内存溢出 out of memory：是指程序在申请内存时，没有足够的内存空间供其使用，出现out of memory；比如申请了一个integer,但给它存了long才能存下的数，那就是内存溢出。内存溢出通俗的讲就是内存不够用。
-内存泄露 memory leak：是指程序在申请内存后，无法释放已申请的内存空间，一次内存泄露危害可以忽略，但内存泄露堆积后果很严重，无论多少内存,迟早会被占光
-内存泄露原因：
-一、Handler 引起的内存泄漏。
-解决：将Handler声明为静态内部类，就不会持有外部类SecondActivity的引用，其生命周期就和外部类无关，
-如果Handler里面需要context的话，可以通过弱引用方式引用外部类
-二、单例模式引起的内存泄漏。
-解决：Context是ApplicationContext，由于ApplicationContext的生命周期是和app一致的，不会导致内存泄漏
-三、非静态内部类创建静态实例引起的内存泄漏。
-解决：把内部类修改为静态的就可以避免内存泄漏了
-四、非静态匿名内部类引起的内存泄漏。
-解决：将匿名内部类设置为静态的。
-五、注册/反注册未成对使用引起的内存泄漏。
-注册广播接受器、EventBus等，记得解绑。
-六、资源对象没有关闭引起的内存泄漏。
-在这些资源不使用的时候，记得调用相应的类似close（）、destroy（）、recycler（）、release（）等方法释放。
-七、集合对象没有及时清理引起的内存泄漏。
-通常会把一些对象装入到集合中，当不使用的时候一定要记得及时清理集合，让相关对象不再被引用。
+
  
 21、Fragment与Fragment、Activity通信的方式
 1.直接在一个Fragment中调用另外一个Fragment中的方法
@@ -1548,69 +1440,13 @@ handler整个流程中，主要有四个对象，handler，Message,MessageQueue,
 22、Android UI适配
 字体使用sp,使用dp，多使用match_parent，wrap_content，weight
 图片资源，不同图片的的分辨率，放在相应的文件夹下可使用百分比代替。
-23、app优化
-app优化:(工具：Hierarchy Viewer 分析布局  工具：TraceView 测试分析耗时的)
-App启动优化
-布局优化
-响应优化
-内存优化
-电池使用优化
-网络优化
- 
-App启动优化(针对冷启动)
-App启动的方式有三种：
-冷启动：App没有启动过或App进程被killed, 系统中不存在该App进程, 此时启动App即为冷启动。
-热启动：热启动意味着你的App进程只是处于后台, 系统只是将其从后台带到前台, 展示给用户。
- 
-介于冷启动和热启动之间, 一般来说在以下两种情况下发生:
- 
-(1)用户back退出了App, 然后又启动. App进程可能还在运行, 但是activity需要重建。
-(2)用户退出App后, 系统可能由于内存原因将App杀死, 进程和activity都需要重启, 但是可以在onCreate中将被动杀死锁保存的状态(saved instance state)恢复。
- 
-优化：
-Application的onCreate（特别是第三方SDK初始化），首屏Activity的渲染都不要进行耗时操作，如果有，就可以放到子线程或者IntentService中
- 
-布局优化
-尽量不要过于复杂的嵌套。可以使用<include>，<merge>，<ViewStub>
- 
-响应优化
-Android系统每隔16ms会发出VSYNC信号重绘我们的界面(Activity)。
-页面卡顿的原因：
-(1)过于复杂的布局.
-(2)UI线程的复杂运算
-(3)频繁的GC,导致频繁GC有两个原因:1、内存抖动, 即大量的对象被创建又在短时间内马上被释放.2、瞬间产生大量的对象会严重占用内存区域。
- 
-内存优化：参考内存泄露和内存溢出部分
- 
-电池使用优化(使用工具：Batterystats & bugreport)
-(1)优化网络请求
-(2)定位中使用GPS, 请记得及时关闭
- 
-网络优化(网络连接对用户的影响:流量,电量,用户等待)可在Android studio下方logcat旁边那个工具Network Monitor检测
-API设计：App与Server之间的API设计要考虑网络请求的频次, 资源的状态等. 以便App可以以较少的请求来完成业务需求和界面的展示.
-Gzip压缩：使用Gzip来压缩request和response, 减少传输数据量, 从而减少流量消耗.
-图片的Size：可以在获取图片时告知服务器需要的图片的宽高, 以便服务器给出合适的图片, 避免浪费.
-网络缓存：适当的缓存, 既可以让我们的应用看起来更快, 也能避免一些不必要的流量消耗.
- 
-24、图片优化
-(1)对图片本身进行操作。尽量不要使用setImageBitmap、setImageResource、BitmapFactory.decodeResource来设置一张大图，因为这些方法在完成decode后，
-最终都是通过java层的createBitmap来完成的，需要消耗更多内存.
-(2)图片进行缩放的比例，SDK中建议其值是2的指数值,值越大会导致图片不清晰。
-(3)不用的图片记得调用图片的recycle()方法
- 
 
- 
+
 26、JAVA GC原理
 垃圾收集算法的核心思想是：对虚拟机可用内存空间，即堆空间中的对象进行识别，如果对象正在被引用，那么称其为存活对象
 ，反之，如果对象不再被引用，则为垃圾对象，可以回收其占据的空间，用于再分配。垃圾收集算法的选择和垃圾收集系统参数的合理调节直接影响着系统性能。
  
-27、ANR
-ANR全名Application Not Responding, 也就是"应用无响应". 当操作在一段时间内系统无法处理时, 系统层面会弹出上图那样的ANR对话框.
-产生原因：
-(1)5s内无法响应用户输入事件(例如键盘输入, 触摸屏幕等).
-(2)BroadcastReceiver在10s内无法结束
-(3)Service 20s内无法结束（低概率）
- 
+
 解决方式：
 (1)不要在主线程中做耗时的操作，而应放在子线程中来实现。如onCreate()和onResume()里尽可能少的去做创建操作。
 (2)应用程序应该避免在BroadcastReceiver里做耗时的操作或计算。

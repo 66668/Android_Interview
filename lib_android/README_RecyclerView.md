@@ -2,31 +2,43 @@
 
 ## Recycleview和ListView的区别
 
+1. 使用方面: 
+ListView的基础使用:
 
-1. **ViewHolder编写规范化**
+(1)继承重写 BaseAdapter 类
+(2)自定义 ViewHolder 和 convertView 一起完成复用优化工作
 
-    在ListView中，**ViewHolder需要自己来定义**，且这只是一种推荐的使用方式，不使用当然也可以，这不是必须的。只不过不使用ViewHolder的话，
-    ListView每次getView的时候都会调用findViewById(int)，这将导致ListView性能展示迟缓
-    
-    **RecyclerView封装了ViewHolder编写规范**，且必须要实现
-    
-    **RecyclerView复用item全部搞定， ListView需要设置setTag()与getTag()**；
+RecyclerView 基础使用关键点同样有两点:
+(1)继承重写 RecyclerView.Adapter 和 RecyclerView.ViewHolder
+(2)设置布局管理器，控制布局效果
 
-2. **滚动方向**：
+RecyclerView 相比 ListView 在基础使用上的区别主要有如下几点:
 
-ListView只能在上下滚动，api没提供横向滑动
+(1)ViewHolder 的编写规范化了
+(2)RecyclerView 复用 Item 的工作 Google 全帮你搞定，不再需要像 ListView 那样自己调用 setTag getTag()
+(3)RecyclerView 需要多出一步 LayoutManager 的设置工作
 
-RecyclerView相较于ListView，在滚动上面的功能扩展了许多。还支持多种类型列表的展示要求，主要如下：
+2. 布局方面:
+RecyclerView 支持 线性布局、网格布局、瀑布流布局 三种，而且同时还能够控制横向还是纵向滚动。
+ListView只能在上下滚
 
-（1）LinearLayoutManager，可以支持水平和竖直方向上滚动的列表。
+3. API提供方面:
+ListView 提供了 setEmptyView ，addFooterView 、 addHeaderView;而RecycleView没有实现，根据ViewHolder的Type与View来实现自己的Header，Footter与普通的item，但是这样就会影响到Adapter的数据，比如position，添加了Header与Footter后，实际的position将大于数据的position
 
-（2） StaggeredGridLayoutManager，可以支持交叉网格风格的列表，类似于瀑布流或者Pinterest。
- 
-（3）GridLayoutManager，支持网格展示，可以水平或者竖直滚动，如展示图片的画廊。
-  
-3. **item动画**：相比较于ListView，RecyclerView.ItemAnimator则被提供用于在RecyclerView添加、删除或移动item时处理动画效果。
+RecyclerView 供了notifyItemChanged 用于更新单个 Item View 的刷新，我们可以省去自己写**局部更新**的工作
 
-4. 嵌套滚动机制：
+4. 动画效果:
+RecyclerView 在做局部刷新的时候有一个渐变的动画效果。继承 **RecyclerView.ItemAnimator** 类，并 实现相应的方法，再调用 RecyclerView的 setItemAnimator(RecyclerView.ItemAnimator animator) 方法设置完即可实现自定义的动画效果。
+
+5. 监听 Item 的事件:
+ListView 提供了单击、长按、选中某个 Item 的监听设置。
+RecyclerView中: 提供了唯一一个API：RecyclerView.OnItemTouchListener接口来监听item的触摸事件；需要自定义监听事件。
+
+6. 缓存机制不同：
+（1）RecyclerView比ListView多两级缓存，支持多个离ItemView缓存，支持开发者自定义缓存处理逻辑，支持所有RecyclerView共用同一个RecyclerViewPool(缓存池)。
+（2） RecyclerView缓存RecyclerView.ViewHolder，抽象可理解为：View + ViewHolder(避免每次createView时调用findViewById) + flag(标识状态).而ListView缓存View。
+
+7. 嵌套滚动机制：
 
 在事件分发机制中，Touch事件在进行分发的时候，由父View向子View传递，一旦子View消费这个事件的话，那么接下来的事件分发的时候，父View将不接受，
 由子View进行处理；但是与Android的事件分发机制不同，嵌套滚动机制（Nested Scrolling）可以弥补这个不足，能让子View与父View同时处理这个Touch事件，
@@ -34,31 +46,35 @@ RecyclerView相较于ListView，在滚动上面的功能扩展了许多。还支
 
 ListView就没有实现嵌套滚动机制；
 
-5. **HeaderView 与 FooterView**：
+### 提问：Recycleview如何解决滑动卡顿,优化滑动体验?
 
-在ListView中可以通过addHeaderView() 与 addFooterView()来添加头部item与底部item，来当我们需要实现下拉刷新或者上拉加载的情况；
-而且这两个API不会影响Adapter的编写；
-
-但是RecyclerView中并没有这两个API，所以当我们需要在RecyclerView添加头部item或者底部item的时候，我们可以在Adapter中自己编写，
-根据ViewHolder的Type与View来实现自己的Header，Footter与普通的item，但是这样就会影响到Adapter的数据，比如position，
-添加了Header与Footter后，实际的position将大于数据的position；
-
-6. 设置分割
-
- 在ListView中如果我们想要在item之间添加间隔符，我们只需要在布局文件中对ListView添加如下属性即可：
-
-        android:divider="@android:color/transparent"
-        android:dividerHeight="5dp"
-
-7. Item点击事件：
-
-   在ListView中有onItemClickListener(), onItemLongClickListener(), onItemSelectedListener(), 
-   但是添加HeaderView与FooterView后就不一样了，因为HeaderView与FooterView都会算进position中，这时会发现position会出现变化，
-   可能会抛出数组越界，为了解决这个问题，我们在getItemId()方法（在该方法中HeaderView与FooterView返回的值是-1）
-   中通过返回id来标志对应的item，而不是通过position来标记；但是我们可以在Adapter中针对每个item写在getView()中会比较合适；
-   
-   而在RecyclerView中，提供了唯一一个API：RecyclerView.OnItemTouchListener接口来监听item的触摸事件；需要自定义监听事件。
+1. 熟悉recyclerview的item加载顺序的模版方法
 
     
+        getItemViewType(获取显示类型，返回值可在onCreateViewHolder中拿到，以决定加载哪种ViewHolder)
+        
+        onCreateViewHolder(加载ViewHolder的布局)
+        
+        onViewAttachedToWindow（当Item进入这个页面的时候调用）
+        
+        onBindViewHolder(将数据绑定到布局上，以及一些逻辑的控制就写这啦)
+        
+        onViewDetachedFromWindow（当Item离开这个页面的时候调用）
+        
+        onViewRecycled(当Item被回收的时候调用)
+2. 复杂布局优化：
+        
+        
+        1.尽量减少布局嵌套，层级越深，每次测量时间久越久。
+        2. 如果布局很复杂，可以考虑自定义布局能不能实现。
+        3.尽量减少过度绘制区域。这个可以在开发者选项中看到：调试GPU过度绘制。
 
+3. 优化图片加载,考虑滚动的时候不做复杂布局及图片的加载
 
+### RecyclerView的ItemTouchHelper的实现原理（侧滑删除/item交互动画）
+v7包的ItemTouchHelper创建后和RecycleView绑定即可实现
+参考：https://www.jianshu.com/p/e3426dcc8ef1
+    
+        // 创建ItemTouchHelper，并跟RecyclerView绑定
+        mItemTouchHelper = new ItemTouchHelper(mCallback);
+        mItemTouchHelper.attachToRecyclerView(mRv);

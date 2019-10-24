@@ -53,10 +53,6 @@ http://blog.csdn.net/yuzhiboyi/article/details/7677026
 http://blog.csdn.net/whatday/article/details/38147103 
 此处延伸：https的实现原理
 
-9.进程保活（不死进程） 
-http://www.jianshu.com/p/63aafe3c12af 
-此处延伸：进程的优先级是什么（下面这篇文章，都有说） 
-https://segmentfault.com/a/1190000006251859
 
 
 23.自定义view和动画 
