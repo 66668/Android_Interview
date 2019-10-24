@@ -59,6 +59,31 @@
         
 
  
+ ## 给App授予默认权限不需要权限弹框的方案
+ 
+ 参考：https://blog.csdn.net/wangjicong_215/article/details/72821916
+ 
+ 1. /system/etc/default-permissions/下添加自己的app和权限的xml文件
+ 
+ 在DefaultPermissionGrantPolicy中会去读这个文件，来给app赋予权限
+ 
+ 2. 手动安装的第三方app的权限默认开启是修改PackageManagerService.java
+ 在grantPermissionsLpw函数中添加如下代码:
+ 
+ //Permissions for com.xxx.xxx
+  if(pkg.packageName.contains("com.xxx.xxx")) {
+           final int permsSize = pkg.requestedPermissions.size();
+           for (int i=0; i<permsSize; i++) {
+               final String name = pkg.requestedPermissions.get(i);
+               final BasePermission bp = mSettings.mPermissions.get(name);
+               if(null != bp && permissionsState.grantInstallPermission(bp) != PermissionsState.PERMISSION_OPERATION_FAILURE) {
+                   Slog.d(TAG, "zrx--- grant permission " + name + " to package " + pkg.packageName);
+                   changedInstallPermission = true;
+               }
+           }
+       }
+
+ 
  
     
 
