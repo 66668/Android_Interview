@@ -362,7 +362,6 @@ Arouter的原理
 应用跟系统之间通信什么时候用Socket什么时候用Binder
 
 
-Debug跟Release的APK的区别
 ConcurrentHashmap的原理
 Listview跟Recyclerview的区别（刷新，缓存，各自的使用场景）
 对谷歌新推出的Room架构
