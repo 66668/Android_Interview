@@ -26,9 +26,6 @@ public class MainActivity extends BaseAct {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tv = findViewById(R.id.tv);
-        Log.d("SJY", Environment.getExternalStorageState());
-        startActivity();
     }
 
 
