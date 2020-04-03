@@ -12,11 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 实现2线程的打印，从小到大
  */
 public class ThreadDemo {
-    private static volatile int count = 1;
 
-    private static boolean isJishu = true;
-
-    public static volatile boolean flag = true;
     public static final Object monitor1 = new Object();
     public static volatile int num = 0;
 
@@ -30,20 +26,18 @@ public class ThreadDemo {
         @Override
         public void run() {
             super.run();
-            for (int i = 1; i < 100; i++) {
-                System.out.println("进入ThreadA");
+            while (num <= 100) {
                 synchronized (monitor1) {
-                    System.out.println("进入ThreadA-2");
-                    if (flag) {
+                    System.out.println("进入ThreadA");
+                    if (num % 2 == 0) {
                         try {
-                            System.out.println("1：wait();");
+                            System.out.println("ThreadA：wait()");
                             monitor1.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
                     System.out.println("1：奇数： " + num++);
-                    flag = true;
                     monitor1.notify();
                 }
             }
@@ -55,19 +49,17 @@ public class ThreadDemo {
         public void run() {
             super.run();
             while (num <= 100) {
-                System.out.println("进入ThreadB");
                 synchronized (monitor1) {
-                    System.out.println("进入ThreadB-2");
-                    if (!flag) {
+                    System.out.println("进入ThreadB");
+                    if (num % 2 == 1) {
                         try {
-                            System.out.println("2 wait();");
+                            System.out.println("ThreadB wait()");
                             monitor1.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
                     System.out.println("2 偶数： " + num++);
-                    flag = false;
                     monitor1.notify();
                 }
             }
