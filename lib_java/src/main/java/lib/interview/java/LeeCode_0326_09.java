@@ -29,7 +29,7 @@ public class LeeCode_0326_09 {
         for (String s : strs) {
             String temp = getString(s);//字符串排序，ate aet等，保证一个key:aet
             if (!map.containsKey(temp)) {
-                map.put(temp, new ArrayList<>());//val为一个list表
+                map.put(temp, new ArrayList<String>());//val为一个list表
             }
             map.get(temp).add(s);//逐个原始字符串
         }
