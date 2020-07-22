@@ -32,11 +32,14 @@ public class MyBotton extends Button {
     public boolean dispatchTouchEvent(MotionEvent event) {
         Log.d(TAG, "dispatchTouchEvent");
         return super.dispatchTouchEvent(event);
+//        return true;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Log.d(TAG, "onTouchEvent="+event.getAction());
         return super.onTouchEvent(event);
+        //        return true;
     }
+
 }

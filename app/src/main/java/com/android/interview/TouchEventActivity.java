@@ -34,6 +34,15 @@ public class TouchEventActivity extends BaseAct {
         btn_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "OnClickListener");
+            }
+        });
+
+        btn_1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent ev) {
+                Log.d(TAG, "OnTouchListener=" + ev.getAction());
+                return false;
             }
         });
     }
