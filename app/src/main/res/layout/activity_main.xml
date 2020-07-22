@@ -7,9 +7,20 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/btn_1"
+        android:layout_width="match_parent"
+        android:text="跳转事件"
+        android:layout_height="50dp" />
+
     <EditText
         android:id="@+id/et_input"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:hint="输入"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
 
 </LinearLayout>
