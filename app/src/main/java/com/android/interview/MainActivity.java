@@ -21,17 +21,28 @@ import android.util.Log;
 import android.util.LruCache;
 import android.util.SparseArray;
 import android.view.KeyEvent;
+import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Set;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 public class MainActivity extends BaseAct {
     EditText et_input;
     Button btn_1;
-    Message message;
-    Handler handler;
-    MessageQueue queue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +73,56 @@ public class MainActivity extends BaseAct {
                 startActivity(new Intent(MainActivity.this, TouchEventActivity.class));
             }
         });
+        LinkedHashMap<String, String> a = new LinkedHashMap<>();
+        LruCache cache = new LruCache<String, Bitmap>(4) {
+            @Override
+            protected int sizeOf(String key, Bitmap value) {
+                return super.sizeOf(key, value);
+            }
+        };
+        testRxjava();
     }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
 
         return super.dispatchKeyEvent(event);
+    }
+
+    private void testRxjava(){
+        Observable
+                .create(new ObservableOnSubscribe<String>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                        Log.d("SJY","subscribe-线程：" + Thread.currentThread().getName());
+                        emitter.onNext("a");
+                        emitter.onNext("b");
+                        emitter.onComplete();
+                    }
+                })
+                .subscribeOn(Schedulers.io())//线程调度
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())//主线程切换
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.d("SJY","onSubscribe-线程：" + Thread.currentThread().getName());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        Log.d("SJY","内容：" + s + "-onNext-线程：" + Thread.currentThread().getName());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("SJY","onError-线程：" + Thread.currentThread().getName());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d("SJY","onComplete-线程：" + Thread.currentThread().getName());
+                    }
+                });
     }
 }

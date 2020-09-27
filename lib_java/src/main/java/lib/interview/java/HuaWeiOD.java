@@ -13,7 +13,7 @@ public class HuaWeiOD {
         String a = "a";
         String b = "b";
         transStr(a, b);
-        System.out.println(a + "--" + b);//输出：a b
+        System.out.println("a="+a + "--b=" + b);//输出：a b
     }
 
     static void transStr(String a, String b) {
@@ -22,6 +22,7 @@ public class HuaWeiOD {
         b = nP;
         a = "c";//赋值是new操作，不影响实参数
         b = new String("d");//赋值是new操作，不影响实参数
+        System.out.println("transStr:a="+a + "--b=" + b);//输出：a b
     }
 
 }

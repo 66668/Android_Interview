@@ -1,6 +1,7 @@
 package com.android.interview.touchevent;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,14 +29,14 @@ public class ViewGroup1 extends LinearLayout {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        Log.d(TAG, "dispatchTouchEvent" + ev.getAction());
+        Log.d(TAG, "dispatchTouchEvent=" + ev.getAction());
         return super.dispatchTouchEvent(ev);
 //        return true;
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.d(TAG, "onInterceptTouchEvent" + ev.getAction());
+        Log.d(TAG, "onInterceptTouchEvent=" + ev.getAction());
         return super.onInterceptTouchEvent(ev);
 //        return true;
     }
@@ -45,5 +46,11 @@ public class ViewGroup1 extends LinearLayout {
         Log.d(TAG, "onTouchEvent=" + event.getAction());
         return super.onTouchEvent(event);
 //        return true;
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        Log.d(TAG, "ViewGroup1-Canvas验证=" + canvas.hashCode());
     }
 }

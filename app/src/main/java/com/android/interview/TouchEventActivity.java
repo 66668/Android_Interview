@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.interview.touchevent.ViewGroup1;
+import com.android.interview.touchevent.ViewGroup2;
+
 /**
  * 事件分发 模拟
  */
@@ -21,6 +24,8 @@ public class TouchEventActivity extends BaseAct {
     private static final String TAG = "SJY_Act";
     EditText et_input;
     Button btn_1;
+    ViewGroup1 ly_1;
+    ViewGroup2 ly_2;
     Message message;
     Handler handler;
     MessageQueue queue;
@@ -30,6 +35,24 @@ public class TouchEventActivity extends BaseAct {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_touch);
         btn_1 = findViewById(R.id.btn_1);
+        ly_1 = findViewById(R.id.ly_1);
+        ly_2 = findViewById(R.id.ly_2);
+
+        ly_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "ViewGroup1-OnClickListener");
+                ly_1.invalidate();
+            }
+        });
+
+        ly_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "ViewGroup2-OnClickListener");
+                ly_2.invalidate();
+            }
+        });
 
         btn_1.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -2,6 +2,7 @@ package com.android.interview.touchevent;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -30,16 +31,26 @@ public class MyBotton extends Button {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        Log.d(TAG, "dispatchTouchEvent");
+        Log.d(TAG, "dispatchTouchEvent="+event.getAction());
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            Log.d(TAG, "dispatchTouchEvent-requestDisallowInterceptTouchEvent=" + false);
+            getParent().requestDisallowInterceptTouchEvent(false);//false拦截,父类处理/true不拦截，子类处理
+        }
         return super.dispatchTouchEvent(event);
 //        return true;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d(TAG, "onTouchEvent="+event.getAction());
+        Log.d(TAG, "onTouchEvent=" + event.getAction());
         return super.onTouchEvent(event);
         //        return true;
     }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        Log.d(TAG, "MyBotton-Canvas验证=" + canvas);
+
+    }
 }
