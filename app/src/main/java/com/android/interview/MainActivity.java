@@ -81,6 +81,14 @@ public class MainActivity extends BaseAct {
             }
         };
         testRxjava();
+
+        findViewById(R.id.btn_2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MapAct.class));
+            }
+        });
+
     }
 
     @Override
@@ -89,12 +97,12 @@ public class MainActivity extends BaseAct {
         return super.dispatchKeyEvent(event);
     }
 
-    private void testRxjava(){
+    private void testRxjava() {
         Observable
                 .create(new ObservableOnSubscribe<String>() {
                     @Override
                     public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                        Log.d("SJY","subscribe-线程：" + Thread.currentThread().getName());
+                        Log.d("SJY", "subscribe-线程：" + Thread.currentThread().getName());
                         emitter.onNext("a");
                         emitter.onNext("b");
                         emitter.onComplete();
@@ -106,22 +114,22 @@ public class MainActivity extends BaseAct {
                 .subscribe(new Observer<String>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        Log.d("SJY","onSubscribe-线程：" + Thread.currentThread().getName());
+                        Log.d("SJY", "onSubscribe-线程：" + Thread.currentThread().getName());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        Log.d("SJY","内容：" + s + "-onNext-线程：" + Thread.currentThread().getName());
+                        Log.d("SJY", "内容：" + s + "-onNext-线程：" + Thread.currentThread().getName());
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("SJY","onError-线程：" + Thread.currentThread().getName());
+                        Log.d("SJY", "onError-线程：" + Thread.currentThread().getName());
                     }
 
                     @Override
                     public void onComplete() {
-                        Log.d("SJY","onComplete-线程：" + Thread.currentThread().getName());
+                        Log.d("SJY", "onComplete-线程：" + Thread.currentThread().getName());
                     }
                 });
     }

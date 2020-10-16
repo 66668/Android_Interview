@@ -10,8 +10,14 @@
     <Button
         android:id="@+id/btn_1"
         android:layout_width="match_parent"
-        android:text="跳转事件"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:text="跳转事件" />
+
+    <Button
+        android:id="@+id/btn_2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="kotlin-map" />
 
     <EditText
         android:id="@+id/et_input"

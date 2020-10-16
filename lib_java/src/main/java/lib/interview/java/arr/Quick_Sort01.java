@@ -1,4 +1,4 @@
-package lib.interview.java;
+package lib.interview.java.arr;
 
 import java.util.Arrays;
 
@@ -10,8 +10,11 @@ import java.util.Arrays;
 public class Quick_Sort01 {
     public static void main(String[] args) {
         int a[] = {6, 3, 7, 10, 12, 9, 13, 5, 2, 8, 4, 1, 11};
-        quickSort_02(a, 0, a.length - 1, "main");
-        System.out.println("排序=" + Arrays.toString(a));
+//        quickSort_02(a, 0, a.length - 1, "main");
+//        System.out.println("排序=" + Arrays.toString(a));
+
+        //
+        bubbleSort(a);
     }
 
     //快速排序方法
@@ -52,5 +55,20 @@ public class Quick_Sort01 {
         // 递归调用右半数组
         quickSort_02(arr, j + 1, high, "right");
         return arr;
+    }
+
+    //冒泡
+    public static int[] bubbleSort(int[] array) {
+        if (array.length == 0)
+            return array;
+        for (int i = 0; i < array.length; i++)
+            for (int j = 0; j < array.length - 1 - i; j++)
+                if (array[j + 1] < array[j]) {
+                    int temp = array[j + 1];
+                    array[j + 1] = array[j];
+                    array[j] = temp;
+                }
+        System.out.println("01冒泡排序：" + Arrays.toString(array));
+        return array;
     }
 }
