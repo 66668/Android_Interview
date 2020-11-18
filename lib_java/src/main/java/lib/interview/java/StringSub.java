@@ -12,6 +12,7 @@ public class StringSub {
     static String str1 = "http://39.105.69.83:10026/Api/doorInfo";
     static String str2 = "http://39.105.69.83:10026/";
     static String str3 = "/Api/doorInfo";
+    StringBuffer buffer;
 
 
     public static void main(String[] args) {

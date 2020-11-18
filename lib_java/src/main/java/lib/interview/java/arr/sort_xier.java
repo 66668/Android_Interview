@@ -10,8 +10,8 @@ import java.util.Arrays;
 public class sort_xier {
     public static void main(String[] args) {
         int a[] = {6, 3, 7, 16, 10, 12, 9, 13, 5, 2, 15, 8, 4, 1, 14, 11};
-//        shellSort(a);
-        insertSort_03(a);
+        shellSort(a);
+//        insertSort_03(a);
     }
 
     public static int[] insertSort_03(int[] array) {
