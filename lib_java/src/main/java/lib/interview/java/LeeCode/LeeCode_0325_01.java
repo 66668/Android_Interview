@@ -1,4 +1,4 @@
-package lib.interview.java;
+package lib.interview.java.LeeCode;
 
 import java.util.ArrayList;
 import java.util.List;

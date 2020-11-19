@@ -43,7 +43,6 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends BaseAct {
     EditText et_input;
     Button btn_1;
-    NestedScroll
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

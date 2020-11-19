@@ -1,0 +1,12 @@
+package lib.interview.java.java8;
+
+import android.view.View;
+
+/**
+ * @author:sjy
+ * @date: 2020/11/18
+ * Description:自定义接口
+ */
+public interface DemoCallback {
+    void onBack(String event);
+}
