@@ -19,6 +19,12 @@
         android:layout_height="50dp"
         android:text="kotlin-map" />
 
+    <Button
+        android:id="@+id/btn_3"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="kotlin-map" />
+
     <EditText
         android:id="@+id/et_input"
         android:layout_width="match_parent"

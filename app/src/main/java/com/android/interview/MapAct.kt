@@ -3,6 +3,9 @@ package com.android.interview
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  *@author:sjy
@@ -13,7 +16,7 @@ class MapAct : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_map)
-        testMap()
+//        testMap()
     }
 
     fun testMap() {
@@ -28,4 +31,5 @@ class MapAct : AppCompatActivity() {
             Log.d("SJY", "item key=${item.key}  val=${item.value}")
         }
     }
+
 }

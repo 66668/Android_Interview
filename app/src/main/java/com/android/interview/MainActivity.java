@@ -1,36 +1,20 @@
 package com.android.interview;
 
-import android.app.ActivityManager;
-import android.app.IntentService;
-import android.arch.lifecycle.Lifecycle;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
-import android.os.Message;
-import android.os.MessageQueue;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.util.LruCache;
-import android.util.SparseArray;
 import android.view.KeyEvent;
-import android.view.Surface;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import java.util.HashMap;
+import com.android.interview.kotlin.KotlinDemoAct;
+
 import java.util.LinkedHashMap;
-import java.util.Set;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -79,7 +63,7 @@ public class MainActivity extends BaseAct {
                 return super.sizeOf(key, value);
             }
         };
-        testRxjava();
+//        testRxjava();
 
         findViewById(R.id.btn_2).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +71,12 @@ public class MainActivity extends BaseAct {
                 startActivity(new Intent(MainActivity.this, MapAct.class));
             }
         });
-
+        findViewById(R.id.btn_3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, KotlinDemoAct.class));
+            }
+        });
     }
 
     @Override
