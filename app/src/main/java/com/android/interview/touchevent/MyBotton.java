@@ -53,4 +53,9 @@ public class MyBotton extends Button {
         Log.d(TAG, "MyBotton-Canvas验证=" + canvas);
 
     }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+    }
 }

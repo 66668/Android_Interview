@@ -3,6 +3,9 @@ package com.android.interview;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.MessageQueue;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,6 +30,10 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends BaseAct {
     EditText et_input;
     Button btn_1;
+    Handler handler = new Handler();
+    Looper looper = handler.getLooper();
+
+    MessageQueue queue =looper.getQueue();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
