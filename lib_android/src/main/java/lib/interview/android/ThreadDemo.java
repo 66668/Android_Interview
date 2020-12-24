@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 实现2线程的打印，从小到大
+ * synchronized实现
  */
 public class ThreadDemo {
 

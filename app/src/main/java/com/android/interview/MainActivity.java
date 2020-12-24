@@ -30,14 +30,14 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends BaseAct {
     EditText et_input;
     Button btn_1;
-    Handler handler = new Handler();
-    Looper looper = handler.getLooper();
-
-    MessageQueue queue =looper.getQueue();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initMyView();
+    }
+
+    private void initMyView(){
         et_input = findViewById(R.id.et_input);
         btn_1 = findViewById(R.id.btn_1);
 
