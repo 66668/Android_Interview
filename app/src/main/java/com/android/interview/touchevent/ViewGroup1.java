@@ -28,6 +28,18 @@ public class ViewGroup1 extends LinearLayout {
     }
 
     @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        Log.d(TAG, "ViewGroup1-onLayout");
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        Log.d(TAG, "ViewGroup1-onMeasure");
+    }
+
+    @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         Log.d(TAG, "dispatchTouchEvent=" + ev.getAction());
         return super.dispatchTouchEvent(ev);
@@ -52,5 +64,11 @@ public class ViewGroup1 extends LinearLayout {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         Log.d(TAG, "ViewGroup1-Canvas验证=" + canvas.hashCode());
+    }
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        Log.d(TAG, "ViewGroup1-invalidate");
     }
 }

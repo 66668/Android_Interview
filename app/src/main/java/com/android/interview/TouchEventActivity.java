@@ -51,6 +51,12 @@ public class TouchEventActivity extends BaseAct {
             public void onClick(View v) {
                 Log.d(TAG, "ViewGroup2-OnClickListener");
                 ly_2.invalidate();
+                ly_2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ly_2.requestLayout();
+                    }
+                },2000);
             }
         });
 

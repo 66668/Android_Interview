@@ -16,12 +16,10 @@ public class ThreadDemo4 {
     //1 2 3
     private static volatile int flag = 1;
 
-    //重入锁,ReentrantLock
     static Lock lock = new ReentrantLock();
     static Condition condition1 = lock.newCondition();
     static Condition condition2 = lock.newCondition();
     static Condition condition3 = lock.newCondition();
-
 
     public static void main(String[] args) {
 
@@ -35,14 +33,14 @@ public class ThreadDemo4 {
     public static class Runnable1 implements Runnable {
         @Override
         public void run() {
-            while (flag <= 100) {
+            while (flag<=3) {
                 lock.lock();
                 try {
-                    while (flag % 3 != 1) {
+                    while (flag !=1) {
                         condition1.await();
                     }
-                    System.out.println(Thread.currentThread().getName() + "--" + flag);
-                    flag++;//更换标记位
+                    System.out.println("--" + flag);
+                    flag=2;//更换标记位
                     condition2.signal();//唤醒下一个线程
                 } catch (Exception e) {
                     lock.unlock();
@@ -51,18 +49,18 @@ public class ThreadDemo4 {
         }
     }
 
-
+    //线程1
     public static class Runnable2 implements Runnable {
         @Override
         public void run() {
-            while (flag <= 100) {
+            while (flag<=3) {
                 lock.lock();
                 try {
-                    while (flag % 3 != 2) {
+                    while (flag != 2) {
                         condition2.await();
                     }
-                    System.out.println(Thread.currentThread().getName() + "--" + flag);
-                    flag++;//更换标记位
+                    System.out.println("--" + flag);
+                    flag =3;//更换标记位
                     condition3.signal();//唤醒下一个线程
                 } catch (Exception e) {
                     lock.unlock();
@@ -70,19 +68,18 @@ public class ThreadDemo4 {
             }
         }
     }
-
-    //线程1
+ //线程3
     public static class Runnable3 implements Runnable {
         @Override
         public void run() {
-            while (flag <= 100) {
+            while (flag<=3) {
                 lock.lock();
                 try {
-                    while (flag % 3 != 0) {
+                    while (flag != 3) {
                         condition3.await();
                     }
-                    System.out.println(Thread.currentThread().getName() + "--" + flag);
-                    flag++;//更换标记位
+                    System.out.println("--" + flag);
+                    flag =4;//更换标记位
                     condition1.signal();//唤醒下一个线程
                 } catch (Exception e) {
                     lock.unlock();

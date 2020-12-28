@@ -11,7 +11,7 @@
         android:id="@+id/btn_1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="跳转事件" />
+        android:text="view事件" />
 
     <Button
         android:id="@+id/btn_2"
