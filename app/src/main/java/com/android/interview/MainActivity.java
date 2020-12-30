@@ -30,6 +30,7 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends BaseAct {
     EditText et_input;
     Button btn_1;
+    View mV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +83,13 @@ public class MainActivity extends BaseAct {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, KotlinDemoAct.class));
+            }
+        });
+        mV = findViewById(R.id.view);
+        mV.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("SJY","获取宽高："+mV.getHeight()+"--"+mV.getWidth());
             }
         });
     }
