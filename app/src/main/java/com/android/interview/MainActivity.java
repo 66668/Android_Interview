@@ -1,6 +1,7 @@
 package com.android.interview;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import com.android.interview.kotlin.KotlinDemoAct;
 
 import java.util.LinkedHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -31,11 +33,15 @@ public class MainActivity extends BaseAct {
     EditText et_input;
     Button btn_1;
     View mV;
+    ConcurrentHashMap hashMap;
+    SharedPreferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initMyView();
+        preferences = getSharedPreferences("",SharedPreferences.);
+        preferences.edit().apply();
     }
 
     private void initMyView(){
@@ -83,6 +89,12 @@ public class MainActivity extends BaseAct {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, KotlinDemoAct.class));
+            }
+        });
+        findViewById(R.id.btn_4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, OomDemoActivity.class));
             }
         });
         mV = findViewById(R.id.view);

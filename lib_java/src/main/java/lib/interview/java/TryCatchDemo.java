@@ -29,4 +29,10 @@ public class TryCatchDemo {
             return t;
         }
     }
+
+    public static int add (int a, int b) {
+        a = 2;
+        int result = a + b;
+        return result;
+    }
 }
