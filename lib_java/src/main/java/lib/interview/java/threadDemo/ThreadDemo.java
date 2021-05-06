@@ -1,4 +1,4 @@
-package lib.interview.android;
+package lib.interview.java.threadDemo;
 
 import java.io.BufferedReader;
 import java.io.IOException;

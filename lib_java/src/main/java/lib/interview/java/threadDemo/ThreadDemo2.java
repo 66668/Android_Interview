@@ -1,4 +1,4 @@
-package lib.interview.android;
+package lib.interview.java.threadDemo;
 
 /**
  * 实现3个线程同步打印，从小到大

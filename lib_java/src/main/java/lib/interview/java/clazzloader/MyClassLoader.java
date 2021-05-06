@@ -10,7 +10,7 @@ import java.io.FileInputStream;
  * Description：自定义ClassLoader,绕过双亲委派机制
  */
 public class MyClassLoader extends ClassLoader{
-    private final static String DEFAULT_DIR = "/Users/sjy/a_my_repository/Android_Interview/lib_java/src/main/java/lib/interview/java/clazzloader";//mac个人路径
+    private final static String DEFAULT_DIR = "/Users/koolearn/a_my_repository/Android_Interview/lib_java/src/main/java/lib/interview/java/clazzloader";//mac个人路径
     private String dir = DEFAULT_DIR;
     private String classLoaderName;
 

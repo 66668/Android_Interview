@@ -1,13 +1,5 @@
 package lib.interview.java;
 
-import android.graphics.Point;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 public class HuaWeiOD {
     public static void main(String[] args) {
         String a = "a";

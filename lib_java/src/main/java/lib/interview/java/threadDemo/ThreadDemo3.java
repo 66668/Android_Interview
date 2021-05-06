@@ -1,4 +1,4 @@
-package lib.interview.android;
+package lib.interview.java.threadDemo;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

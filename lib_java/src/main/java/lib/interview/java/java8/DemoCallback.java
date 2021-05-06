@@ -1,7 +1,5 @@
 package lib.interview.java.java8;
 
-import android.view.View;
-
 /**
  * @author:sjy
  * @date: 2020/11/18
